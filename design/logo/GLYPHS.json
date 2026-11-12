@@ -1,0 +1,27 @@
+[
+  {
+    "latex": "\\mathbb{P}",
+    "font": "KaTeX_AMS-Regular",
+    "codepoint_in_font": "0x50"
+  },
+  {
+    "latex": "\\lfloor",
+    "font": "KaTeX_Main-Regular",
+    "codepoint_in_font": "0x230a"
+  },
+  {
+    "latex": "\\forall",
+    "font": "KaTeX_Main-Regular",
+    "codepoint_in_font": "0x2200"
+  },
+  {
+    "latex": "\\exists",
+    "font": "KaTeX_Main-Regular",
+    "codepoint_in_font": "0x2203"
+  },
+  {
+    "latex": "\\mathbb{R}",
+    "font": "KaTeX_AMS-Regular",
+    "codepoint_in_font": "0x52"
+  }
+]

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">PLAER play icon</title>
+  <desc id="desc">A light play triangle in a forest-green circle.</desc>
+  <circle cx="64" cy="64" r="60" fill="#134D43"/>
+  <path d="M50 39a2 2 0 0 1 3-1.73l40 25a2 2 0 0 1 0 3.46l-40 25A2 2 0 0 1 50 89Z" fill="#FCFBF6"/>
+</svg>

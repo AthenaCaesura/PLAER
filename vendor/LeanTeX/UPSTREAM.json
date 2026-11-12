@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/kmill/LeanTeX",
+  "commit": "d66db4582b6cb4d9fa0b6309168103a248a5fd46",
+  "license": "Apache-2.0",
+  "fork": "PLAER local source fork",
+  "lean_version": "4.35.0"
+}

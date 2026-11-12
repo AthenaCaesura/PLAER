@@ -1,0 +1,47 @@
+name: Cross-platform checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    env:
+      LEAN_NUM_THREADS: '2'
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'false'
+      - name: Build paper and check Lean regressions
+        run: python scripts/build.py --test
+      - name: Check math rendering and statement controls
+        run: |
+          node scripts/test_latex.cjs
+          node scripts/test_fermat.cjs
+          node scripts/test_statement_ui.cjs
+      - name: Check explanation persistence
+        run: python scripts/test_explanations.py
+      - name: Check shared SVG branding
+        run: python scripts/test_branding.py
+      - name: Check live Lean endpoint
+        run: python scripts/test_verification.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plaer-${{ matrix.os }}
+          path: dist/

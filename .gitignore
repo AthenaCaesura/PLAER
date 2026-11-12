@@ -1,0 +1,9 @@
+.tools/
+.lake/
+__pycache__/
+*.pyc
+artifacts/
+build/
+.DS_Store
+.env
+.env.*
