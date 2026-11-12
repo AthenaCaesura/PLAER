@@ -1,7 +1,7 @@
-"""Build PLAER from real KaTeX font outlines, without image generation.
+"""Rebuild the approved PLAER wordmark and its glyph provenance.
 
-Optional design dependencies: pip install fonttools resvg-py
-The app itself does not need these packages or any fonts for the output SVGs.
+Optional design dependency: pip install fonttools
+The app itself does not need this package or any fonts for the output SVGs.
 """
 
 from pathlib import Path
@@ -20,7 +20,6 @@ logging.getLogger("fontTools.ttLib.tables._h_e_a_d").setLevel(logging.ERROR)
 OUT = Path(__file__).resolve().parent
 FONTS = ROOT / ".lake/packages/verso/vendored-js/katex/fonts"
 TEAL = "#134D43"
-PAPER = "#FCFBF6"
 
 
 def glyph(font_name, codepoint):
@@ -71,27 +70,11 @@ def main():
     wordmark = svg(x + 4, 168, "PLAER", "PLAER: P, floor bracket, universal quantifier, existential quantifier, R. Actual LaTeX glyph outlines.", body)
     (OUT / "plaer-wordmark.svg").write_text(wordmark, encoding="utf-8")
 
-    # A single initial remains recognizable when the whole name would be too small.
-    p = glyphs[0]
-    _, (x0, y0, x1, y1) = p
-    p_height = 72
-    p_width = (x1 - x0) / (y1 - y0) * p_height
-    p_path, _ = outline(p, (128 - p_width) / 2, 28, p_height, PAPER)
-    icon = svg(128, 128, "PLAER icon", "Blackboard-bold P inside a circular teal field.",
-        [f'<circle cx="64" cy="64" r="62" fill="{TEAL}"/>', p_path])
-    (OUT / "plaer-circle.svg").write_text(icon, encoding="utf-8")
     (OUT / "GLYPHS.json").write_text(json.dumps([
         {"latex": latex, "font": font, "codepoint_in_font": hex(code)}
         for latex, font, code in specs], indent=2) + "\n", encoding="utf-8")
 
-    import resvg_py
-    # Raster previews are rendered from the finished SVGs, never generated.
-    for name, sizes in [("plaer-wordmark", [960]), ("plaer-circle", [512, 64, 32, 16])]:
-        source = (OUT / (name + ".svg")).read_text(encoding="utf-8")
-        for width in sizes:
-            png = resvg_py.svg_to_bytes(svg_string=source, width=width)
-            (OUT / f"{name}-{width}.png").write_bytes(png)
-    print("Built two path-only SVGs and raster previews from actual KaTeX glyphs.")
+    print("Rebuilt the approved mathematical wordmark and GLYPHS.json provenance.")
 
 
 if __name__ == "__main__":

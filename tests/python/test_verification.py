@@ -9,6 +9,7 @@ import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 
+from _support import ROOT
 from serve import PaperHandler
 from verify_proof import WARM_LEAN
 

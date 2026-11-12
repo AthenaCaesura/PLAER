@@ -1,6 +1,8 @@
+const path = require('node:path');
+process.chdir(path.resolve(__dirname, '../..'));
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const katex = require('../.lake/packages/verso/vendored-js/katex/katex.min.js');
+const katex = require('../../.lake/packages/verso/vendored-js/katex/katex.min.js');
 const build = JSON.parse(fs.readFileSync('dist/build.json','utf8'));
 const reports = build.theorem_checks;
 assert.equal(reports.length, 2);

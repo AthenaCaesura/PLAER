@@ -9,3 +9,8 @@
 paper. No font downloads, image generation, or additional runtime requests
 are required. The wordmark's actual KaTeX glyph sources are documented in
 `design/logo/SVG-README.md`; the play mark is simple original SVG geometry.
+
+The GitHub README displays these same shapes in
+[`docs/assets/plaer-banner.svg`](../../docs/assets/plaer-banner.svg), with a
+light background for visibility in either GitHub theme. The banner is a
+documentation asset; these two SVGs remain the canonical runtime assets.

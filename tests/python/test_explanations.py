@@ -8,6 +8,7 @@ import urllib.request
 from pathlib import Path
 from http.server import ThreadingHTTPServer
 
+from _support import ROOT
 import explanations
 import package_document
 from serve import PaperHandler

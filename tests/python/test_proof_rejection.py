@@ -2,7 +2,8 @@
 
 import os
 import subprocess
-from verify_proof import ROOT, WARM_LEAN, verify_theorem
+from _support import ROOT
+from verify_proof import WARM_LEAN, verify_theorem
 
 proof_path = ROOT / "Plaer/Proofs.lean"
 original = proof_path.read_bytes()

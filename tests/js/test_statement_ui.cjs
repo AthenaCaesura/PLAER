@@ -1,3 +1,5 @@
+const path = require('node:path');
+process.chdir(path.resolve(__dirname, '../..'));
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');

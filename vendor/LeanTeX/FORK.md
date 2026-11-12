@@ -27,7 +27,7 @@ There is no LLM in the conversion path. This is a pretty printer, not a formal
 proof that its LaTeX output is equivalent to the input expression.
 
 From the PLAER root, `python scripts/build.py --test` exercises the paper
-and strict renderer. `node scripts/test_latex.cjs` checks the generated formulas
+and strict renderer. `node tests/js/test_latex.cjs` checks the generated formulas
 with the same KaTeX distribution bundled in the paper. Upstream core examples
 can be checked with `lake env lean vendor/LeanTeX/test/basic.lean` and
 `lake env lean vendor/LeanTeX/test/subscript.lean`.

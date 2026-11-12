@@ -35,8 +35,8 @@ def main() -> None:
         run(lake, "exe", "cache", "get", "Mathlib.Basic.Real.Basic", "Mathlib.Tactic.NormNum", "Mathlib.FieldTheory.Finite.Basic")
     run(lake, "build", "Paper")
     if args.test:
-        run(lake, "env", "lean", "Tests.lean")
-        run(lake, "env", "lean", "LatexTests.lean")
+        run(lake, "env", "lean", "tests/lean/Renderer.lean")
+        run(lake, "env", "lean", "tests/lean/Latex.lean")
         run(lake, "env", "lean", "vendor/LeanTeX/test/basic.lean")
         run(lake, "env", "lean", "vendor/LeanTeX/test/subscript.lean")
     run(lake, "env", "lean", "--run", "Main.lean")
