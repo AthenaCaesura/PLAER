@@ -1,0 +1,9 @@
+{
+  "project": "rules",
+  "paper": "examples/Rules/Paper.md",
+  "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
+  "source": "examples/Rules/Statements.lean",
+  "sourceModule": "Rules.Statements",
+  "sourceSha256": "21ba20dd38859a1f07f118ad09d1c0f059582cb6c0834b5db8f8cfcc1602401e",
+  "checks": []
+}

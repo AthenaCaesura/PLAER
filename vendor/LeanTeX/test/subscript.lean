@@ -43,6 +43,6 @@ def foo (n : Nat) : Prop := true
 #guard_msgs in #latex ?foo
 section
 open scoped LeanTeX.Extra
-/-- info: ?foo -/
+/-- info: ?\operatorname{foo} -/
 #guard_msgs in #latex ?foo
 end

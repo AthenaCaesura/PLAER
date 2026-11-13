@@ -23,9 +23,17 @@ Local changes:
 - Print consecutive `∀` binders over the same type as one quantifier,
   `\forall a, b : \mathbb{N}`, and update `test/basic.lean` to match.
 - Add `Config.collectHypotheses`, off by default, to print `A → B → C` as
-  `A \land B \implies C`. PLAER turns it on.
-- With `Config.collectHypotheses`, a function type `α → β → γ` prints as
-  `(α, β) → γ`, its inputs together, as its calls print `f(a, b)`.
+  `A \land B \implies C`. Instance arguments, `[Group G]`, are assumptions and
+  join the hypotheses. PLAER turns it on.
+- Add `Config.mathFunctions`, off by default: a function type `α → β → γ` prints
+  as `(α, β) → γ`, its inputs together, as its calls print `f(a, b)`, and
+  `fun a b => e` as `(a, b) \mapsto e`, without binder types. PLAER turns it on.
+- Add `Config.elementBinders`, off by default: a variable over the elements of a
+  type prints `x \in T`, and over `Set α`, `s \subseteq α`. Variables over sorts
+  and function types keep `x : T`. PLAER turns it on.
+- `Name.toLatex`: a name whose stem (before any `_`) has more than one letter
+  prints upright, `\operatorname{op\_assoc}`, rather than as a product of letters
+  with a subscript. Single letters such as `x_1` print as before.
 - A function applied only to implicit arguments prints as its name, not `f()`.
 
 Project-specific Mathlib notation is in `Plaer/Latex.lean`, using this fork's

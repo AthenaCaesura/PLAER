@@ -62,7 +62,7 @@ Prose after.
     assert boxes["SelfTest.triple"]["signatureLatex"] == "\\operatorname{triple} : \\mathbb{N} \\to \\mathbb{N}", boxes["SelfTest.triple"]
     statement = boxes["SelfTest.zero_add_statement"]
     assert (statement["kind"], statement["title"], statement["caption"]) == ("candidate", "Zero on the left", "A caption.")
-    assert statement["statementLatex"] == "\\forall n : \\mathbb{N},\\ 0 + n = n", statement["statementLatex"]
+    assert statement["statementLatex"] == "\\forall n \\in \\mathbb{N},\\ 0 + n = n", statement["statementLatex"]
     assert "ℕ" in statement["statementLean"] and "simp" not in str(statement["statementLean"])
     good, wrong, sorried, broken, missing = statement["proofs"]
     assert good["result"]["ok"] is True, good
@@ -85,7 +85,7 @@ Prose after.
                                          "\\quad \\text{for } \\alpha : \\mathbf{Type}"), pointed
     assert pointed["latex"] == ("\\begin{aligned}\\operatorname{base\\_point} &: \\alpha \\\\ "
                                 "\\operatorname{op} &: (\\alpha, \\alpha) \\to \\alpha \\\\ "
-                                "\\operatorname{op\\_base} &: \\forall a : \\alpha,\\ "
+                                "\\operatorname{op\\_base} &: \\forall a \\in \\alpha,\\ "
                                 "\\operatorname{op}(a, \\operatorname{base\\_point}) = a\\end{aligned}"), pointed["latex"]
     # Unsupported notation keeps the Lean view and says why, instead of guessing or failing the build.
     unsupported = boxes["SelfTest.unsupported_statement"]

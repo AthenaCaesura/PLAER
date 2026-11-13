@@ -256,7 +256,15 @@
     }
     if (item.caption) card.append(caption(item.caption));
     card.append(body);
+    if (item.notes && item.notes.length) card.append(notationNotes(item.notes));
     return card;
+  }
+
+  // What an unusual symbol in the formula means, such as subtraction in ℕ.
+  function notationNotes(notes) {
+    const box = node("div", "box-notes");
+    renderMarkdown(notes.join(" "), box);
+    return box;
   }
 
   function caption(text) {
@@ -306,6 +314,7 @@
     const statement = node("div", "theorem-statement");
     statement.append(mathPanel, leanPanel, reprintPanel);
     card.append(statement);
+    if (item.notes && item.notes.length) card.append(notationNotes(item.notes));
 
     if (!item.proofs.length) {
       card.append(node("p", "proof-none", "No proof attached. Add a line such as “-- proof: proofs/File.lean Namespace.name” under it."));

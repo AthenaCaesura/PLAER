@@ -30,8 +30,16 @@ partial def String.toLatex (s : String) : String :=
   | xs => "_".intercalate xs
 
 /-- Convert a `Name` to a `String` and then use `String.toLatex` to replace common
-unicode characters by LaTeX commands. -/
-def Lean.Name.toLatex (n : Name) : String := (toString n).toLatex
+unicode characters by LaTeX commands. A name whose stem (the part before any `_`) has
+more than one letter, such as `value` or `op_assoc`, is a word, and prints upright with
+`_` as a character: `\operatorname{op\_assoc}`, not o·p with a subscript. `x_1` and `α`
+are single letters and print as before. (PLAER fork.) -/
+def Lean.Name.toLatex (n : Name) : String :=
+  let s := toString n
+  let stem := (s.splitOn "_").head!
+  if (stem.toList.filter Char.isAlpha).length > 1 then
+    "\\operatorname{" ++ s.replace "_" "\\_" ++ "}"
+  else s.toLatex
 
 /-- Give a LaTeX-suitable representation of the local variable. -/
 def Lean.FVarId.toLatex (fvarid : FVarId) : MetaM String :=
@@ -93,8 +101,44 @@ private partial def collectLambdaArgs : Expr → Array (Name × LatexData) → L
 /-- `LatexPrinter` for `λ`-abstractions. For instance `λ x : ℝ => x^2` is rendered as `(x : ℝ) ↦ x^2`. -/
 latex_pp_rules (kind := lam) | e => do
   let (args, body) ← collectLambdaArgs e #[]
+  if (← read).mathFunctions then
+    -- `fun a b => e` is the two-input function `(a, b) ↦ e`
+    let names := args.map fun (name, _) => LatexData.atomString name.toLatex
+    let pnames := if names.size == 1 then names[0]! else (LatexData.intercalate ", " names).parens
+    return pnames ++ LatexData.nonAssocOp " \\mapsto " 0 ++ body
   let pargs := LatexData.intercalate ", " <| args.map (λ (name, type) => LatexData.ofString name.toLatex ++ " : " ++ type)
   return pargs.parens ++ LatexData.nonAssocOp " \\mapsto " 0 ++ body
+
+/-- A quantified variable and its range: `x ∈ T` for an element of a type, `s ⊆ α` for a
+subset (with `elementBinders`), otherwise `x : T`. `names` is already typeset. -/
+def binderLatex (names : String) (domain : Expr) : LatexPrinterM LatexData := do
+  if (← read).omitBinders then
+    return LatexData.atomString names
+  if (← read).elementBinders then
+    if domain.isAppOfArity `Set 1 then
+      let pα ← latexPP domain.appArg!
+      return names ++ " \\subseteq " ++ pα.resetBP .Infinity .Infinity
+    -- An element of a type: not a type itself, not a function
+    let isElementType ← try
+        let sort ← Meta.whnf (← Meta.inferType domain)
+        pure (sort.isSort && !sort.isProp && !(← Meta.whnf domain).isForall && !(← Meta.whnf domain).isSort)
+      catch _ => pure false
+    if isElementType then
+      return names ++ " \\in " ++ (← latexPP domain).resetBP .Infinity .Infinity
+  return names ++ " : " ++ (← latexPP domain).resetBP .Infinity .Infinity
+
+/-- Gather the hypotheses at the front of `e`: implications `A → …`, and instance
+arguments `[C x] → …`, which assume a structure. Calls `k` with them and the rest. -/
+partial def gatherHypotheses (e : Expr) (hyps : Array LatexData)
+    (k : Array LatexData → Expr → LatexPrinterM α) : LatexPrinterM α := do
+  unless e.isForall do return ← k hyps e
+  if e.binderInfo.isInstImplicit then
+    let h ← latexPP e.bindingDomain!
+    withBindingBodyUnusedName e fun _ body => gatherHypotheses body (hyps.push h) k
+  else if e.isArrow && (← try Meta.isProp e.bindingDomain! catch _ => pure false) then
+    gatherHypotheses e.bindingBody! (hyps.push (← latexPP e.bindingDomain!)) k
+  else
+    k hyps e
 
 /-- Enter `e`, a `∀`, and every following `∀` over the same domain whose variable is
 used (an unused one is an implication or a plain function arrow, printed as such). -/
@@ -114,40 +158,32 @@ latex_pp_rules (kind := forallE) | e => do
   let domProp? ← try Meta.isProp e.bindingDomain! catch _ => pure false
 
   if prop? then
-    if arrow? ∧ domProp? then
-      -- implication
-      if (← read).collectHypotheses then
-        -- `A → B → C` is `A ∧ B ⟹ C`: gather every hypothesis before the conclusion
-        let mut hyps := #[e.bindingDomain!]
-        let mut concl := e.bindingBody!
-        repeat
-          -- `←` would run before `&&`, so test for an arrow first
-          unless concl.isArrow do break
-          unless ← (try Meta.isProp concl.bindingDomain! catch _ => pure false) do break
-          hyps := hyps.push concl.bindingDomain!
-          concl := concl.bindingBody!
-        let mut phyps := (← latexPP hyps[0]!).protect 35
+    if (← read).collectHypotheses && ((arrow? ∧ domProp?) || e.binderInfo.isInstImplicit) then
+      -- `A → B → C` is `A ∧ B ⟹ C`: gather every hypothesis before the conclusion
+      return ← gatherHypotheses e #[] fun hyps concl => do
+        let mut phyps := hyps[0]!.protect 35
         for h in hyps[1:] do
-          phyps := phyps ++ LatexData.rightAssocOp " \\land " 35 ++ (← latexPP h).protect 35
+          phyps := phyps ++ LatexData.rightAssocOp " \\land " 35 ++ h.protect 35
         let pconcl ← latexPP concl
         return phyps ++ LatexData.nonAssocOp " \\implies " 30 ++ pconcl.protectLeft 30
+    if arrow? ∧ domProp? then
+      -- implication
       let pdom ← latexPP e.bindingDomain!
       let pbody ← latexPP e.bindingBody!
       let assoc := if (← read).implicationAssoc then LatexData.rightAssocOp else LatexData.nonAssocOp
       return pdom.protectRight 30 ++ assoc " \\implies " 30 ++ pbody.protectLeft 30
     else
       -- forall; consecutive variables of the same type share one quantifier
-      let pdom ← latexPP e.bindingDomain!
       forallGroup e.bindingDomain! e #[] fun names body => do
         let pbody ← latexPP body
-        let binder := if (← read).omitBinders then LatexData.atomString "" else " : " ++ pdom.resetBP .Infinity .Infinity
         let vars := ", ".intercalate (names.map (·.toLatex)).toList
-        let pall := s!"\\forall {vars}" ++ binder ++ ",\\ " ++ pbody
+        let binder ← binderLatex vars e.bindingDomain!
+        let pall := "\\forall " ++ binder ++ ",\\ " ++ pbody
         return pall |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 0)
   else
     if arrow? then
       -- function
-      if (← read).collectHypotheses then
+      if (← read).mathFunctions then
         -- `α → α → α` takes two inputs: print it `(α, α) → α`
         let mut inputs := #[e.bindingDomain!]
         let mut output := e.bindingBody!
@@ -245,7 +281,7 @@ latex_pp_app_rules (const := Exists)
       if (← read).omitBinders then
         binder ← binder.maybeWithTooltip s!"in \\({pdom.latex.1}\\)"
       else
-        binder := binder ++ " : " ++ pdom.resetBP .Infinity .Infinity
+        binder ← binderLatex name.toLatex α
       let pex := s!"\\exists " ++ binder ++ ",\\ " ++ pbody
       return pex |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 0)
 

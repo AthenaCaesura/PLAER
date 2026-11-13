@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T17:04:14.987574+00:00",
+  "built_at": "2026-11-13T17:23:47.552761+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
   "paper_sha256": "4b4da9d098a2b92ada29d21325dfb694d617aa6e00314c1e1d6e4a9c51c7a522",
   "source_sha256": "7c5e773977b7d778effdc2e3be130e5b348ebefe6e6a4404a7fbe3aac9599aa9",
-  "document_sha256": "3c0476ae56d956ec9572d90e32de6706f1beb114b944a8fe57d0ac967a7ccef3",
-  "engine_fingerprint": "a231144c0c94743541add138c0164f58fdb96077983701aae0c6e51f655143a2",
+  "document_sha256": "e44dae0755893973a1df312538fa4c5f9f4aa9a96d39af43bd4352da71017604",
+  "engine_fingerprint": "4a6a7b6c47ebf6494bfee9c64aab96680a15cee848666e3916aa0e922012c130",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -61,6 +61,7 @@
             "leanVersion": "4.35.0",
             "line": 24,
             "name": "Basics.triangle",
+            "notes": [],
             "signatureLatex": "\\operatorname{triangle} : \\mathbb{N} \\to \\mathbb{N}",
             "source": "/-- Triangular numbers -/\ndef Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i",
             "sourceModule": "[anonymous]",
@@ -118,7 +119,7 @@
             "type": "declaration",
             "doc": "A monoid",
             "kind": "definition",
-            "latex": "\\begin{aligned}\\operatorname{op} &: (\\alpha, \\alpha) \\to \\alpha \\\\ \\operatorname{unit} &: \\alpha \\\\ \\operatorname{op\\_assoc} &: \\forall a, b, c : \\alpha,\\ \\operatorname{op}(\\operatorname{op}(a, b), c) = \\operatorname{op}(a, \\operatorname{op}(b, c)) \\\\ \\operatorname{op\\_unit} &: \\forall a : \\alpha,\\ \\operatorname{op}(a, \\operatorname{unit}) = a\\end{aligned}",
+            "latex": "\\begin{aligned}\\operatorname{op} &: (\\alpha, \\alpha) \\to \\alpha \\\\ \\operatorname{unit} &: \\alpha \\\\ \\operatorname{op\\_assoc} &: \\forall a, b, c \\in \\alpha,\\ \\operatorname{op}(\\operatorname{op}(a, b), c) = \\operatorname{op}(a, \\operatorname{op}(b, c)) \\\\ \\operatorname{op\\_unit} &: \\forall a \\in \\alpha,\\ \\operatorname{op}(a, \\operatorname{unit}) = a\\end{aligned}",
             "leanVersion": "4.35.0",
             "line": 40,
             "name": "Basics.Monoid",
@@ -148,7 +149,7 @@
             "type": "declaration",
             "doc": "Even numbers, by two rules",
             "kind": "definition",
-            "latex": "\\begin{aligned}\\operatorname{zero} &: \\operatorname{even}(0) \\\\ \\operatorname{step} &: \\forall n : \\mathbb{N},\\ \\operatorname{even}(n) \\implies \\operatorname{even}(n + 2)\\end{aligned}",
+            "latex": "\\begin{aligned}\\operatorname{zero} &: \\operatorname{even}(0) \\\\ \\operatorname{step} &: \\forall n \\in \\mathbb{N},\\ \\operatorname{even}(n) \\implies \\operatorname{even}(n + 2)\\end{aligned}",
             "leanVersion": "4.35.0",
             "line": 51,
             "name": "Basics.even",
@@ -181,9 +182,10 @@
             "leanVersion": "4.35.0",
             "line": 62,
             "name": "Basics.goldbach",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "95177223",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ n > 2 \\land 2 \\mid n \\implies \\exists p : \\mathbb{N},\\ \\exists q : \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = n",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\ n > 2 \\land 2 \\mid n \\implies \\exists p \\in \\mathbb{N},\\ \\exists q \\in \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = n",
             "statementLean": "def Basics.goldbach : Prop := ∀ n > 2, 2 ∣ n → ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n",
             "block": 5,
             "offset": 0,
@@ -213,9 +215,10 @@
             "leanVersion": "4.35.0",
             "line": 70,
             "name": "Basics.euler_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "538884409",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ \\operatorname{Prime}(n^{2} + n + 41)",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\ \\operatorname{Prime}(n^{2} + n + 41)",
             "statementLean": "def Basics.euler_statement : Prop := ∀ (n : ℕ), Nat.Prime (n ^ 2 + n + 41)",
             "block": 6,
             "offset": 0,
@@ -237,7 +240,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
                 "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
                 "statementHash": "538884409",
-                "wallMs": 920
+                "wallMs": 1140
               },
               {
                 "file": "proofs/Missing.lean",
@@ -275,9 +278,10 @@
             "leanVersion": "4.35.0",
             "line": 83,
             "name": "Basics.gauss_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "985449252",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ 2 \\cdot \\operatorname{triangle}(n) = n \\cdot (n + 1)",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\ 2 \\cdot \\operatorname{triangle}(n) = n \\cdot (n + 1)",
             "statementLean": "def Basics.gauss_statement : Prop := ∀ (n : ℕ), 2 * Basics.triangle n = n * (n + 1)",
             "block": 7,
             "offset": 0,
@@ -305,7 +309,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 934
+                "wallMs": 1062
               },
               {
                 "file": "proofs/Gauss.lean",
@@ -329,7 +333,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1002
+                "wallMs": 1136
               }
             ],
             "statement": true,
@@ -356,9 +360,10 @@
             "leanVersion": "4.35.0",
             "line": 94,
             "name": "Basics.hundred_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "1879992750",
-            "statementLatex": "\\operatorname{goldbach} \\implies \\exists p : \\mathbb{N},\\ \\exists q : \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = 100",
+            "statementLatex": "\\operatorname{goldbach} \\implies \\exists p \\in \\mathbb{N},\\ \\exists q \\in \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = 100",
             "statementLean": "def Basics.hundred_statement : Prop := Basics.goldbach → ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = 100",
             "block": 8,
             "offset": 0,
@@ -384,7 +389,7 @@
                 "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
                 "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
-                "wallMs": 864
+                "wallMs": 1008
               }
             ],
             "statement": true,
@@ -427,9 +432,10 @@
             "leanVersion": "4.35.0",
             "line": 133,
             "name": "Basics.pascal_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "2248319565",
-            "statementLatex": "\\forall n, k : \\mathbb{N},\\ \\binom{n + 1}{k + 1} = \\binom{n}{k} + \\binom{n}{k + 1}",
+            "statementLatex": "\\forall n, k \\in \\mathbb{N},\\ \\binom{n + 1}{k + 1} = \\binom{n}{k} + \\binom{n}{k + 1}",
             "statementLean": "def Basics.pascal_statement : Prop := ∀ (n k : ℕ), (n + 1).choose (k + 1) = n.choose k + n.choose (k + 1)",
             "block": 10,
             "offset": 0,
@@ -453,7 +459,7 @@
                 "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 983
+                "wallMs": 1216
               }
             ],
             "statement": true,
@@ -468,9 +474,10 @@
             "leanVersion": "4.35.0",
             "line": 138,
             "name": "Basics.sin_cos_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "1396079601",
-            "statementLatex": "\\forall x : \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1",
+            "statementLatex": "\\forall x \\in \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1",
             "statementLean": "def Basics.sin_cos_statement : Prop := ∀ (x : ℝ), Real.sin x ^ 2 + Real.cos x ^ 2 = 1",
             "block": 10,
             "offset": 5,
@@ -498,7 +505,7 @@
                 "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 900
+                "wallMs": 1008
               }
             ],
             "statement": true,

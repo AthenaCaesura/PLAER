@@ -70,6 +70,7 @@ dist/fermat/index.html            the document, as one offline HTML file
 | Project | What it illustrates | Paper | Offline document |
 | --- | --- | --- | --- |
 | Basics | Every kind of box, with a short explanation of each, and every answer a play button can give. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
+| Rules | The five rules that print Lean as mathematics, each shown on Mathlib's notions and the paper's own. | [Rules/Paper.md](examples/Rules/Paper.md) | [dist/rules](dist/rules/index.html) |
 | Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/Paper.md](examples/Fermat/Paper.md) | [dist/fermat](dist/fermat/index.html) |
 
 ## View a document
@@ -115,7 +116,7 @@ your Python command. With the server running:
   message if it does not compile.
 
 You can equally edit `Paper.md` in your own editor and reload the page.
-Run `python scripts/check.py` to build both examples and run every test.
+Run `python scripts/check.py` to build every example and run every test.
 
 ## Repository map
 

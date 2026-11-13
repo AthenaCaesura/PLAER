@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T15:01:49.547997+00:00",
+  "built_at": "2026-11-13T17:24:06.328789+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
   "paper_sha256": "8a51e7766b38e6533cfc0f9e85e6e46f003a16dc2ec0c246ab24c7076948dd5b",
   "source_sha256": "5ff785f27e28bf974f20a8a8c65e397610b6b29949920617c35fd14e7e85330e",
-  "document_sha256": "72fa25feab5c88ce913c798fec5c28baafdc5ac0f84e16726dd22950d938c25b",
-  "engine_fingerprint": "a231144c0c94743541add138c0164f58fdb96077983701aae0c6e51f655143a2",
+  "document_sha256": "9c03decb5cee256f31132c73e4b9f9e800b04389de9a354c3f7eb1e6176e1d5c",
+  "engine_fingerprint": "4a6a7b6c47ebf6494bfee9c64aab96680a15cee848666e3916aa0e922012c130",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -55,9 +55,10 @@
             "leanVersion": "4.35.0",
             "line": 8,
             "name": "Fermat.last_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "1861763117",
-            "statementLatex": "\\forall n, a, b, c : \\mathbb{N},\\ n > 2 \\land a > 0 \\land b > 0 \\land c > 0 \\implies a^{n} + b^{n} \\neq c^{n}",
+            "statementLatex": "\\forall n, a, b, c \\in \\mathbb{N},\\ n > 2 \\land a > 0 \\land b > 0 \\land c > 0 \\implies a^{n} + b^{n} \\neq c^{n}",
             "statementLean": "def Fermat.last_statement : Prop := ∀ (n a b c : ℕ), n > 2 → a > 0 → b > 0 → c > 0 → a ^ n + b ^ n ≠ c ^ n",
             "block": 1,
             "offset": 0,
@@ -79,7 +80,7 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
                 "statementHash": "1861763117",
-                "wallMs": 1335
+                "wallMs": 1113
               }
             ],
             "statement": true,
@@ -106,9 +107,10 @@
             "leanVersion": "4.35.0",
             "line": 23,
             "name": "Fermat.little_statement",
+            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "737928072",
-            "statementLatex": "\\forall p : \\mathbb{N},\\ \\forall a : \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
+            "statementLatex": "\\forall p \\in \\mathbb{N},\\ \\forall a \\in \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
             "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
             "block": 2,
             "offset": 0,
@@ -136,7 +138,7 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 1258
+                "wallMs": 1277
               }
             ],
             "statement": true,

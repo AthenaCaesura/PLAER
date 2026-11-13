@@ -18,9 +18,15 @@ structure Config where
   smallness : Nat := 0
   /-- Whether implication is right associative -/
   implicationAssoc : Bool := false
-  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication, and a function
-  type `α → β → γ` as `(α, β) → γ`, with its inputs together -/
+  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication. Instance
+  arguments, `[Group G]`, are assumptions too, and join the hypotheses. -/
   collectHypotheses : Bool := false
+  /-- Whether functions read as in mathematics: a type `α → β → γ` as `(α, β) → γ`, with
+  its inputs together, and `fun a b => e` as `(a, b) ↦ e`, without binder types. -/
+  mathFunctions : Bool := false
+  /-- Whether a variable ranging over a type of elements reads `x ∈ T`, and over `Set α`,
+  `s ⊆ α`, rather than `x : T`. Variables over sorts and function types keep `x : T`. -/
+  elementBinders : Bool := false
   /-- Whether to omit binders in pi/forall -/
   omitBinders : Bool := false
   /-- Whether to use subscripts for arguments to families of types/sets -/

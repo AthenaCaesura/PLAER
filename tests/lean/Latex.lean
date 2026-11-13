@@ -25,35 +25,46 @@ elab "#test_latex" : command => Command.liftTermElabM do
   let cases := [
     ("(0 : ℝ) ∈ IntervalFixture.I", "0 \\in I"),
     ("(2 : ℝ) ∉ IntervalFixture.I", "2 \\notin I"),
-    ("∀ x : ℝ, x ≤ 1 → x + 1 ≤ 2", "\\forall x : \\mathbb{R},\\ x \\le 1 \\implies x + 1 \\le 2"),
-    ("∃ n : ℕ, 1 < n", "\\exists n : \\mathbb{N},\\ n > 1"),
-    ("∀ x : ℝ, 0 ≤ x → x ≤ 1", "\\forall x : \\mathbb{R},\\ x \\ge 0 \\implies x \\le 1"),
+    ("∀ x : ℝ, x ≤ 1 → x + 1 ≤ 2", "\\forall x \\in \\mathbb{R},\\ x \\le 1 \\implies x + 1 \\le 2"),
+    ("∃ n : ℕ, 1 < n", "\\exists n \\in \\mathbb{N},\\ n > 1"),
+    ("∀ x : ℝ, 0 ≤ x → x ≤ 1", "\\forall x \\in \\mathbb{R},\\ x \\ge 0 \\implies x \\le 1"),
     ("(1 : ℕ) < 2", "1 < 2"),
     ("((1 + 2) / 3 : ℝ)", "\\frac{1 + 2}{3}"),
     ("((1 / 2) ^ 3 : ℝ)", "\\left(\\frac{1}{2}\\right)^{3}"),
     ("(1 + (2 + 3) : ℕ)", "1 + (2 + 3)"),
     ("{y : ℝ | -1 < y ∧ y ≤ 2}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; - 1 < y \\le 2\\right\\}"),
     ("{y : ℝ | y = 0 ∨ y = 1}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; y = 0 \\lor y = 1\\right\\}"),
-    ("∀ x : ℝ, ∃ x : ℝ, x = x", "\\forall x : \\mathbb{R},\\ \\exists x : \\mathbb{R},\\ x = x"),
-    ("∀ s : Set ℝ, s = s", "\\forall s : \\mathcal{P}(\\mathbb{R}),\\ s = s"),
-    ("∀ a b : ℕ, ∀ x : ℝ, 0 < a → 0 < b → a + b = b + a", "\\forall a, b : \\mathbb{N},\\ \\forall x : \\mathbb{R},\\ a > 0 \\land b > 0 \\implies a + b = b + a"),
+    ("∀ x : ℝ, ∃ x : ℝ, x = x", "\\forall x \\in \\mathbb{R},\\ \\exists x \\in \\mathbb{R},\\ x = x"),
+    ("∀ s : Set ℝ, s = s", "\\forall s \\subseteq \\mathbb{R},\\ s = s"),
+    ("∀ a b : ℕ, ∀ x : ℝ, 0 < a → 0 < b → a + b = b + a", "\\forall a, b \\in \\mathbb{N},\\ \\forall x \\in \\mathbb{R},\\ a > 0 \\land b > 0 \\implies a + b = b + a"),
     ("∀ p q : Prop, (p → q) → p → q", "\\forall p, q : \\mathbf{Prop},\\ (p \\implies q) \\land p \\implies q"),
-    ("∀ a b : ℕ, a ∣ b → a ≤ b", "\\forall a, b : \\mathbb{N},\\ a \\mid b \\implies a \\le b"),
-    ("∀ x : ℝ, |x| ≥ 0", "\\forall x : \\mathbb{R},\\ \\left|x\\right| \\ge 0"),
-    ("∀ x : ℝ, x ≥ 0 → Real.sqrt x * Real.sqrt x = x", "\\forall x : \\mathbb{R},\\ x \\ge 0 \\implies \\sqrt{x} \\cdot \\sqrt{x} = x"),
-    ("∀ n : ℕ, Nat.factorial (n + 1) = (n + 1) * Nat.factorial n", "\\forall n : \\mathbb{N},\\ (n + 1)! = (n + 1) \\cdot n!"),
-    ("∀ n k : ℕ, Nat.choose n k ≤ 2 ^ n", "\\forall n, k : \\mathbb{N},\\ \\binom{n}{k} \\le 2^{n}"),
-    ("∀ a b : ℕ, Nat.gcd a b ∣ a", "\\forall a, b : \\mathbb{N},\\ \\gcd(a, b) \\mid a"),
-    ("∀ a b : ℕ, Nat.gcd a b * Nat.lcm a b = a * b", "\\forall a, b : \\mathbb{N},\\ \\gcd(a, b) \\cdot \\operatorname{lcm}(a, b) = a \\cdot b"),
-    ("∀ a b : ℕ, min a b ≤ max a b", "\\forall a, b : \\mathbb{N},\\ \\min(a, b) \\le \\max(a, b)"),
-    ("∀ x : ℝ, Real.log (Real.exp x) = x", "\\forall x : \\mathbb{R},\\ \\log(\\exp(x)) = x"),
-    ("∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1", "\\forall x : \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1"),
+    ("∀ a b : ℕ, a ∣ b → a ≤ b", "\\forall a, b \\in \\mathbb{N},\\ a \\mid b \\implies a \\le b"),
+    ("∀ x : ℝ, |x| ≥ 0", "\\forall x \\in \\mathbb{R},\\ \\left|x\\right| \\ge 0"),
+    ("∀ x : ℝ, x ≥ 0 → Real.sqrt x * Real.sqrt x = x", "\\forall x \\in \\mathbb{R},\\ x \\ge 0 \\implies \\sqrt{x} \\cdot \\sqrt{x} = x"),
+    ("∀ n : ℕ, Nat.factorial (n + 1) = (n + 1) * Nat.factorial n", "\\forall n \\in \\mathbb{N},\\ (n + 1)! = (n + 1) \\cdot n!"),
+    ("∀ n k : ℕ, Nat.choose n k ≤ 2 ^ n", "\\forall n, k \\in \\mathbb{N},\\ \\binom{n}{k} \\le 2^{n}"),
+    ("∀ a b : ℕ, Nat.gcd a b ∣ a", "\\forall a, b \\in \\mathbb{N},\\ \\gcd(a, b) \\mid a"),
+    ("∀ a b : ℕ, Nat.gcd a b * Nat.lcm a b = a * b", "\\forall a, b \\in \\mathbb{N},\\ \\gcd(a, b) \\cdot \\operatorname{lcm}(a, b) = a \\cdot b"),
+    ("∀ a b : ℕ, min a b ≤ max a b", "\\forall a, b \\in \\mathbb{N},\\ \\min(a, b) \\le \\max(a, b)"),
+    ("∀ x : ℝ, Real.log (Real.exp x) = x", "\\forall x \\in \\mathbb{R},\\ \\log(\\exp(x)) = x"),
+    ("∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1", "\\forall x \\in \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1"),
     ("Real.pi > 3", "\\pi > 3"),
-    ("∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2", "\\forall n : \\mathbb{N},\\ \\sum_{i = 0}^{n} i = \\frac{n \\cdot (n + 1)}{2}"),
-    ("∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n", "\\forall n : \\mathbb{N},\\ \\prod_{i = 0}^{n - 1} (i + 1) = n!"),
-    ("∀ x : ℕ, x ∈ Finset.range 3 → x < 3", "\\forall x : \\mathbb{N},\\ x \\in \\{0, \\ldots, 2\\} \\implies x < 3"),
+    ("∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2", "\\forall n \\in \\mathbb{N},\\ \\sum_{i = 0}^{n} i = \\left\\lfloor \\frac{n \\cdot (n + 1)}{2} \\right\\rfloor"),
+    ("∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n", "\\forall n \\in \\mathbb{N},\\ \\prod_{i = 0}^{n - 1} (i + 1) = n!"),
+    ("∀ x : ℕ, x ∈ Finset.range 3 → x < 3", "\\forall x \\in \\mathbb{N},\\ x \\in \\{0, \\ldots, 2\\} \\implies x < 3"),
     ("∀ f : ℕ → ℝ, f 0 = f 0", "\\forall f : \\mathbb{N} \\to \\mathbb{R},\\ f(0) = f(0)"),
     ("∀ f : ℕ → ℕ → ℕ, f 0 0 = 0", "\\forall f : (\\mathbb{N}, \\mathbb{N}) \\to \\mathbb{N},\\ f(0, 0) = 0"),
+    -- Rule 1: an instance argument is an assumption, and joins the hypotheses.
+    ("∀ (α : Type) [LinearOrder α] (a b : α), min a b ≤ a", "\\forall \\alpha : \\mathbf{Type},\\ \\operatorname{LinearOrder}(\\alpha) \\implies \\forall a, b \\in \\alpha,\\ \\min(a, b) \\le a"),
+    -- Rule 2: encodings read as what they encode.
+    ("(fun (a b : ℕ) => a + b) 1 2 = 3", "((a, b) \\mapsto a + b)(1, 2) = 3"),
+    ("∀ i : Fin 5, (i : ℕ) < 5", "\\forall i \\in \\{0, \\ldots, 4\\},\\ i < 5"),
+    ("∀ x : {n : ℕ // n > 0}, (x : ℕ) ≥ 1", "\\forall x \\in \\left\\{n\\in\\mathbb{N}\\;\\middle|\\; n > 0\\right\\},\\ x \\ge 1"),
+    -- Rule 3: an unusual operation looks unusual.
+    ("∀ n m : ℕ, n - m + m ≥ n", "\\forall n, m \\in \\mathbb{N},\\ n \\mathbin{\\dot{-}} m + m \\ge n"),
+    ("∀ a b : ℤ, a / b * b + a % b = a", "\\forall a, b \\in \\mathbb{Z},\\ a \\mathbin{\\mathrm{div}} b \\cdot b + a \\bmod b = a"),
+    -- Rule 4: a conversion shows only when it can change a value.
+    ("∀ n : ℕ, ((n : ℤ) : ℝ) = (n : ℝ)", "\\forall n \\in \\mathbb{N},\\ n = n"),
     -- A name defined in this file, not imported, prints by its own name.
     ("LatexTests.unmapped 3 = 10", "\\operatorname{unmapped}(3) = 10")]
   let mut fixtures : Array Json := #[]
@@ -83,7 +94,7 @@ elab "#test_latex" : command => Command.liftTermElabM do
   fixtures := fixtures.push <| Json.mkObj [("source", toJson "definition alternate"), ("latex", toJson alternate)]
   let report ← statementReport ``quantified
   let latex ← ofExcept <| report.getObjValAs? String "statementLatex"
-  unless latex == "\\forall n : \\mathbb{N},\\ n + 0 = n" do
+  unless latex == "\\forall n \\in \\mathbb{N},\\ n + 0 = n" do
     throwError "The shared proof checker did not use the general renderer: {latex}"
   fixtures := fixtures.push <| Json.mkObj [("source", toJson "theorem quantified"), ("latex", toJson latex)]
   IO.FS.createDirAll "build"

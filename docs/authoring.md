@@ -45,6 +45,22 @@ over a `Finset` (with limits over `Finset.range`), `exp`, `log`, `sin`,
 their own name. Any other name shows "No LaTeX" with the Lean view, until a
 rule is added (see below).
 
+Lean's notation is printed as a mathematician would write it, by five general
+rules; [examples/Rules/Paper.md](../examples/Rules/Paper.md) shows each one:
+
+1. An instance argument, `[Group G]`, is an assumption and joins the hypotheses:
+   $\operatorname{Group}(G) \implies \dots$. Every class prints as its own name.
+2. Lean's encodings read as what they encode: `α → β → γ` is $(\alpha, \beta) \to \gamma$,
+   `fun x => e` is $x \mapsto e$, `Fin n` and `{x // p x}` are sets, a structure's
+   value is a tuple of its fields (proofs left out), and `Tendsto` and `∀ᶠ` are
+   limits.
+3. An operation that differs from the textbook one looks different: subtraction
+   in ℕ is $\dot{-}$, division in ℕ is $\lfloor a/b \rfloor$, in ℤ $\operatorname{div}$.
+   The box notes what each such symbol means, and that $x / 0 = 0$.
+4. A conversion between number systems prints as nothing when it can never make
+   two numbers equal (the target has characteristic zero), and as $[a]_T$ otherwise.
+5. A variable over the elements of a type reads $x \in T$, over subsets $S \subseteq T$.
+
 A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.
 
