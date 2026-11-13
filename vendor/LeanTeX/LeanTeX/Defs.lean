@@ -18,7 +18,8 @@ structure Config where
   smallness : Nat := 0
   /-- Whether implication is right associative -/
   implicationAssoc : Bool := false
-  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication -/
+  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication, and a function
+  type `α → β → γ` as `(α, β) → γ`, with its inputs together -/
   collectHypotheses : Bool := false
   /-- Whether to omit binders in pi/forall -/
   omitBinders : Bool := false

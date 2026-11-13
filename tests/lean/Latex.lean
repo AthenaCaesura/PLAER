@@ -53,6 +53,7 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n", "\\forall n : \\mathbb{N},\\ \\prod_{i = 0}^{n - 1} (i + 1) = n!"),
     ("∀ x : ℕ, x ∈ Finset.range 3 → x < 3", "\\forall x : \\mathbb{N},\\ x \\in \\{0, \\ldots, 2\\} \\implies x < 3"),
     ("∀ f : ℕ → ℝ, f 0 = f 0", "\\forall f : \\mathbb{N} \\to \\mathbb{R},\\ f(0) = f(0)"),
+    ("∀ f : ℕ → ℕ → ℕ, f 0 0 = 0", "\\forall f : (\\mathbb{N}, \\mathbb{N}) \\to \\mathbb{N},\\ f(0, 0) = 0"),
     -- A name defined in this file, not imported, prints by its own name.
     ("LatexTests.unmapped 3 = 10", "\\operatorname{unmapped}(3) = 10")]
   let mut fixtures : Array Json := #[]

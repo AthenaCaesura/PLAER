@@ -1,5 +1,6 @@
 \operatorname{triangle}(n) \coloneqq \sum_{i = 0}^{n} i
 \begin{aligned}x &: \mathbb{N} \\ y &: \mathbb{N}\end{aligned}
+\begin{aligned}\operatorname{op} &: (\alpha, \alpha) \to \alpha \\ \operatorname{unit} &: \alpha \\ \operatorname{op\_assoc} &: \forall a, b, c : \alpha,\ \operatorname{op}(\operatorname{op}(a, b), c) = \operatorname{op}(a, \operatorname{op}(b, c)) \\ \operatorname{op\_unit} &: \forall a : \alpha,\ \operatorname{op}(a, \operatorname{unit}) = a\end{aligned}
 \begin{aligned}\operatorname{zero} &: \operatorname{even}(0) \\ \operatorname{step} &: \forall n : \mathbb{N},\ \operatorname{even}(n) \implies \operatorname{even}(n + 2)\end{aligned}
 \forall n : \mathbb{N},\ n > 2 \land 2 \mid n \implies \exists p : \mathbb{N},\ \exists q : \mathbb{N},\ \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = n
 \forall n : \mathbb{N},\ \operatorname{Prime}(n^{2} + n + 41)

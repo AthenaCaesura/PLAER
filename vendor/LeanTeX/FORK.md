@@ -24,6 +24,9 @@ Local changes:
   `\forall a, b : \mathbb{N}`, and update `test/basic.lean` to match.
 - Add `Config.collectHypotheses`, off by default, to print `A → B → C` as
   `A \land B \implies C`. PLAER turns it on.
+- With `Config.collectHypotheses`, a function type `α → β → γ` prints as
+  `(α, β) → γ`, its inputs together, as its calls print `f(a, b)`.
+- A function applied only to implicit arguments prints as its name, not `f()`.
 
 Project-specific Mathlib notation is in `Plaer/Latex.lean`, using this fork's
 `latex_pp_const_rule`, `latex_pp_app_rules`, and `def_latex_binop` extension points.

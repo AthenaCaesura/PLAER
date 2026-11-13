@@ -31,6 +31,12 @@ def SelfTest.zero_add_statement : Prop := ∀ n : ℕ, 0 + n = n
 structure SelfTest.Point where
   x : ℕ
 
+/-- A pointed type -/
+class SelfTest.Pointed (α : Type) where
+  base_point : α
+  op : α → α → α
+  op_base : ∀ a : α, op a base_point = a
+
 /-- No notation is registered for this -/
 def SelfTest.unsupported_statement : Prop := ∀ n : ℕ, Nat.pred (n + 1) = n
 ```
@@ -50,7 +56,7 @@ Prose after.
     state = build_state(project, run_proofs=True)
     boxes = {d["name"]: d for d in declarations(state)}
     assert list(boxes) == ["SelfTest.triple", "SelfTest.zero_add_statement",
-                           "SelfTest.Point", "SelfTest.unsupported_statement"], list(boxes)
+                           "SelfTest.Point", "SelfTest.Pointed", "SelfTest.unsupported_statement"], list(boxes)
     assert boxes["SelfTest.triple"]["kind"] == "definition" and boxes["SelfTest.triple"]["latex"] == "\\operatorname{triple}(n) \\coloneqq 3 \\cdot n"
     # A definition shows its type, domain and range first, as Lean elaborated it.
     assert boxes["SelfTest.triple"]["signatureLatex"] == "\\operatorname{triple} : \\mathbb{N} \\to \\mathbb{N}", boxes["SelfTest.triple"]
@@ -72,6 +78,15 @@ Prose after.
     point = boxes["SelfTest.Point"]
     assert point["kind"] == "definition" and point["signatureLatex"] == "\\operatorname{Point} : \\mathbf{Type}", point
     assert point["latex"] == "\\begin{aligned}x &: \\mathbb{N}\\end{aligned}", point
+    # A class names its parameters once; fields keep their underscores and are
+    # written by name inside the laws; a function's inputs are listed together.
+    pointed = boxes["SelfTest.Pointed"]
+    assert pointed["signatureLatex"] == ("\\operatorname{Pointed}(\\alpha) : \\mathbf{Type} "
+                                         "\\quad \\text{for } \\alpha : \\mathbf{Type}"), pointed
+    assert pointed["latex"] == ("\\begin{aligned}\\operatorname{base\\_point} &: \\alpha \\\\ "
+                                "\\operatorname{op} &: (\\alpha, \\alpha) \\to \\alpha \\\\ "
+                                "\\operatorname{op\\_base} &: \\forall a : \\alpha,\\ "
+                                "\\operatorname{op}(a, \\operatorname{base\\_point}) = a\\end{aligned}"), pointed["latex"]
     # Unsupported notation keeps the Lean view and says why, instead of guessing or failing the build.
     unsupported = boxes["SelfTest.unsupported_statement"]
     assert unsupported["statementLatex"] is None and "No LaTeX" in unsupported["latexError"]

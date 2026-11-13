@@ -147,6 +147,20 @@ latex_pp_rules (kind := forallE) | e => do
   else
     if arrow? then
       -- function
+      if (← read).collectHypotheses then
+        -- `α → α → α` takes two inputs: print it `(α, α) → α`
+        let mut inputs := #[e.bindingDomain!]
+        let mut output := e.bindingBody!
+        repeat
+          unless output.isArrow do break
+          if ← (try Meta.isProp output catch _ => pure true) then break
+          inputs := inputs.push output.bindingDomain!
+          output := output.bindingBody!
+        if inputs.size > 1 then
+          let pinputs ← inputs.mapM fun input => return (← latexPP input).resetBP .Infinity .Infinity
+          let poutput ← latexPP output
+          return (LatexData.intercalate ", " pinputs).parens ++ LatexData.nonAssocOp " \\to " 30 ++
+            poutput.protectLeft 30
       let pdom ← latexPP e.bindingDomain!
       let pbody ← latexPP e.bindingBody!
       return pdom.protectRight 30 ++ LatexData.nonAssocOp " \\to " 30 ++ pbody.protectLeft 30
@@ -203,6 +217,9 @@ where
     for arg in args, pkind in pkinds do
       if pkind.bInfo.isExplicit then
         pargs := pargs.push (← withExtraSmallness (if is_fam then 2 else 0) <| latexPP arg)
+    -- Only implicit arguments: the name alone, not `unit()`.
+    if pargs.isEmpty then
+      return f'
     if is_fam then
       return f'.toAtom.sub <| LatexData.intercalate ", " pargs
     else

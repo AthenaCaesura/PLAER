@@ -25,13 +25,24 @@ import Plaer.Latex
 def Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i
 -- ```
 
--- A `structure` or `class` box lists its fields and their types. Its type line, $\operatorname{Point} : \mathbf{Type}$, says that `Point` is itself a type, like $\mathbb{N}$: each value of `Point` is one point, made of an $x$ and a $y$.
+-- A `structure` or `class` box lists its fields and their types. Its type line, $\operatorname{Point} : \mathbf{Type}$, says that `Point` is itself a type, like $\mathbb{N}$.
 
 -- ```lean
 /-- A point with natural-number coordinates -/
 structure Basics.Point where
   x : ℕ
   y : ℕ
+-- ```
+
+-- A `class` is a structure whose values Lean finds by itself. Its fields can include laws: here a monoid is a type with an operation and a unit, where the operation is associative and the unit does nothing. The class has a parameter, the type $\alpha$, named once in its type line.
+
+-- ```lean
+/-- A monoid -/
+class Basics.Monoid (α : Type) where
+  op : α → α → α
+  unit : α
+  op_assoc : ∀ a b c : α, op (op a b) c = op a (op b c)
+  op_unit : ∀ a : α, op a unit = a
 -- ```
 
 -- An `inductive` box lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$. Its type, $\operatorname{even} : \mathbb{N} \to \mathbf{Prop}$, says that `even` takes a natural number and gives a proposition: it is a property of numbers.
@@ -88,10 +99,12 @@ def Basics.hundred_statement : Prop :=
 
 -- ## Lean
 
--- All other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, and quick checks such as `example`. This one gives points a default value and checks that $\operatorname{triangle}(4) = 10$:
+-- All other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, and quick checks such as `example`. This one gives points a default value, makes $\mathbb{N}$ under $+$ a monoid, and checks that $\operatorname{triangle}(4) = 10$:
 
 -- ```lean
 instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩
+
+instance : Basics.Monoid ℕ := ⟨(· + ·), 0, Nat.add_assoc, Nat.add_zero⟩
 
 example : Basics.triangle 4 = 10 := by simp [Basics.triangle, Finset.sum_range_succ]
 -- ```

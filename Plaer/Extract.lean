@@ -62,34 +62,44 @@ meta def definitionReport (name : Name) : MetaM Json := do
     ("leanVersion", toJson Lean.versionString)] ++
     (← latexFields "latex" (definitionLatex name))
 
-/-- A field or constructor name: upright when longer than one letter, so `step`
-does not read as the product s·t·e·p. -/
+/-- A field or constructor name. Upright when longer than one letter, so `step`
+does not read as s·t·e·p, and `_` is a character, not a subscript. -/
 meta def labelLatex (label : String) : String :=
-  if label.length > 1 then "\\operatorname{" ++ label.toLatex ++ "}" else label.toLatex
+  let escaped := label.replace "_" "\\_"
+  if label.length > 1 then "\\operatorname{" ++ escaped ++ "}" else escaped
 
 /-- A structure or class lists its fields, an inductive type its constructors,
-each with its type as Lean elaborated it:
+each with its type as Lean elaborated it. Parameters are named once, in the type
+line, and the rows use them:
 
-    Point : Type          even : ℕ → Prop
-      x : ℕ                 zero : even(0)
-      y : ℕ                 step : ∀ n : ℕ, even(n) ⟹ even(n + 2)
--/
+    Monoid'(α) : Type   for α : Type        even : ℕ → Prop
+      op : α → α → α                          zero : even(0)
+      op_assoc : ∀ a, b, c : α, …             step : ∀ n : ℕ, even(n) ⟹ even(n + 2)
+
+A field's type is read from its projection, so other fields in it are written by
+name, `op(a, b)`, as they are in the field list. -/
 meta def inductiveReport (name : Name) (info : InductiveVal) : MetaM Json := do
   let env ← getEnv
   let signature ← try
-      pure (some ((← nameLatex name) ++ " : " ++ (← expressionLatex info.type)))
+      forallBoundedTelescope info.type (some info.numParams) fun params result => do
+        let names ← params.toList.mapM fun p => return (← p.fvarId!.getDecl).userName.toString.toLatex
+        let head := (← nameLatex name) ++ (if names.isEmpty then "" else "(" ++ ", ".intercalate names ++ ")")
+        let binders ← params.toList.mapM fun p => do
+          let decl ← p.fvarId!.getDecl
+          return decl.userName.toString.toLatex ++ " : " ++ (← expressionLatex decl.type)
+        let given := if binders.isEmpty then "" else " \\quad \\text{for } " ++ ", ".intercalate binders
+        return some (head ++ " : " ++ (← expressionLatex result) ++ given)
     catch _ => pure none
   let rows : MetaM (List String) := do
     if isStructure env name then
-      let ctor := getStructureCtor env name
-      forallTelescope ctor.type fun xs _ => do
-        let fields := xs.extract info.numParams xs.size
-        fields.toList.mapM fun field => do
-          let decl ← field.fvarId!.getDecl
-          return labelLatex decl.userName.toString ++ " &: " ++ (← expressionLatex decl.type)
+      (getStructureFields env name).toList.mapM fun field => do
+        let projection ← getConstInfo (name ++ field)
+        forallBoundedTelescope projection.type (some (info.numParams + 1)) fun _ type => do
+          return labelLatex field.toString ++ " &: " ++ (← expressionLatex type)
     else
       info.ctors.mapM fun ctor => do
-        return labelLatex ctor.getString! ++ " &: " ++ (← expressionLatex (← getConstInfo ctor).type)
+        forallBoundedTelescope (← getConstInfo ctor).type (some info.numParams) fun _ type => do
+          return labelLatex ctor.getString! ++ " &: " ++ (← expressionLatex type)
   let body : MetaM String := do
     return "\\begin{aligned}" ++ " \\\\ ".intercalate (← rows) ++ "\\end{aligned}"
   return Json.mkObj <| [
