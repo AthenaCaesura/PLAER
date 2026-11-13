@@ -12,14 +12,20 @@ A paper holds the things Lean has: definitions, and claims. A claim is a conject
 
 ## Definition
 
-A `def` gives a name a meaning. Switch between its LaTeX and the Lean you wrote. The $n$-th triangular number is $0 + 1 + \dots + n$:
+These Lean declarations make a **Definition** box:
+
+- `def` (and `abbrev`, `noncomputable def`) that is not a claim: a function, a number, a set, …
+- `structure` and `class`: a new type whose values are made of named fields.
+- `inductive`: a new type, or a property, given by the rules that build its values.
+
+Each box starts with the name's type, as Lean records it. For a function that is its domain and range: `triangle : ℕ → ℕ` takes a natural number and gives one back. Below it is the definition itself. The $n$-th triangular number is $0 + 1 + \dots + n$:
 
 ```lean
 /-- Triangular numbers -/
 def Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i
 ```
 
-A `structure` or `class` is a definition too. Its box lists its fields and their types:
+A `structure` or `class` box lists its fields and their types. Its type line, $\operatorname{Point} : \mathbf{Type}$, says that `Point` is itself a type, like $\mathbb{N}$: each value of `Point` is one point, made of an $x$ and a $y$.
 
 ```lean
 /-- A point with natural-number coordinates -/
@@ -28,7 +34,7 @@ structure Basics.Point where
   y : ℕ
 ```
 
-An `inductive` definition lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$.
+An `inductive` box lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$. Its type, $\operatorname{even} : \mathbb{N} \to \mathbf{Prop}$, says that `even` takes a natural number and gives a proposition: it is a property of numbers.
 
 ```lean
 /-- Even numbers, by two rules -/

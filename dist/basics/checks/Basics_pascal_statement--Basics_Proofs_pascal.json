@@ -14,5 +14,5 @@
   "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
   "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-  "wallMs": 1324
+  "wallMs": 1025
 }

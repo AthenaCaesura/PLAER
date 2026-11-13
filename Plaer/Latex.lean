@@ -203,10 +203,25 @@ meta def expressionLatex (expression : Expr) : MetaM String := do
     return "\\begin{gathered}" ++ " \\\\ \\implies ".intercalate rows ++ "\\end{gathered}"
   return normalized
 
+/-- A declared name as formulas write it: a paper's own names print upright, as
+themselves. Any other name falls back to its last component. -/
+meta def nameLatex (name : Name) : MetaM String := do
+  let info ← getConstInfo name
+  try expressionLatex (.const name (info.levelParams.map .param))
+  catch _ => return name.getString!.toLatex
+
 /-- Typeset the declaration's actual value, rather than rebuilding it from plot metadata. -/
 meta def definitionLatex (name : Name) : MetaM String := do
   let info ← getConstInfoDefn name
-  let body ← expressionLatex info.value
-  return name.getString!.toLatex ++ " \\coloneqq " ++ body
+  -- A function reads the usual way, `triangle(n) ≔ …`, with its arguments named as in
+  -- its definition. The type line above it gives the domain and range.
+  let applied ← try
+      lambdaTelescope info.value fun xs body => do
+        if xs.isEmpty then throwError "not a function"
+        let lhs ← expressionLatex (mkAppN (.const name (info.levelParams.map .param)) xs)
+        return some (lhs ++ " \\coloneqq " ++ (← expressionLatex body))
+    catch _ => pure none
+  if let some latex := applied then return latex
+  return (← nameLatex name) ++ " \\coloneqq " ++ (← expressionLatex info.value)
 
 end Plaer

@@ -4,7 +4,7 @@
   "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
   "source": "examples/Basics/Statements.lean",
   "sourceModule": "Basics.Statements",
-  "sourceSha256": "e1de42ba5c5ab76063bca798836f39d5958f848f1ba957f13b09f65cc716d9b2",
+  "sourceSha256": "b7de7f6304fdfa1910cb3bad3c3af4b2a5dcc39658977cabcafac909abf60ce5",
   "checks": [
     {
       "file": "proofs/File.lean",
@@ -22,7 +22,7 @@
       "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
       "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
       "statementHash": "538884409",
-      "wallMs": 1329
+      "wallMs": 984
     },
     {
       "file": "proofs/Missing.lean",
@@ -57,7 +57,7 @@
       "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
       "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-      "wallMs": 1463
+      "wallMs": 972
     },
     {
       "file": "proofs/Gauss.lean",
@@ -81,7 +81,7 @@
       "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
       "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-      "wallMs": 1406
+      "wallMs": 1047
     },
     {
       "file": "proofs/Primes.lean",
@@ -103,7 +103,7 @@
       "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
       "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
-      "wallMs": 1383
+      "wallMs": 929
     },
     {
       "file": "proofs/Notation.lean",
@@ -123,7 +123,7 @@
       "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
       "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-      "wallMs": 1324
+      "wallMs": 1025
     },
     {
       "file": "proofs/Notation.lean",
@@ -147,7 +147,7 @@
       "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
       "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-      "wallMs": 1328
+      "wallMs": 954
     }
   ]
 }

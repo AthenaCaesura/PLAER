@@ -51,9 +51,9 @@ Prose after.
     boxes = {d["name"]: d for d in declarations(state)}
     assert list(boxes) == ["SelfTest.triple", "SelfTest.zero_add_statement",
                            "SelfTest.Point", "SelfTest.unsupported_statement"], list(boxes)
-    assert boxes["SelfTest.triple"]["kind"] == "definition" and "\\coloneqq" in boxes["SelfTest.triple"]["latex"]
+    assert boxes["SelfTest.triple"]["kind"] == "definition" and boxes["SelfTest.triple"]["latex"] == "\\operatorname{triple}(n) \\coloneqq 3 \\cdot n"
     # A definition shows its type, domain and range first, as Lean elaborated it.
-    assert boxes["SelfTest.triple"]["signatureLatex"] == "triple : \\mathbb{N} \\to \\mathbb{N}", boxes["SelfTest.triple"]
+    assert boxes["SelfTest.triple"]["signatureLatex"] == "\\operatorname{triple} : \\mathbb{N} \\to \\mathbb{N}", boxes["SelfTest.triple"]
     statement = boxes["SelfTest.zero_add_statement"]
     assert (statement["kind"], statement["title"], statement["caption"]) == ("candidate", "Zero on the left", "A caption.")
     assert statement["statementLatex"] == "\\forall n : \\mathbb{N},\\ 0 + n = n", statement["statementLatex"]
@@ -70,7 +70,7 @@ Prose after.
     assert "Wrong" not in checker and "Broken" not in checker   # one check compiles one proof file
     # A structure is a definition: its box lists its fields with their types.
     point = boxes["SelfTest.Point"]
-    assert point["kind"] == "definition" and point["signatureLatex"] == "Point : \\mathbf{Type}", point
+    assert point["kind"] == "definition" and point["signatureLatex"] == "\\operatorname{Point} : \\mathbf{Type}", point
     assert point["latex"] == "\\begin{aligned}x &: \\mathbb{N}\\end{aligned}", point
     # Unsupported notation keeps the Lean view and says why, instead of guessing or failing the build.
     unsupported = boxes["SelfTest.unsupported_statement"]

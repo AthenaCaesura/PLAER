@@ -9,6 +9,7 @@ open Lean Meta Elab Term Plaer IntervalFixture
 namespace LatexTests
 
 def unmapped (n : Nat) : Nat := n + 7
+def twice (n : Nat) : Nat := n + n
 def alternate : Set ℝ := {y | y = 0 ∨ y = 1}
 theorem quantified (n : Nat) : n + 0 = n := Nat.add_zero n
 
@@ -68,6 +69,10 @@ elab "#test_latex" : command => Command.liftTermElabM do
       pure false
     catch _ => pure true
     unless rejected do throwError "Strict rendering silently accepted: {source}"
+  -- A function the file defines reads `twice(n) ≔ …`.
+  let twice ← definitionLatex ``twice
+  unless twice == "\\operatorname{twice}(n) \\coloneqq n + n" do throwError "Function definition: {twice}"
+  fixtures := fixtures.push <| Json.mkObj [("source", toJson "definition twice"), ("latex", toJson twice)]
   let definition ← definitionLatex ``I
   unless definition == "I \\coloneqq \\left\\{x\\in\\mathbb{R}\\;\\middle|\\; 0 \\le x \\le 1\\right\\}" do
     throwError "The paper definition changed unexpectedly: {definition}"

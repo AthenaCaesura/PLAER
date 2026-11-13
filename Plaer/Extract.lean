@@ -52,7 +52,7 @@ meta def definitionReport (name : Name) : MetaM Json := do
   let moduleName := (← findModuleOf? name).getD .anonymous
   -- Its type, as Lean elaborated it: `triangle : ℕ → ℕ`, domain and range first.
   let signature ← try
-      pure (some (name.getString!.toLatex ++ " : " ++ (← expressionLatex info.type)))
+      pure (some ((← nameLatex name) ++ " : " ++ (← expressionLatex info.type)))
     catch _ => pure none
   return Json.mkObj <| [
     ("name", toJson name.toString), ("kind", toJson "definition"),
@@ -77,7 +77,7 @@ each with its type as Lean elaborated it:
 meta def inductiveReport (name : Name) (info : InductiveVal) : MetaM Json := do
   let env ← getEnv
   let signature ← try
-      pure (some (name.getString!.toLatex ++ " : " ++ (← expressionLatex info.type)))
+      pure (some ((← nameLatex name) ++ " : " ++ (← expressionLatex info.type)))
     catch _ => pure none
   let rows : MetaM (List String) := do
     if isStructure env name then

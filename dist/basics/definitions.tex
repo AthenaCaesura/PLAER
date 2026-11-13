@@ -1,4 +1,4 @@
-triangle \coloneqq (n : \mathbb{N}) \mapsto \sum_{i = 0}^{n} i
+\operatorname{triangle}(n) \coloneqq \sum_{i = 0}^{n} i
 \begin{aligned}x &: \mathbb{N} \\ y &: \mathbb{N}\end{aligned}
 \begin{aligned}\operatorname{zero} &: \operatorname{even}(0) \\ \operatorname{step} &: \forall n : \mathbb{N},\ \operatorname{even}(n) \implies \operatorname{even}(n + 2)\end{aligned}
 \forall n : \mathbb{N},\ n > 2 \land 2 \mid n \implies \exists p : \mathbb{N},\ \exists q : \mathbb{N},\ \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = n

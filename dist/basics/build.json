@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T14:41:43.368266+00:00",
+  "built_at": "2026-11-13T14:46:14.082223+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
-  "paper_sha256": "4b97aeb89255c481736c1464295eaef69bd4e6a5246300d7871b69bde1420287",
-  "source_sha256": "e1de42ba5c5ab76063bca798836f39d5958f848f1ba957f13b09f65cc716d9b2",
-  "document_sha256": "f1b409dcf11b960077cb1853f86db9f166c525d35cc4063f1c3d74329a5049ec",
-  "engine_fingerprint": "c313df4084f8b4ab75166f448e81cbc34c5c91e78bc1503e0888f13616baf082",
+  "paper_sha256": "5639c7c7c4b9c10c23a59ba7ea87d50719076f9f77e19785c316d48a34e5df24",
+  "source_sha256": "b7de7f6304fdfa1910cb3bad3c3af4b2a5dcc39658977cabcafac909abf60ce5",
+  "document_sha256": "4fa5cda961af05e5a5b97b3a67bc7c3f547d861547216008e1a9a35a3625ed5e",
+  "engine_fingerprint": "48349324f248f373ca33df07db5d60272bf563591c9391582cea69aa089def91",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -19,7 +19,7 @@
   "state": {
     "project": "basics",
     "title": "Theorems, conjectures, and definitions",
-    "revision": "4b97aeb89255c481736c1464295eaef69bd4e6a5246300d7871b69bde1420287",
+    "revision": "5639c7c7c4b9c10c23a59ba7ea87d50719076f9f77e19785c316d48a34e5df24",
     "paperFile": "examples/Basics/Paper.md",
     "paperUrl": "sources/Paper.md",
     "sourceFile": "examples/Basics/Statements.lean",
@@ -45,23 +45,23 @@
       },
       {
         "kind": "markdown",
-        "text": "A paper holds the things Lean has: definitions, and claims. A claim is a conjecture until a proof of it is checked; then it is a theorem. PLAER shows each one in its own kind of box.\n\n## Definition\n\nA `def` gives a name a meaning. Switch between its LaTeX and the Lean you wrote. The $n$-th triangular number is $0 + 1 + \\dots + n$:",
+        "text": "A paper holds the things Lean has: definitions, and claims. A claim is a conjecture until a proof of it is checked; then it is a theorem. PLAER shows each one in its own kind of box.\n\n## Definition\n\nThese Lean declarations make a **Definition** box:\n\n- `def` (and `abbrev`, `noncomputable def`) that is not a claim: a function, a number, a set, …\n- `structure` and `class`: a new type whose values are made of named fields.\n- `inductive`: a new type, or a property, given by the rules that build its values.\n\nEach box starts with the name's type, as Lean records it. For a function that is its domain and range: `triangle : ℕ → ℕ` takes a natural number and gives one back. Below it is the definition itself. The $n$-th triangular number is $0 + 1 + \\dots + n$:",
         "line": 11
       },
       {
         "kind": "lean",
         "text": "/-- Triangular numbers -/\ndef Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i",
-        "line": 18,
+        "line": 24,
         "items": [
           {
             "type": "declaration",
             "doc": "Triangular numbers",
             "kind": "definition",
-            "latex": "triangle \\coloneqq (n : \\mathbb{N}) \\mapsto \\sum_{i = 0}^{n} i",
+            "latex": "\\operatorname{triangle}(n) \\coloneqq \\sum_{i = 0}^{n} i",
             "leanVersion": "4.35.0",
-            "line": 18,
+            "line": 24,
             "name": "Basics.triangle",
-            "signatureLatex": "triangle : \\mathbb{N} \\to \\mathbb{N}",
+            "signatureLatex": "\\operatorname{triangle} : \\mathbb{N} \\to \\mathbb{N}",
             "source": "/-- Triangular numbers -/\ndef Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i",
             "sourceModule": "[anonymous]",
             "block": 1,
@@ -76,13 +76,13 @@
       },
       {
         "kind": "markdown",
-        "text": "A `structure` or `class` is a definition too. Its box lists its fields and their types:",
-        "line": 22
+        "text": "A `structure` or `class` box lists its fields and their types. Its type line, $\\operatorname{Point} : \\mathbf{Type}$, says that `Point` is itself a type, like $\\mathbb{N}$: each value of `Point` is one point, made of an $x$ and a $y$.",
+        "line": 28
       },
       {
         "kind": "lean",
         "text": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
-        "line": 25,
+        "line": 31,
         "items": [
           {
             "type": "declaration",
@@ -90,9 +90,9 @@
             "kind": "definition",
             "latex": "\\begin{aligned}x &: \\mathbb{N} \\\\ y &: \\mathbb{N}\\end{aligned}",
             "leanVersion": "4.35.0",
-            "line": 25,
+            "line": 31,
             "name": "Basics.Point",
-            "signatureLatex": "Point : \\mathbf{Type}",
+            "signatureLatex": "\\operatorname{Point} : \\mathbf{Type}",
             "source": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
             "block": 2,
             "offset": 0,
@@ -106,13 +106,13 @@
       },
       {
         "kind": "markdown",
-        "text": "An `inductive` definition lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$.",
-        "line": 31
+        "text": "An `inductive` box lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$. Its type, $\\operatorname{even} : \\mathbb{N} \\to \\mathbf{Prop}$, says that `even` takes a natural number and gives a proposition: it is a property of numbers.",
+        "line": 37
       },
       {
         "kind": "lean",
         "text": "/-- Even numbers, by two rules -/\ninductive Basics.even : ℕ → Prop\n  | zero : Basics.even 0\n  | step (n : ℕ) : Basics.even n → Basics.even (n + 2)",
-        "line": 34,
+        "line": 40,
         "items": [
           {
             "type": "declaration",
@@ -120,9 +120,9 @@
             "kind": "definition",
             "latex": "\\begin{aligned}\\operatorname{zero} &: \\operatorname{even}(0) \\\\ \\operatorname{step} &: \\forall n : \\mathbb{N},\\ \\operatorname{even}(n) \\implies \\operatorname{even}(n + 2)\\end{aligned}",
             "leanVersion": "4.35.0",
-            "line": 34,
+            "line": 40,
             "name": "Basics.even",
-            "signatureLatex": "even : \\mathbb{N} \\to \\mathbf{Prop}",
+            "signatureLatex": "\\operatorname{even} : \\mathbb{N} \\to \\mathbf{Prop}",
             "source": "/-- Even numbers, by two rules -/\ninductive Basics.even : ℕ → Prop\n  | zero : Basics.even 0\n  | step (n : ℕ) : Basics.even n → Basics.even (n + 2)",
             "block": 3,
             "offset": 0,
@@ -137,19 +137,19 @@
       {
         "kind": "markdown",
         "text": "## Conjecture\n\nA `def … : Prop` is a claim: Lean calls it a proposition. Writing it down does not assert it. Until a proof of it is checked, it is a **Conjecture**. Goldbach's conjecture has been checked for every even number up to $4 \\times 10^{18}$, but nobody has proved it:",
-        "line": 40
+        "line": 46
       },
       {
         "kind": "lean",
         "text": "/-- Goldbach's conjecture -/\ndef Basics.goldbach : Prop :=\n  ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n",
-        "line": 45,
+        "line": 51,
         "items": [
           {
             "type": "declaration",
             "doc": "Goldbach's conjecture",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 45,
+            "line": 51,
             "name": "Basics.goldbach",
             "sourceModule": "[anonymous]",
             "statementHash": "95177223",
@@ -169,19 +169,19 @@
       {
         "kind": "markdown",
         "text": "A conjecture can be false. Euler noticed that $n^2 + n + 41$ is prime for $n = 0, 1, \\dots, 39$, but at $n = 40$ it is $41^2$. The proof attached here is wrong, and the second proof file does not exist, so the claim stays a conjecture:",
-        "line": 50
+        "line": 56
       },
       {
         "kind": "lean",
         "text": "/-- Euler's prime-generating polynomial -/\ndef Basics.euler_statement : Prop := ∀ n : ℕ, (n ^ 2 + n + 41).Prime\n-- proof: proofs/File.lean Basics.Proofs.euler\n-- proof: proofs/Missing.lean Basics.Proofs.euler_missing",
-        "line": 53,
+        "line": 59,
         "items": [
           {
             "type": "declaration",
             "doc": "Euler's prime-generating polynomial",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 53,
+            "line": 59,
             "name": "Basics.euler_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "538884409",
@@ -207,7 +207,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
                 "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
                 "statementHash": "538884409",
-                "wallMs": 1329
+                "wallMs": 984
               },
               {
                 "file": "proofs/Missing.lean",
@@ -231,19 +231,19 @@
       {
         "kind": "markdown",
         "text": "## Theorem\n\nA `-- proof:` line attaches a proof file to a claim. When a play button checks a proof, Lean has proved the claim and the box says **Theorem**. If the check happened earlier, for example when this page was built, the box says so; press play to check it again.\n\nEvery proof rests on the axioms of Lean's logic, and the box lists the ones its proof uses. A claim can have several proofs. Gauss's formula for the triangular numbers defined above has two, both from that definition:",
-        "line": 59
+        "line": 65
       },
       {
         "kind": "lean",
         "text": "/-- Gauss's formula -/\ndef Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)\n-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction\n-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_steps",
-        "line": 66,
+        "line": 72,
         "items": [
           {
             "type": "declaration",
             "doc": "Gauss's formula",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 66,
+            "line": 72,
             "name": "Basics.gauss_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "985449252",
@@ -275,7 +275,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1463
+                "wallMs": 972
               },
               {
                 "file": "proofs/Gauss.lean",
@@ -299,7 +299,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1406
+                "wallMs": 1047
               }
             ],
             "statement": true,
@@ -312,19 +312,19 @@
       {
         "kind": "markdown",
         "text": "## A theorem that assumes a conjecture\n\nA proof can never assume a conjecture. To build on one, put it in the claim: \"if Goldbach's conjecture holds, then …\". The theorem below is then honest about what it rests on, because the assumption is part of what it says:",
-        "line": 72
+        "line": 78
       },
       {
         "kind": "lean",
         "text": "/-- If Goldbach is right, 100 is a sum of two primes -/\ndef Basics.hundred_statement : Prop :=\n  Basics.goldbach → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = 100\n-- proof: proofs/Primes.lean Basics.Proofs.hundred",
-        "line": 77,
+        "line": 83,
         "items": [
           {
             "type": "declaration",
             "doc": "If Goldbach is right, 100 is a sum of two primes",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 77,
+            "line": 83,
             "name": "Basics.hundred_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "1879992750",
@@ -354,7 +354,7 @@
                 "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
                 "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
-                "wallMs": 1383
+                "wallMs": 929
               }
             ],
             "statement": true,
@@ -367,12 +367,12 @@
       {
         "kind": "markdown",
         "text": "## Lean\n\nAll other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, and quick checks such as `example`. This one gives points a default value and checks that $\\operatorname{triangle}(4) = 10$:",
-        "line": 83
+        "line": 89
       },
       {
         "kind": "lean",
         "text": "instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩\n\nexample : Basics.triangle 4 = 10 := by simp [Basics.triangle, Finset.sum_range_succ]",
-        "line": 88,
+        "line": 94,
         "items": [
           {
             "type": "code",
@@ -383,19 +383,19 @@
       {
         "kind": "markdown",
         "text": "## Not allowed in a paper\n\nA paper states claims; proofs live in proof files. Lean refuses to build a paper that contains:\n\n- a `theorem`, because a `theorem` carries its proof. Write it as a conjecture with a `-- proof:` line; it shows as a theorem once that proof is checked.\n- an `axiom`, because every proof could then quietly assume it. Write it as a conjecture, and put it in the claims that depend on it, as above.\n- `sorry`, which would pretend a claim is proved.\n\nThis sample is not compiled:\n\n```lean ignore\ntheorem Basics.zero_add (n : ℕ) : 0 + n = n := by simp      -- refused: the proof belongs in a proof file\naxiom Basics.goldbach_holds : Basics.goldbach                -- refused: an unproved assumption\ndef Basics.half : ℕ → ℕ := sorry                            -- refused: sorry\n```\n\n## Notation\n\nThe LaTeX view knows common notation, such as sums, binomial coefficients, and trigonometric functions. Two examples, proved in `proofs/Notation.lean`:",
-        "line": 93
+        "line": 99
       },
       {
         "kind": "lean",
         "text": "/-- Pascal's rule -/\ndef Basics.pascal_statement : Prop :=\n  ∀ n k : ℕ, Nat.choose (n + 1) (k + 1) = Nat.choose n k + Nat.choose n (k + 1)\n-- proof: proofs/Notation.lean Basics.Proofs.pascal\n\n/-- The Pythagorean identity -/\ndef Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1\n-- proof: proofs/Notation.lean Basics.Proofs.sin_cos",
-        "line": 114,
+        "line": 120,
         "items": [
           {
             "type": "declaration",
             "doc": "Pascal's rule",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 114,
+            "line": 120,
             "name": "Basics.pascal_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "2248319565",
@@ -423,7 +423,7 @@
                 "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1324
+                "wallMs": 1025
               }
             ],
             "statement": true,
@@ -436,7 +436,7 @@
             "doc": "The Pythagorean identity",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 119,
+            "line": 125,
             "name": "Basics.sin_cos_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "1396079601",
@@ -468,7 +468,7 @@
                 "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1328
+                "wallMs": 954
               }
             ],
             "statement": true,

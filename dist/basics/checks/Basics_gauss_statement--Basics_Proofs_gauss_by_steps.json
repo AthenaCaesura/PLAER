@@ -18,5 +18,5 @@
   "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
   "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-  "wallMs": 1406
+  "wallMs": 1047
 }
