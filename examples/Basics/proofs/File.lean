@@ -1,8 +1,7 @@
 import Basics.Statements
 
-/-- Deliberately incorrect, written as a chain of equalities.
-Lean checks each step; the first one is wrong, because `1` is not `0`. -/
-theorem Namespace.Proofs.name : Namespace.name_statement := by
+/-- Deliberately wrong: `decide` can check one number at a time, but not every `n` at once.
+(And the claim is false anyway: at n = 40 the value is 41².) -/
+theorem Basics.Proofs.euler : Basics.euler_statement := by
   intro n
-  calc n + 1 = n + 0 := by rfl            -- wrong step: claims 1 = 0
-    _ = n := by rw [Nat.add_zero]         -- correct step: adding zero changes nothing
+  decide

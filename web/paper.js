@@ -267,11 +267,10 @@
   // whether Lean accepts it; proof bodies are never embedded in the card.
 
   // A claim is a conjecture until one of its proofs is checked; then it is a
-  // theorem. An axiom is a claim Lean accepts without proof.
+  // theorem, and it lists the axioms of Lean's own logic its proof rests on.
   function statementBox(item, blockIndex) {
-    const axiom = item.kind === "axiom";
     const card = node("section", "proof-check");
-    card.setAttribute("aria-label", (axiom ? "Axiom: " : "Claim and proof checks: ") + item.title);
+    card.setAttribute("aria-label", "Claim and proof checks: " + item.title);
     const leanPanel = leanSourcePanel(item, blockIndex);
     // Lean's own printing of the statement it checks: one line, implicit details shown.
     const reprintPanel = node("div");
@@ -285,14 +284,13 @@
     function refreshKind() {
       const proved = (item.proofs || []).filter(proof => proof.result && proof.result.ok && !proof.result.pending);
       const notes = [];
-      if (axiom) {
-        notes.push("Assumed without proof. A theorem that uses it says so.");
-      } else if (proved.length) {
+      if (proved.length) {
         if (!proved.some(proof => proof.checkedNow)) notes.push("Proved by an earlier check. Press play to check it again.");
-        const assumed = [...new Set(proved.flatMap(proof => proof.result.assumes || []))];
-        if (assumed.length) notes.push("Assumes the axiom" + (assumed.length > 1 ? "s " : " ") + assumed.join(", ") + ".");
+        // The proof that needs the fewest axioms is the one to cite.
+        const fewest = proved.map(proof => proof.result.axioms || []).sort((a, b) => a.length - b.length)[0];
+        notes.push(fewest.length ? "Rests on Lean's axioms " + fewest.join(", ") + "." : "Uses none of Lean's axioms.");
       }
-      eyebrow.textContent = axiom ? "Axiom" : proved.length ? "Theorem" : "Conjecture";
+      eyebrow.textContent = proved.length ? "Theorem" : "Conjecture";
       card.dataset.kind = eyebrow.textContent.toLowerCase();
       caveat.textContent = notes.join(" ");
       caveat.hidden = !notes.length;
@@ -303,7 +301,6 @@
     statement.append(mathPanel, leanPanel, reprintPanel);
     card.append(statement);
 
-    if (axiom) return card;
     if (!item.proofs.length) {
       card.append(node("p", "proof-none", "No proof attached. Add a line such as “-- proof: proofs/File.lean Namespace.name” under it."));
     }
@@ -390,7 +387,7 @@
     }
     for (const item of block.items) {
       output.append(item.type === "code" ? codeBlock(item)
-        : item.statement || item.kind === "axiom" ? statementBox(item, index) : definitionBox(item, index));
+        : item.statement ? statementBox(item, index) : definitionBox(item, index));
     }
     return output;
   }

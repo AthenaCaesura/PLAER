@@ -139,7 +139,10 @@ def declarations(project: Project, blocks: list[paper.Block], compile: bool = Tr
     found = json.loads(reports[0])
     refused = {"theorem": "write {name} as a conjecture, `def {name} : Prop := ...`, and put its proof "
                           "in a separate file attached with a `-- proof:` line. It shows as a theorem "
-                          "once that proof is checked"}
+                          "once that proof is checked",
+               "axiom": "{name} is an axiom: an assumption nothing proves, which every proof could use. "
+                        "Make it a conjecture, `def {name} : Prop := ...`, and put it in the claims that "
+                        "depend on it: `def Q : Prop := {name} → ...`"}
     problems = [f"{project.paper.name}:{d['line']}: " + refused[d["kind"]].format(name=d["name"])
                 for d in found if d["kind"] in refused] + sorries
     if problems:

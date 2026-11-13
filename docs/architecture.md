@@ -40,15 +40,24 @@ does not is checked in its own Lean process instead. `scripts/build.py` also
 compiles `Statements.lean` to a module, so the offline checker files run on
 their own with `lake env lean`.
 
-## Statements and proofs
+## Conjectures, theorems, and axioms
 
-An unproved statement is a closed definition of type `Prop`:
+A claim is a closed definition of type `Prop`:
 
 ```lean
-def add_zero_statement : Prop := ∀ n : Nat, n + 0 = n
+def goldbach : Prop := ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n
 ```
 
 This defines a proposition; it does not assert it and introduces no axiom.
+The page calls it a conjecture until one of its proofs is checked, and a
+theorem after. Papers may not contain `axiom`, so a proof can only rest on
+Lean's own axioms; an assumption such as Goldbach's conjecture must appear in
+the claim, as `goldbach → ...`.
+
+Lean's `collectAxioms` follows every constant a proof uses, transitively,
+through Mathlib down to the axioms at the bottom, so its list is complete. It
+does not re-check Mathlib's proofs: each was checked by Lean's kernel when
+Mathlib was compiled. The check re-runs the kernel only on the new proof.
 
 A proof check compiles a readable checker: the complete proof file, an added
 `import Plaer.Check`, and a final `#plaer_check_proof statement proof`. That

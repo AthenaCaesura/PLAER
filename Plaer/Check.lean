@@ -45,21 +45,14 @@ meta def checkExternalProof (statementName proofName : Name) : MetaM Json := do
       for axiomName in ← collectAxioms constant do
         unless axioms.contains axiomName do axioms := axioms.push axiomName
     let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-    -- Axioms the paper itself states are allowed, and reported: the page says the
-    -- theorem assumes them. Any other axiom fails the check.
-    let paper ← findModuleOf? statementName
-    let mut assumed : Array Name := #[]
+    -- `collectAxioms` follows every constant the proof uses, all the way down, so
+    -- this is the complete list. Only Lean's three standard axioms are accepted.
     for axiomName in axioms do
-      if allowed.contains axiomName then continue
-      if (← findModuleOf? axiomName) == paper then
-        assumed := assumed.push axiomName
-        continue
-      throwError "Unapproved axiom: {axiomName}"
+      unless allowed.contains axiomName do throwError "Unapproved axiom: {axiomName}"
     pure <| Json.mkObj [
       ("ok", toJson true),
       ("diagnostics", toJson "Lean's kernel accepted the displayed proposition; axiom dependencies audited."),
-      ("axioms", toJson (axioms.map Name.toString)),
-      ("assumes", toJson (assumed.map Name.toString))]
+      ("axioms", toJson (axioms.map Name.toString))]
   catch error =>
     pure <| Json.mkObj [
       ("ok", toJson false),

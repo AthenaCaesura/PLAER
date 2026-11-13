@@ -16,8 +16,9 @@
 
 PLAER turns Lean definitions and theorem statements into a readable document.
 Each one appears in a box that switches between **LaTeX** and **Lean**: a
-definition, a conjecture, a theorem, or an axiom. A claim is a conjecture until
-one of its proofs is checked, and then it is a theorem. Readers never have to
+definition, a conjecture, or a theorem. A claim is a conjecture until one of
+its proofs is checked, and then it is a theorem, listing the axioms of Lean's
+logic that its proof uses. Readers never have to
 look at a proof: a box only says where its proofs live and whether Lean
 accepts them.
 

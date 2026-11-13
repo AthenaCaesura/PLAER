@@ -1,0 +1,22 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.gauss_statement",
+  "proofDeclaration": "Basics.Proofs.gauss_by_induction",
+  "result": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "985449252",
+  "proofFile": "examples/Basics/proofs/Gauss.lean",
+  "proofUrl": "sources/proofs/Gauss.lean",
+  "checkerUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean",
+  "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
+  "proofSha256": "0d7e89557df2a9e6c4d40bd32251c8bcbd74fc177f462846dcea4c21e23f0bef",
+  "wallMs": 593
+}

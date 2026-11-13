@@ -19,20 +19,23 @@ module name, so it must be a capitalized Lean identifier such as `MyTopic`.
 `Paper.md` is ordinary Markdown. The first `# heading` is the document title.
 Write `$...$` and `$$...$$` for mathematics in your notes.
 
-A fenced block that says exactly ` ```lean ` is Lean. The boxes are the four
-things Lean has: definitions, claims, proved claims, and assumptions.
+A fenced block that says exactly ` ```lean ` is Lean. The boxes are the things
+Lean has: definitions, and claims, which are conjectures until proved.
 
 | You write | The document shows |
 | --- | --- |
 | any `def` that is not a claim | A **Definition** box with LaTeX and Lean views. |
 | `structure`, `class`, `inductive` | A **Definition** box with only its Lean, since there is no formula. |
 | `def name : Prop := ...` (a proposition) | A **Conjecture** box, with a play button for each attached proof. |
-| the same, once a play button proves it | A **Theorem** box. If the proof was checked earlier, such as when the page was built, the box says so. |
-| `axiom name : ...` | An **Axiom** box, marked as assumed without proof. A theorem whose proof uses it names it. |
+| the same, once a play button proves it | A **Theorem** box. It lists the axioms of Lean's logic its proof uses, and says so if the proof was checked earlier, such as when the page was built. |
 | anything else: imports, `instance`, notation rules, `example`, ... | One folded **Lean** line. |
 
 A `theorem` in the paper is an error, because a `theorem` carries its proof:
-write it as a conjecture with a proof file. `sorry` is an error too. Imports
+write it as a conjecture with a proof file. An `axiom` is an error, because
+every proof could quietly assume it: write it as a conjecture and put it in
+the claims that depend on it, `def Q : Prop := Goldbach → ...`. `sorry` is an
+error too. A proof may use only Lean's own axioms (`propext`,
+`Classical.choice`, `Quot.sound`). Imports
 come before all other Lean, and the editor refuses to move a box above them.
 
 The LaTeX view knows Lean's logic and arithmetic, sets, and this Mathlib
@@ -45,13 +48,13 @@ A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.
 
 ```lean
-/-- Adding zero -/
-def Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n
+/-- Gauss's formula -/
+def Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)
 ```
 
-Represent a statement you have not proved in the paper as a closed `Prop`
-definition, with every parameter bound inside the proposition. This says what
-the claim is; it adds no axiom and does not claim a proof exists.
+Write every claim as a closed `Prop` definition, with every parameter bound
+inside the proposition. This says what the claim is; it adds no axiom and does
+not claim a proof exists.
 
 All of a paper's Lean compiles as one module, top to bottom, exactly as if the
 blocks were one file. Use ` ```lean ignore ` for Lean you want to show without
@@ -59,28 +62,27 @@ compiling it.
 
 ## Attach proofs
 
-Put each proof in its own Lean file. It imports the paper's module and proves
-the statement by name:
+Put proofs in their own Lean files. A proof file imports the paper's module
+and proves the claim by name:
 
 ```lean
 import Basics.Statements
 
-theorem Basics.Proofs.add_zero : Basics.add_zero_statement := by
-  intro n
-  exact Nat.add_zero n
+theorem Basics.Proofs.infinitely_many_primes : Basics.infinitely_many_primes :=
+  fun n => Nat.exists_infinite_primes n
 ```
 
-Attach it with a comment line under the statement, inside the same block:
+Attach it with a comment line under the claim, inside the same block:
 
 ```lean
-def Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n
--- proof: proofs/AddZero.lean Basics.Proofs.add_zero
--- proof: proofs/AddZeroBySimp.lean Basics.Proofs.add_zero_by_simp
+def Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)
+-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction
+-- proof: proofs/Gauss.lean Basics.Proofs.gauss_from_mathlib
 ```
 
 The line gives the proof file, relative to the paper's folder, and the
-declaration in it. A statement can have any number of proofs, or none. Each
-gets its own play button and result.
+declaration in it. A claim can have any number of proofs, or none. Each gets
+its own play button and result.
 
 A check compiles one proof file followed by an audit command. It succeeds only
 if the named declaration proves exactly the displayed proposition, contains no
@@ -100,10 +102,10 @@ paper, after the definition:
 
 ```lean
 open Lean LeanTeX in
-latex_pp_app_rules (const := Basics.double)
+latex_pp_app_rules (const := Basics.triangle)
   | _, #[n] => do
     let n ← latexPP n
-    return LatexData.atomString "\\operatorname{double}" ++ n.parens
+    return (LatexData.atomString "T").sub n
 ```
 
 This needs `import Plaer.Latex` in the paper's first block. Rules for Mathlib

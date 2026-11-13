@@ -1,0 +1,16 @@
+{
+  "name": "Basics.euler_statement",
+  "proofDeclaration": "Basics.Proofs.euler",
+  "result": {
+    "ok": false,
+    "diagnostics": "Expected type must not contain free variables\n  Nat.Prime (n ^ 2 + n + 41)\n\nHint: Use the `+revert` option to automatically clean up and revert free variables"
+  },
+  "proofFile": "examples/Basics/proofs/File.lean",
+  "proofUrl": "sources/proofs/File.lean",
+  "checkerUrl": "checks/Basics_euler_statement--Basics_Proofs_euler.lean",
+  "auditUrl": "checks/Basics_euler_statement--Basics_Proofs_euler.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
+  "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
+  "statementHash": "538884409",
+  "wallMs": 584
+}

@@ -93,13 +93,16 @@ Prose after.
         raise AssertionError("a theorem or sorry in the paper was accepted")
     except LeanRejected as error:
         assert "SelfTest.inline as a conjecture" in str(error) and "`sorry` is not allowed" in str(error), error
-    # An axiom is accepted, and gets its own box.
-    (folder / "Paper.md").write_text(text + "\n```lean\n/-- Assumed -/\naxiom SelfTest.assumed : ∀ n : ℕ, n = n\n```\n",
+    # An axiom is refused too: a proof could quietly assume it.
+    (folder / "Paper.md").write_text(text + "\n```lean\naxiom SelfTest.assumed : ∀ n : ℕ, n = 0\n```\n",
                                      encoding="utf-8")
-    assumed = {d["name"]: d for d in declarations(build_state(project, run_proofs=False))}["SelfTest.assumed"]
-    assert assumed["kind"] == "axiom" and assumed["statementLatex"].startswith("\\forall n"), assumed
+    try:
+        build_state(project, run_proofs=False)
+        raise AssertionError("an axiom in the paper was accepted")
+    except LeanRejected as error:
+        assert "SelfTest.assumed is an axiom" in str(error), error
     print("PASS: boxes from one paper; good proof accepted; wrong, sorry, broken and missing proofs rejected; "
-          "theorems and sorry refused in papers; axioms get boxes")
+          "theorems, axioms and sorry refused in papers")
 finally:
     shutil.rmtree(folder, ignore_errors=True)
     shutil.rmtree(ROOT / "dist" / "selftest", ignore_errors=True)

@@ -3,7 +3,6 @@
   "name": "Fermat.little_statement",
   "proofDeclaration": "Fermat.Proofs.little",
   "result": {
-    "assumes": [],
     "axioms": [
       "propext",
       "Classical.choice",
@@ -19,5 +18,5 @@
   "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
   "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
   "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-  "wallMs": 979
+  "wallMs": 1348
 }

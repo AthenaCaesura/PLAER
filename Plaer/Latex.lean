@@ -114,6 +114,7 @@ latex_pp_app_rules (kind := const.Real.log) | _, args => namedFunction "\\log" a
 latex_pp_app_rules (kind := const.Real.sin) | _, args => namedFunction "\\sin" args 1
 latex_pp_app_rules (kind := const.Real.cos) | _, args => namedFunction "\\cos" args 1
 latex_pp_app_rules (kind := const.Nat.gcd) | _, args => namedFunction₂ "\\gcd" args 2
+latex_pp_app_rules (kind := const.Nat.lcm) | _, args => namedFunction₂ "\\operatorname{lcm}" args 2
 latex_pp_app_rules (kind := const.Min.min) | _, args => namedFunction₂ "\\min" args 4
 latex_pp_app_rules (kind := const.Max.max) | _, args => namedFunction₂ "\\max" args 4
 latex_pp_rules (kind := const.Real.pi) | _ => pure <| LatexData.atomString "\\pi"

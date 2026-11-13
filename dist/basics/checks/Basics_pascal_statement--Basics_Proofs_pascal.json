@@ -1,0 +1,18 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.pascal_statement",
+  "proofDeclaration": "Basics.Proofs.pascal",
+  "result": {
+    "axioms": [],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "2248319565",
+  "proofFile": "examples/Basics/proofs/Notation.lean",
+  "proofUrl": "sources/proofs/Notation.lean",
+  "checkerUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.lean",
+  "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
+  "proofSha256": "7ba45e75dcdd66925449f73f6c518c2f6084b846321e1f23b0e7111fc16efedb",
+  "wallMs": 697
+}

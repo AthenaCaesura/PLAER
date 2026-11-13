@@ -3,7 +3,6 @@
   "name": "Basics.sum_statement",
   "proofDeclaration": "Basics.Proofs.sum_odd",
   "result": {
-    "assumes": [],
     "axioms": [
       "propext",
       "Classical.choice",
@@ -18,6 +17,6 @@
   "checkerUrl": "checks/Basics_sum_statement--Basics_Proofs_sum_odd.lean",
   "auditUrl": "checks/Basics_sum_statement--Basics_Proofs_sum_odd.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_sum_statement--Basics_Proofs_sum_odd.lean\"",
-  "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
-  "wallMs": 722
+  "proofSha256": "7ba45e75dcdd66925449f73f6c518c2f6084b846321e1f23b0e7111fc16efedb",
+  "wallMs": 693
 }

@@ -1,24 +1,25 @@
 import Basics.Statements
 
-/-! Proofs of the notation examples, one theorem per statement. -/
+/-! Proofs of the notation examples, one theorem per claim. -/
 
-theorem Basics.Proofs.gcd_dvd : Basics.gcd_dvd_statement :=
-  fun a b => Nat.gcd_dvd_left a b
+theorem Basics.Proofs.gcd_lcm : Basics.gcd_lcm_statement :=
+  fun a b => Nat.gcd_mul_lcm a b
 
-theorem Basics.Proofs.min_le_max : Basics.min_le_max_statement :=
-  fun _ _ => _root_.min_le_max
+theorem Basics.Proofs.min_max : Basics.min_max_statement := by
+  intro a b
+  omega
 
-theorem Basics.Proofs.abs_nonneg : Basics.abs_statement :=
-  fun x => _root_.abs_nonneg x
+theorem Basics.Proofs.triangle_inequality : Basics.triangle_inequality :=
+  fun x y => abs_add_le x y
 
-theorem Basics.Proofs.sqrt_mul_self : Basics.sqrt_statement :=
-  fun x hx => Real.mul_self_sqrt hx
+theorem Basics.Proofs.sqrt_mul : Basics.sqrt_statement :=
+  fun x y hx => Real.sqrt_mul hx y
 
-theorem Basics.Proofs.factorial_succ : Basics.factorial_statement :=
-  fun n => Nat.factorial_succ n
+theorem Basics.Proofs.dvd_factorial : Basics.factorial_statement :=
+  fun _ _ hm hmn => Nat.dvd_factorial hm hmn
 
-theorem Basics.Proofs.choose_one : Basics.choose_statement :=
-  fun n => Nat.choose_one_right n
+theorem Basics.Proofs.pascal : Basics.pascal_statement :=
+  fun n k => Nat.choose_succ_succ n k
 
 theorem Basics.Proofs.sum_odd : Basics.sum_statement := by
   intro n
@@ -32,11 +33,11 @@ theorem Basics.Proofs.prod_succ : Basics.prod_statement := by
   | zero => simp
   | succ n ih => rw [Finset.prod_range_succ, ih, Nat.factorial_succ]; ring
 
-theorem Basics.Proofs.log_exp : Basics.log_exp_statement :=
-  fun x => Real.log_exp x
+theorem Basics.Proofs.exp_add : Basics.exp_statement :=
+  fun x y => Real.exp_add x y
 
 theorem Basics.Proofs.sin_cos : Basics.sin_cos_statement :=
   fun x => Real.sin_sq_add_cos_sq x
 
-theorem Basics.Proofs.pi_pos : Basics.pi_statement :=
-  Real.pi_pos
+theorem Basics.Proofs.cos_pi : Basics.pi_statement :=
+  Real.cos_pi

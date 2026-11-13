@@ -43,6 +43,7 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("∀ n : ℕ, Nat.factorial (n + 1) = (n + 1) * Nat.factorial n", "\\forall n : \\mathbb{N},\\ (n + 1)! = (n + 1) \\cdot n!"),
     ("∀ n k : ℕ, Nat.choose n k ≤ 2 ^ n", "\\forall n, k : \\mathbb{N},\\ \\binom{n}{k} \\le 2^{n}"),
     ("∀ a b : ℕ, Nat.gcd a b ∣ a", "\\forall a, b : \\mathbb{N},\\ \\gcd(a, b) \\mid a"),
+    ("∀ a b : ℕ, Nat.gcd a b * Nat.lcm a b = a * b", "\\forall a, b : \\mathbb{N},\\ \\gcd(a, b) \\cdot \\operatorname{lcm}(a, b) = a \\cdot b"),
     ("∀ a b : ℕ, min a b ≤ max a b", "\\forall a, b : \\mathbb{N},\\ \\min(a, b) \\le \\max(a, b)"),
     ("∀ x : ℝ, Real.log (Real.exp x) = x", "\\forall x : \\mathbb{R},\\ \\log(\\exp(x)) = x"),
     ("∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1", "\\forall x : \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1"),
