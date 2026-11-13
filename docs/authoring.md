@@ -41,8 +41,9 @@ come before all other Lean, and the editor refuses to move a box above them.
 The LaTeX view knows Lean's logic and arithmetic, sets, and this Mathlib
 notation: `∣`, `gcd`, `min`, `max`, `|x|`, `√x`, `n!`, `choose`, `∑` and `∏`
 over a `Finset` (with limits over `Finset.range`), `exp`, `log`, `sin`,
-`cos`, `π`, primes, and `≡ [ZMOD n]`. Anything else shows "No LaTeX" with
-the Lean view, until you add a rule as shown below.
+`cos`, `π`, primes, and `≡ [ZMOD n]`. Names defined in the paper print by
+their own name. Any other name shows "No LaTeX" with the Lean view, until a
+rule is added (see below).
 
 A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.
@@ -77,7 +78,7 @@ Attach it with a comment line under the claim, inside the same block:
 ```lean
 def Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)
 -- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction
--- proof: proofs/Gauss.lean Basics.Proofs.gauss_from_mathlib
+-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_steps
 ```
 
 The line gives the proof file, relative to the paper's folder, and the
@@ -95,22 +96,12 @@ supported in proof files.
 
 ## LaTeX for your own definitions
 
-The LaTeX view comes from Lean's elaborated expression through registered
-notation rules, and it never guesses. A statement that mentions a function with
-no rule keeps its Lean view and shows what is missing. Register a rule in the
-paper, after the definition:
-
-```lean
-open Lean LeanTeX in
-latex_pp_app_rules (const := Basics.triangle)
-  | _, #[n] => do
-    let n ← latexPP n
-    return (LatexData.atomString "T").sub n
-```
-
-This needs `import Plaer.Latex` in the paper's first block. Rules for Mathlib
-notation shared by all projects belong in [Plaer/Latex.lean](../Plaer/Latex.lean);
-add a case to [tests/lean/Latex.lean](../tests/lean/Latex.lean) for new forms.
+Names the paper defines print as themselves: a claim that uses
+`Basics.triangle n` reads $\operatorname{triangle}(n)$. Mathlib names need a
+notation rule, and the common ones are listed above. A claim that uses a
+Mathlib name with no rule keeps its Lean view and says what is missing. Rules
+for Mathlib notation belong in [Plaer/Latex.lean](../Plaer/Latex.lean); add a
+case to [tests/lean/Latex.lean](../tests/lean/Latex.lean) for each one.
 
 ## Write useful notes
 

@@ -17,6 +17,6 @@
   "checkerUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean",
   "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
-  "proofSha256": "0d7e89557df2a9e6c4d40bd32251c8bcbd74fc177f462846dcea4c21e23f0bef",
-  "wallMs": 593
+  "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
+  "wallMs": 1671
 }

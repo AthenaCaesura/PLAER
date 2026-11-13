@@ -1,7 +1,6 @@
 # Theorems, conjectures, and definitions
 
 ```lean
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Data.Nat.Prime.Infinite
@@ -52,13 +51,13 @@ def Basics.euler_statement : Prop := ∀ n : ℕ, (n ^ 2 + n + 41).Prime
 
 A `-- proof:` line attaches a proof file to a claim. When a play button checks a proof, Lean has proved the claim and the box says **Theorem**. If the check happened earlier, for example when this page was built, the box says so; press play to check it again.
 
-Every proof rests on the axioms of Lean's logic, and the box lists the ones its proof uses. A claim can have several proofs. Gauss's formula for triangular numbers has two, one by induction and one from Mathlib:
+Every proof rests on the axioms of Lean's logic, and the box lists the ones its proof uses. A claim can have several proofs. Gauss's formula for the triangular numbers defined above has two, both from that definition:
 
 ```lean
 /-- Gauss's formula -/
 def Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)
 -- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction
--- proof: proofs/Gauss.lean Basics.Proofs.gauss_from_mathlib
+-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_steps
 ```
 
 ```lean
@@ -80,21 +79,12 @@ def Basics.hundred_statement : Prop :=
 
 ## Lean
 
-All other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, quick checks such as `example`, and LaTeX notation rules. This one gives points a default value, checks that $T_4 = 10$, and tells the LaTeX view to write `Basics.triangle n` as $T_n$ and `Basics.goldbach` by name:
+All other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, and quick checks such as `example`. This one gives points a default value and checks that $\operatorname{triangle}(4) = 10$:
 
 ```lean
 instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩
 
 example : Basics.triangle 4 = 10 := by simp [Basics.triangle, Finset.sum_range_succ]
-
-open Lean LeanTeX in
-latex_pp_app_rules (const := Basics.triangle)
-  | _, #[n] => do
-    let n ← latexPP n
-    return (LatexData.atomString "T").sub n
-
-open Lean LeanTeX in
-latex_pp_const_rule Basics.goldbach := pure <| LatexData.atomString "\\text{Goldbach's conjecture}"
 ```
 
 ## Not allowed in a paper
@@ -115,53 +105,17 @@ def Basics.half : ℕ → ℕ := sorry                            -- refused: so
 
 ## Notation
 
-The LaTeX view knows common mathematical notation. Each theorem below is proved in `proofs/Notation.lean`.
+The LaTeX view knows common notation, such as sums, binomial coefficients, and trigonometric functions. Two examples, proved in `proofs/Notation.lean`:
 
 ```lean
-/-- Greatest common divisor and least common multiple -/
-def Basics.gcd_lcm_statement : Prop := ∀ a b : ℕ, Nat.gcd a b * Nat.lcm a b = a * b
--- proof: proofs/Notation.lean Basics.Proofs.gcd_lcm
-
-/-- Minimum and maximum -/
-def Basics.min_max_statement : Prop := ∀ a b : ℕ, min a b + max a b = a + b
--- proof: proofs/Notation.lean Basics.Proofs.min_max
-
-/-- The triangle inequality -/
-def Basics.triangle_inequality : Prop := ∀ x y : ℝ, |x + y| ≤ |x| + |y|
--- proof: proofs/Notation.lean Basics.Proofs.triangle_inequality
-
-/-- Square roots multiply -/
-def Basics.sqrt_statement : Prop := ∀ x y : ℝ, x ≥ 0 → Real.sqrt (x * y) = Real.sqrt x * Real.sqrt y
--- proof: proofs/Notation.lean Basics.Proofs.sqrt_mul
-
-/-- Every number up to n divides n factorial -/
-def Basics.factorial_statement : Prop := ∀ m n : ℕ, 0 < m → m ≤ n → m ∣ Nat.factorial n
--- proof: proofs/Notation.lean Basics.Proofs.dvd_factorial
-
 /-- Pascal's rule -/
 def Basics.pascal_statement : Prop :=
   ∀ n k : ℕ, Nat.choose (n + 1) (k + 1) = Nat.choose n k + Nat.choose n (k + 1)
 -- proof: proofs/Notation.lean Basics.Proofs.pascal
 
-/-- The sum of the first n odd numbers -/
-def Basics.sum_statement : Prop := ∀ n : ℕ, ∑ i ∈ Finset.range n, (2 * i + 1) = n ^ 2
--- proof: proofs/Notation.lean Basics.Proofs.sum_odd
-
-/-- Factorial as a product -/
-def Basics.prod_statement : Prop := ∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n
--- proof: proofs/Notation.lean Basics.Proofs.prod_succ
-
-/-- The exponential turns sums into products -/
-def Basics.exp_statement : Prop := ∀ x y : ℝ, Real.exp (x + y) = Real.exp x * Real.exp y
--- proof: proofs/Notation.lean Basics.Proofs.exp_add
-
 /-- The Pythagorean identity -/
 def Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1
 -- proof: proofs/Notation.lean Basics.Proofs.sin_cos
-
-/-- The cosine of pi -/
-def Basics.pi_statement : Prop := Real.cos Real.pi = -1
--- proof: proofs/Notation.lean Basics.Proofs.cos_pi
 ```
 
 ## What the play button says

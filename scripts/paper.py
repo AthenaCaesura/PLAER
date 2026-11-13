@@ -14,6 +14,8 @@ LEAN_FENCE = re.compile(r"```lean\s*")
 # Inside a lean block, `-- proof: proofs/File.lean Namespace.declaration`
 # attaches a proof to the statement above it.
 PROOF_LINE = re.compile(r"\s*--\s*proof:\s*(\S+)\s+(\S+)\s*$")
+# Between two Markdown cells, so they stay two cells. Invisible when rendered.
+CELL_BREAK = "<!-- cell -->"
 
 
 @dataclass
@@ -32,7 +34,10 @@ def parse(markdown: str) -> list[Block]:
     lines = markdown.splitlines()
     spans, kind, start = [], "markdown", 0
     for index, line in enumerate(lines):
-        if kind == "markdown" and LEAN_FENCE.fullmatch(line):
+        if kind == "markdown" and line.strip() == CELL_BREAK:
+            spans.append(("markdown", start, index))
+            start = index + 1
+        elif kind == "markdown" and LEAN_FENCE.fullmatch(line):
             spans.append(("markdown", start, index))
             kind, start = "lean", index + 1
         elif kind == "lean" and line.strip() == "```":
@@ -52,7 +57,11 @@ def parse(markdown: str) -> list[Block]:
 
 def serialize(blocks: list[Block]) -> str:
     """Write blocks back out as a paper."""
-    parts = [f"```lean\n{block.text}\n```" if block.kind == "lean" else block.text for block in blocks]
+    parts = []
+    for index, block in enumerate(blocks):
+        if index and block.kind == "markdown" and blocks[index - 1].kind == "markdown":
+            parts.append(CELL_BREAK)
+        parts.append(f"```lean\n{block.text}\n```" if block.kind == "lean" else block.text)
     return "\n\n".join(parts) + "\n"
 
 

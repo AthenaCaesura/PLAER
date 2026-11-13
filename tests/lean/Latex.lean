@@ -51,7 +51,9 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2", "\\forall n : \\mathbb{N},\\ \\sum_{i = 0}^{n} i = \\frac{n \\cdot (n + 1)}{2}"),
     ("∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n", "\\forall n : \\mathbb{N},\\ \\prod_{i = 0}^{n - 1} (i + 1) = n!"),
     ("∀ x : ℕ, x ∈ Finset.range 3 → x < 3", "\\forall x : \\mathbb{N},\\ x \\in \\{0, \\ldots, 2\\} \\implies x < 3"),
-    ("∀ f : ℕ → ℝ, f 0 = f 0", "\\forall f : \\mathbb{N} \\to \\mathbb{R},\\ f(0) = f(0)")]
+    ("∀ f : ℕ → ℝ, f 0 = f 0", "\\forall f : \\mathbb{N} \\to \\mathbb{R},\\ f(0) = f(0)"),
+    -- A name defined in this file, not imported, prints by its own name.
+    ("LatexTests.unmapped 3 = 10", "\\operatorname{unmapped}(3) = 10")]
   let mut fixtures : Array Json := #[]
   for (source, expected) in cases do
     let latex ← renderTerm source
@@ -59,8 +61,8 @@ elab "#test_latex" : command => Command.liftTermElabM do
       throwError "Rendering {source}: expected {expected}, got {latex}"
     fixtures := fixtures.push <| Json.mkObj [("source", toJson source), ("latex", toJson latex)]
   -- An inner unsupported expression must fail too; no generic fallback may hide it.
-  for source in ["LatexTests.unmapped 3", "1 + LatexTests.unmapped 3",
-      "(let x : Nat := 1; x + 2)", "∀ x : ℕ, LatexTests.unmapped x = x", "(_ : ℕ)"] do
+  for source in ["Nat.pred 3", "1 + Nat.pred 3",
+      "(let x : Nat := 1; x + 2)", "∀ x : ℕ, Nat.pred x = x", "(_ : ℕ)"] do
     let rejected ← try
       let _ ← renderTerm source
       pure false

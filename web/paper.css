@@ -182,6 +182,12 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 .cell-output .illustration { border:0; padding:8px 0 0; background:transparent; }
 .cell-editor { display:block; width:100%; min-height:130px; resize:vertical; padding:12px; border:1px solid #bbcbbc; border-radius:4px; background:#f9faf7; color:var(--ink); font:14px/1.7 Consolas,monospace; }
 .cell-edit-actions { margin-top:10px; }.cell-shortcut, .notebook-status { font:11px var(--sans); color:var(--muted); }
+.cell-adder { display:flex; justify-content:center; gap:6px; margin:2px 0; padding:4px 0; opacity:0; transition:opacity .12s; position:relative; }
+.cell-adder::before { content:""; position:absolute; left:0; right:0; top:50%; border-top:1px dashed #cdd5c8; z-index:0; }
+.cell-adder .cell-action { position:relative; z-index:1; background:var(--paper, #fbfaf6); padding:3px 8px; font-size:10.5px; }
+.cell-adder:hover, .cell-adder:focus-within { opacity:1; }
+@media (hover: none) { .cell-adder { opacity:.75; } }
+@media print { .cell-adder { display:none!important; } }
 .notebook-toolbar { margin-top:13px; }.notebook-status { margin-left:auto; }
 .empty-explanation { color:var(--muted); font-style:italic; }
 @media(max-width:540px) { .explanation-cell { padding:16px; } .cell-editor { font-size:16px; } }

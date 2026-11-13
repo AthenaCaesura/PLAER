@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T13:40:39.537175+00:00",
+  "built_at": "2026-11-13T14:28:30.493194+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
   "paper_sha256": "8a51e7766b38e6533cfc0f9e85e6e46f003a16dc2ec0c246ab24c7076948dd5b",
   "source_sha256": "5ff785f27e28bf974f20a8a8c65e397610b6b29949920617c35fd14e7e85330e",
-  "document_sha256": "a6683aba3f235ae37fc33e2c8d776c186f8ea888d655148027f55647519f799a",
-  "engine_fingerprint": "7ebb6e03fe185a4a82e0315fa6c92b7ded1abdc45683d5b53681e3d8544710fa",
+  "document_sha256": "7fee1d50af46304ce3990a5d53efeca426be6a6bf834a7b2c5f015797c3c9caa",
+  "engine_fingerprint": "6f4913e9fa0c4736e41dec3088a54d4637123ce0193c03a5ef1b27a76e979c37",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -79,7 +79,7 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
                 "statementHash": "1861763117",
-                "wallMs": 1355
+                "wallMs": 1342
               }
             ],
             "statement": true,
@@ -136,7 +136,7 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 1348
+                "wallMs": 1346
               }
             ],
             "statement": true,

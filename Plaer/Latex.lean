@@ -92,6 +92,15 @@ latex_pp_app_rules (kind := const.Int.ModEq)
     return (a.protectRight 50 ++ " \\equiv " ++ b.protectLeft 50 ++
       " \\pmod{" ++ modulus.latex.1 ++ "}").resetBP (.NonAssoc 50) (.NonAssoc 50)
 
+/-- A name the paper itself defines prints as that name, `\operatorname{triangle}`,
+so `triangle n` reads `triangle(n)`. The paper's own declarations belong to no
+imported module. Every other constant still needs a notation rule. -/
+latex_pp_rules (kind := const)
+  | .const c _ => do
+    if (← findModuleOf? c).isSome then failure
+    let name := c.getString!.replace "_" "\\_"
+    return LatexData.atomString ("\\operatorname{" ++ name ++ "}")
+
 /-! Common Mathlib notation. Each rule checks its argument count and otherwise
 declines, so an unexpected form shows "No LaTeX" rather than something wrong. -/
 

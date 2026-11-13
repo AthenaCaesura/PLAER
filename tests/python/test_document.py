@@ -32,7 +32,7 @@ structure SelfTest.Point where
   x : ℕ
 
 /-- No notation is registered for this -/
-def SelfTest.unsupported_statement : Prop := ∀ n : ℕ, SelfTest.triple n = n + n + n
+def SelfTest.unsupported_statement : Prop := ∀ n : ℕ, Nat.pred (n + 1) = n
 ```
 
 Prose after.

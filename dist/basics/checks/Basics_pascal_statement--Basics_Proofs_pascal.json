@@ -13,6 +13,6 @@
   "checkerUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.lean",
   "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
-  "proofSha256": "7ba45e75dcdd66925449f73f6c518c2f6084b846321e1f23b0e7111fc16efedb",
-  "wallMs": 697
+  "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
+  "wallMs": 1186
 }

@@ -12,7 +12,7 @@
   const root = document.getElementById("plaer-document");
   let live = false;        // scripts/serve.py is answering
   let editing = null;      // index of the block being edited, or "new"
-  let draft = null;        // a box being added: {kind, text}
+  let draft = null;        // a box being added: {kind, text, at}, where `at` is its position
   let leanEdit = null;     // a declaration being edited in its Lean tab: {name, text}
   const chosenView = new Map();   // declaration name → the tab last chosen for it
   let removed = null;      // the last removed block, for Undo
@@ -396,6 +396,7 @@
 
   const TEMPLATES = {
     definition: {kind: "lean", text: "/-- Title of the definition -/\ndef Namespace.name (n : ℕ) : ℕ := n"},
+    lean: {kind: "lean", text: "example : 2 + 2 = 4 := rfl"},
     conjecture: {kind: "lean", text: "/-- Title of the conjecture -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 0 = n\n-- proof: proofs/File.lean Namespace.Proofs.name"},
     markdown: {kind: "markdown", text: ""}
   };
@@ -459,7 +460,7 @@
       problem.hidden = true;
       saveButton.disabled = true;
       const request = index === "new"
-        ? {op: "insert", index: state.blocks.length, kind: block.kind, text: area.value}
+        ? {op: "insert", index: block.at ?? state.blocks.length, kind: block.kind, text: area.value}
         : {op: "replace", index, text: area.value};
       const outcome = await send(request, "Saving…");
       if (outcome !== true) { problem.textContent = outcome; problem.hidden = false; saveButton.disabled = false; }
@@ -501,11 +502,19 @@
     return outcome === true;
   }
 
+  // Between every two cells, as in a notebook: add any kind of cell right there.
+  const ADDERS = [["Markdown", "markdown"], ["Definition", "definition"], ["Conjecture", "conjecture"], ["Lean", "lean"]];
+  function adder(at) {
+    const bar = node("div", "cell-adder");
+    for (const [label, template] of ADDERS) {
+      bar.append(action("+ " + label, () => { draft = {...TEMPLATES[template], at}; editing = "new"; draw(); },
+        `Add a ${label} cell here`));
+    }
+    return bar;
+  }
+
   function toolbar() {
     const bar = node("div", "notebook-toolbar");
-    for (const [label, template] of [["+ Definition", "definition"], ["+ Conjecture", "conjecture"], ["+ Markdown", "markdown"]]) {
-      bar.append(action(label, () => { draft = {...TEMPLATES[template]}; editing = "new"; draw(); }));
-    }
     if (removed) {
       bar.append(action("Undo remove", async () => {
         const {index, kind, text} = removed;
@@ -524,7 +533,14 @@
   function draw() {
     root.replaceChildren();
     if (live && state.leanError) root.append(node("pre", "build-error", "Lean rejected the paper:\n\n" + state.leanError));
+    const draftCell = () => {
+      const cell = node("section", "block editable");
+      cell.append(editor(draft, "new"));
+      root.append(cell);
+    };
     state.blocks.forEach((block, index) => {
+      if (live && draft && draft.at === index) draftCell();
+      else if (live && !draft) root.append(adder(index));
       const cell = node("section", "block" + (live ? " editable" : ""));
       if (live) cell.append(controls(block, index));
       if (editing === index) cell.append(editor(block, index));
@@ -535,11 +551,8 @@
       }
       root.append(cell);
     });
-    if (draft) {
-      const cell = node("section", "block editable");
-      cell.append(editor(draft, "new"));
-      root.append(cell);
-    }
+    if (live && draft && draft.at >= state.blocks.length) draftCell();
+    else if (live && !draft) root.append(adder(state.blocks.length));
     if (live) root.append(toolbar());
   }
 

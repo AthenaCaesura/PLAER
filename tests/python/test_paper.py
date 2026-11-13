@@ -61,8 +61,13 @@ for bad in [{"op": "move", "index": 1, "offset": 1}, {"op": "insert", "index": 0
     raise AssertionError(f"accepted {bad}")
 assert paper.edit(headed, {"op": "move", "index": 0, "offset": 1})[1].kind == "markdown"   # prose may move above
 
+# Markdown cells stay separate: moving one next to another keeps two cells.
+two = paper.parse("# A\n\n```lean\ndef a := 1\n```\n\nSecond.\n")
+moved = paper.parse(paper.serialize(paper.edit(two, {"op": "move", "index": 2, "offset": -1})))
+assert [(b.kind, b.text) for b in moved] == [("markdown", "# A"), ("markdown", "Second."), ("lean", "def a := 1")], moved
+assert paper.lean_source(paper.serialize(moved)).count("-- " + paper.CELL_BREAK) == 1
+
 # Every edit can be written to the Markdown file and read back unchanged.
-# (Two prose blocks that end up adjacent simply become one.)
 for request in [{"op": "insert", "index": 3, "kind": "lean", "text": "def y := 2"},
                 {"op": "move", "index": 0, "offset": 1}, {"op": "remove", "index": 2}]:
     written = paper.serialize(paper.edit(blocks, request))
