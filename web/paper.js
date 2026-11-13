@@ -218,16 +218,22 @@
   }
 
 
-  function heading(className, eyebrow, eyebrowClass, title, toggle) {
+  function heading(className, eyebrow, eyebrowClass, title, toggle, source) {
     const box = node("div", className);
     const text = node("div");
     text.append(node("p", "eyebrow " + eyebrowClass, eyebrow), node("h2", "theorem-title", title));
+    if (source) text.append(source);
     box.append(text);
     if (toggle) box.append(toggle);
     return box;
   }
 
-  const sourceLink = item => link(`${state.sourceFile}:${item.line}`, state.sourceUrl);
+  // Where the declaration is written, shown right under the box's title.
+  function sourceLink(item) {
+    const line = node("p", "box-source");
+    line.append(link(`${state.sourceFile}:${item.line}`, state.sourceUrl));
+    return line;
+  }
 
   // ── Definition boxes ──────────────────────────────────────────────────────
 
@@ -239,17 +245,14 @@
     if (item.kind === "definition") {
       const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
         [{key: "lean", label: "Lean", panel: leanPanel}]);
-      card.append(heading("definition-heading", "Definition", "", item.title, toggle));
+      card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
       body.append(mathPanel, leanPanel);
     } else {   // a structure, inductive type, axiom…: Lean only
-      card.append(heading("definition-heading", "Declaration", "", item.title));
+      card.append(heading("definition-heading", "Declaration", "", item.title, null, sourceLink(item)));
       body.append(leanPanel);
     }
     if (item.caption) card.append(caption(item.caption));
     card.append(body);
-    const details = node("details", "source-proof-details");
-    details.append(node("summary", "", "Source"), sourceLink(item));
-    card.append(details);
     return card;
   }
 
@@ -272,7 +275,8 @@
     reprintPanel.append(node("pre", "theorem-lean", item.statementLean));
     const {toggle, mathPanel} = views(item.name, "Statement representation", item.statementLatex, item.latexError, "theorem-math",
       [{key: "lean", label: "Lean", panel: leanPanel}, {key: "reprint", label: "Reprint", panel: reprintPanel}]);
-    card.append(heading("proof-heading", item.kind === "candidate" ? "Statement" : "Theorem", "theorem-label", item.title, toggle));
+    card.append(heading("proof-heading", item.kind === "candidate" ? "Statement" : "Theorem", "theorem-label", item.title, toggle,
+      sourceLink(item)));
     if (item.caption) card.append(caption(item.caption));
     const statement = node("div", "theorem-statement");
     statement.append(mathPanel, leanPanel, reprintPanel);
@@ -282,9 +286,6 @@
       card.append(node("p", "proof-none", "No proof attached. Add a line such as “-- proof: proofs/File.lean Namespace.name” under the statement."));
     }
     item.proofs.forEach((proof, index) => card.append(proofRow(item, proof, index)));
-    const details = node("details", "source-proof-details");
-    details.append(node("summary", "", "Source"), sourceLink(item));
-    card.append(details);
     return card;
   }
 
@@ -313,7 +314,7 @@
       error.hidden = true;
       if (proof.result.pending) { result.dataset.state = "unverified"; text.textContent = "Not checked"; return; }
       result.dataset.state = proof.result.ok ? "verified" : "rejected";
-      text.textContent = (proof.result.ok ? "Proved" : "Not proved") + (proof.checkedNow ? " · checked now" : " · saved check");
+      text.textContent = proof.result.ok ? "Proved" : "Not proved";
     }
     show();
     async function check() {
@@ -326,7 +327,7 @@
         if (report.name !== item.name || report.statementHash !== item.statementHash) {
           throw new Error("The statement changed. Reload the document.");
         }
-        Object.assign(proof, report, {checkedNow: true});
+        Object.assign(proof, report);
         show();
       } catch (problem) {
         result.dataset.state = "unverified";

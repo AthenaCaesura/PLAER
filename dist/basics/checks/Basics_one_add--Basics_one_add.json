@@ -1,0 +1,18 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.one_add",
+  "proofDeclaration": "Basics.one_add",
+  "result": {
+    "axioms": [],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "1627815279",
+  "proofFile": "examples/Basics/Statements.lean",
+  "proofUrl": "sources/Statements.lean",
+  "checkerUrl": "checks/Basics_one_add--Basics_one_add.lean",
+  "auditUrl": "checks/Basics_one_add--Basics_one_add.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_one_add--Basics_one_add.lean\"",
+  "proofSha256": "d8cedb63601a2b6e192b4343bb0c477de61c18ab3b495c57833db586c1b08b53",
+  "wallMs": 288
+}

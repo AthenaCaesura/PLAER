@@ -4,7 +4,7 @@
   "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
   "source": "examples/Basics/Statements.lean",
   "sourceModule": "Basics.Statements",
-  "sourceSha256": "a676d562f3f7cde6e57879c242e358097f1ddfbe31dc86209c8fae51ab6bc13b",
+  "sourceSha256": "75c23c32eea9d7240cc3d797d42ca25ff1341ac893b318a966f1ac7cb16e20fa",
   "checks": [
     {
       "file": "proofs/AddZero.lean",
@@ -24,7 +24,7 @@
       "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean\"",
       "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
-      "wallMs": 356
+      "wallMs": 449
     },
     {
       "file": "proofs/AddZeroBySimp.lean",
@@ -46,7 +46,27 @@
       "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean\"",
       "proofSha256": "f431fb551c8d5dc7b76daec86c03a84a880d4e745c8c11c43543240b4127b7c5",
-      "wallMs": 345
+      "wallMs": 250
+    },
+    {
+      "inline": true,
+      "declaration": "Basics.one_add",
+      "leanVersion": "4.35.0",
+      "name": "Basics.one_add",
+      "proofDeclaration": "Basics.one_add",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1627815279",
+      "proofFile": "examples/Basics/Statements.lean",
+      "proofUrl": "sources/Statements.lean",
+      "checkerUrl": "checks/Basics_one_add--Basics_one_add.lean",
+      "auditUrl": "checks/Basics_one_add--Basics_one_add.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_one_add--Basics_one_add.lean\"",
+      "proofSha256": "d8cedb63601a2b6e192b4343bb0c477de61c18ab3b495c57833db586c1b08b53",
+      "wallMs": 288
     },
     {
       "file": "proofs/Double.lean",
@@ -69,7 +89,7 @@
       "auditUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean\"",
       "proofSha256": "c28bd955bbfe5d729f0e1a07aa032694f074287d0f6f3a6fbb8ce83c3ce2001e",
-      "wallMs": 360
+      "wallMs": 266
     },
     {
       "file": "proofs/File.lean",
@@ -87,7 +107,18 @@
       "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
       "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
       "statementHash": "975527729",
-      "wallMs": 350
+      "wallMs": 297
+    },
+    {
+      "file": "proofs/Missing.lean",
+      "declaration": "Namespace.Proofs.missing",
+      "name": "Namespace.name_statement",
+      "proofDeclaration": "Namespace.Proofs.missing",
+      "statementHash": "975527729",
+      "result": {
+        "ok": false,
+        "diagnostics": "Proof file not found: proofs/Missing.lean"
+      }
     }
   ]
 }

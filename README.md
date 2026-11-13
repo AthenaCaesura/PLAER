@@ -66,7 +66,7 @@ dist/fermat/index.html            the document, as one offline HTML file
 
 | Project | What it illustrates | Paper | Offline document |
 | --- | --- | --- | --- |
-| Basics | A definition, a statement with two separate proofs, and LaTeX notation for your own definition. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
+| Basics | Every kind of box, with a short explanation of each, and every answer a play button can give. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
 | Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/Paper.md](examples/Fermat/Paper.md) | [dist/fermat](dist/fermat/index.html) |
 
 ## View a document

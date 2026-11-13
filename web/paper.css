@@ -256,6 +256,9 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 .lean-setup .lean-code { margin-top: 8px; }
 .definition > .source-proof-details { margin: 0 27px; padding: 12px 0 14px; }
 .definition > .source-proof-details a { margin-left: 10px; color: var(--green); }
+.box-source { margin: 4px 0 0; font: 12px var(--sans); }
+.box-source a { color: var(--muted); text-underline-offset: 3px; }
+.box-source a:hover { color: var(--green); }
 .box-caption { padding: 8px 27px 0; font: 15px/1.6 Georgia, serif; color: #5e6d56; }
 .proof-check > .box-caption { padding: 8px 0 0; }
 .box-caption p { margin: 0; }
