@@ -19,6 +19,14 @@ meta def declarationSource (name : Name) : MetaM String := do
   let stop := fileMap.ofPosition ranges.range.endPos
   return (String.Pos.Raw.extract source start stop).trimAscii.copy
 
+/-- LaTeX fields for a box. Notation the strict printer cannot typeset does not
+fail the document: the box keeps its Lean view and reports the reason. -/
+private meta def latexFields (field : String) (render : MetaM String) : MetaM (List (String × Json)) := do
+  try
+    return [(field, toJson (← render))]
+  catch error =>
+    return [(field, Json.null), ("latexError", toJson (← error.toMessageData.toString))]
+
 /-- Extract statement data without loading a separately configured proof. -/
 meta def statementReport (name : Name) : MetaM Json := do
   let info ← getConstInfo name
@@ -29,22 +37,59 @@ meta def statementReport (name : Name) : MetaM Json := do
   let statementLean :=
     if info.isTheorem then "theorem " ++ name.toString ++ " : " ++ pretty
     else "def " ++ name.toString ++ " : Prop := " ++ pretty
-  return Json.mkObj [
+  return Json.mkObj <| [
     ("name", toJson name.toString), ("kind", toJson kind),
     ("statementLean", toJson statementLean),
-    ("statementLatex", toJson (← expressionLatex proposition)),
     ("statementHash", toJson (toString (hash proposition))),
     ("sourceModule", toJson moduleName.toString),
-    ("leanVersion", toJson Lean.versionString)]
+    ("leanVersion", toJson Lean.versionString)] ++
+    (← latexFields "statementLatex" (expressionLatex proposition))
 
-/-- Generic definition data. Plotting metadata belongs to an optional illustration. -/
+/-- Generic definition data. -/
 meta def definitionReport (name : Name) : MetaM Json := do
   let _ ← getConstInfoDefn name
   let moduleName := (← findModuleOf? name).getD .anonymous
-  return Json.mkObj [
-    ("name", toJson name.toString), ("sourceModule", toJson moduleName.toString),
+  return Json.mkObj <| [
+    ("name", toJson name.toString), ("kind", toJson "definition"),
+    ("sourceModule", toJson moduleName.toString),
     ("source", toJson (← declarationSource name)),
-    ("latex", toJson (← definitionLatex name)),
-    ("leanVersion", toJson Lean.versionString)]
+    ("leanVersion", toJson Lean.versionString)] ++
+    (← latexFields "latex" (definitionLatex name))
+
+/-- The box for one declaration: a statement (a theorem, or a closed `Prop`
+definition awaiting proofs), a definition, or anything else shown as Lean only. -/
+meta def declarationReport (name : Name) : MetaM Json := do
+  match ← getConstInfo name with
+  | .thmInfo _ => statementReport name
+  | .defnInfo definition =>
+    if definition.type.isProp then statementReport name else definitionReport name
+  | _ => return Json.mkObj [
+    ("name", toJson name.toString), ("kind", toJson "other"),
+    ("source", toJson (← declarationSource name))]
+
+/-- Every declaration written in a module, in source order, with its line span
+and doc comment. Constants Lean generates inside another declaration are skipped. -/
+meta def moduleReport (moduleName : Name) : MetaM Json := do
+  let env ← getEnv
+  let some index := env.getModuleIdx? moduleName
+    | throwError "Module is not imported: {moduleName}"
+  let mut spans : Array (Nat × Nat × Name) := #[]
+  for name in env.header.moduleData[index.toNat]!.constNames do
+    if name.isInternal then continue
+    let some ranges ← findDeclarationRanges? name | continue
+    spans := spans.push (ranges.range.pos.line, ranges.range.endPos.line, name)
+  -- Outermost first: earlier start, then later end, then the shorter name.
+  spans := spans.qsort fun (a, b, m) (c, d, n) =>
+    a < c || (a == c && (b > d || (b == d && m.toString.length < n.toString.length)))
+  let mut reports : Array Json := #[]
+  let mut covered := 0
+  for (first, last, name) in spans do
+    if first ≤ covered then continue
+    covered := last
+    let report ← declarationReport name
+    let doc := (← findDocString? env name).getD ""
+    reports := reports.push <| report.mergeObj <| Json.mkObj [
+      ("line", toJson first), ("endLine", toJson last), ("doc", toJson doc.trimAscii.copy)]
+  return toJson reports
 
 end Plaer

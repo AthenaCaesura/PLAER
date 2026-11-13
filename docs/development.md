@@ -6,57 +6,49 @@ from the repository root; use `python3` if that is your Python command.
 ## Build and serve one project
 
 ```sh
-python scripts/build.py --project examples/Basics/project.json
-python scripts/serve.py --project examples/Basics/project.json
+python scripts/build.py examples/Basics/Paper.md
+python scripts/serve.py examples/Basics/Paper.md
 ```
 
-Build and serve require a manifest, either through `--project` or
-`PLAER_PROJECT`. Use `examples/Fermat/project.json` for the Fermat project.
-A document build compiles its statement module and document composition;
-individual proof files are checked through their explicit mappings.
+Both take a paper or its folder, or read `PLAER_PROJECT`. `build.py`
+regenerates `Statements.lean`, compiles it, checks every attached proof, and
+writes `dist/<project>/`. `serve.py` does the same without rerunning proofs
+that are still valid, then serves the document with live checks and editing.
 
-After changing a statement, manifest, or paper, rebuild the project. For shared
-CSS, JavaScript, SVGs, or authored notes, packaging an existing intermediate
-document is enough:
-
-```sh
-python scripts/package_document.py --project examples/Basics/project.json
-```
-
-Packaging does not compile Lean or refresh formal statement data.
+Changes to `web/paper.js` or `web/paper.css` reach a document the next time it
+is built or the server starts.
 
 ## Run checks
 
 ```sh
 python scripts/check.py
-python scripts/check.py --project examples/Basics/project.json
+python scripts/check.py examples/Basics/Paper.md
 ```
 
-With no project flag, the check runner covers the included projects. With a
-flag, it checks that project. The suite needs Node.js 22, Python, and Lean.
-Checks cover Lean rendering, frontend controls, notes and branding, and actual
-requests to the local proof-checking endpoint.
+The runner builds each example, then runs the tests. It needs Node.js 22,
+Python, and Lean.
 
-Use `python scripts/check.py --help` for available focused or additional
-regression options. The test suite is organized under `tests/lean/`,
-`tests/python/`, and `tests/js/`. Keep example-specific expectations separate
-from generic UI and project-isolation checks.
+| Test | Covers |
+| --- | --- |
+| `tests/python/test_paper.py` | The paper format, the line-for-line Lean file, edits. No Lean needed. |
+| `tests/python/test_document.py` | A throwaway paper through Lean: every box kind, and proofs that must be rejected. |
+| `tests/python/test_server.py` | Editing and checking through the local server. |
+| `tests/python/test_branding.py` | The embedded SVG assets. |
+| `tests/lean/Latex.lean`, `tests/js/test_latex.cjs` | Notation rules, strict rejection, and KaTeX accepting the output. |
 
-For a new proof mapping, verify that the correct proof succeeds and that an
-incorrect export or proof fails. Also check that a bad proof in a different
-independent file does not prevent the selected proof from being checked.
-Original source, generated checker, and the displayed mapping should agree.
+When you change the proof check, confirm that a correct proof succeeds and
+that a proof of a different proposition, a `sorry`, and a broken file all fail.
 
 ## Inspect output
 
-Each example's manifest selects its output directory, such as `dist/basics/`.
-Inspect `index.html`, build provenance, `audit.json`, and the generated
-`checks/*.lean` artifacts. The **Source & proof** control in the document exposes the
-same statement-to-proof mapping and checker command.
+`dist/<project>/` holds `index.html`, `build.json` (the page's state and build
+provenance), `audit.json`, `checks/*.lean` with a `.json` result beside each,
+and `sources/` snapshots of the paper, its Lean file, and the proof files.
 
-Local intermediates belong in `build/<project-id>/`; dependency caches and
-optional portable tools belong in `.lake/` and `.tools/`. Keep generated
-`dist/` output consistent with its sources when committing.
+Local intermediates belong in `build/<project>/`; dependency caches and
+optional portable tools belong in `.lake/` and `.tools/`. Keep `dist/` and each
+`Statements.lean` consistent with their papers when committing;
+`test_paper.py` checks the latter.
 
 ## Toolchain and dependencies
 

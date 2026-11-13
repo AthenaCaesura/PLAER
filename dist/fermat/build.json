@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T03:06:03.426094+00:00",
+  "built_at": "2026-11-13T05:28:40.367771+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
+  "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
-  "source_fingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
-  "source_sha256": "a954e1ede4dfa094d8a4b5a949530d169baddbc8fc9b138556206bf3f5be14c3",
-  "document_sha256": "098e4977219a795d62cff67fb46dfee5899b57034f8aa40458d12df8a85c6f48",
-  "paper_source_sha256": "c6fa5342dba6114ab1f852071ff754128cfa1c6f7853932b0a5a3cce2d60ab57",
-  "dependencies_sha256": "c0f4de3c8079e91d4bcced86a48fac6e65533c1962c2bed70588ca5647e6db57",
+  "paper_sha256": "adb46eb31b87eea8f34bc32f401af714706895c365930b5c66dc3db7010525a4",
+  "source_sha256": "3bf968a2b38a9c72cb01ad8b60053d01e7b8d10ecea60b8fd5c2c72c06169211",
+  "document_sha256": "27f3e6c9652270f1a7bad2fea11b458daf728be5fbed60280ec460362970da5d",
+  "engine_fingerprint": "9ee9ac1676d0c65f3a201d4cb84db5c5892f23457c9dd475c069f2ee3ae8d39f",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -16,62 +16,155 @@
     "fork": "PLAER local source fork",
     "lean_version": "4.35.0"
   },
-  "theorem_checks": [
-    {
-      "kind": "candidate",
-      "leanVersion": "4.35.0",
-      "name": "Fermat.last_statement",
-      "sourceModule": "Fermat.Statements",
-      "statementHash": "592678445",
-      "statementLatex": "\\begin{gathered}\\forall n : \\mathbb{N},\\ \\forall a : \\mathbb{N},\\ \\forall b : \\mathbb{N},\\ \\forall c : \\mathbb{N},\\ 2 < n \\\\ \\implies (0 < a \\\\ \\implies (0 < b \\\\ \\implies (0 < c \\\\ \\implies a^{n} + b^{n} \\neq c^{n})))\\end{gathered}",
-      "statementLean": "def Fermat.last_statement : Prop := ∀ (n a b c : ℕ), 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n",
-      "proofDeclaration": "Fermat.Proofs.last",
-      "result": {
-        "ok": false,
-        "diagnostics": "Application type mismatch: The argument\n  hn\nhas type\n  2 < n\nbut is expected to have type\n  a ^ n + b ^ n < c ^ n\nin the application\n  Nat.ne_of_lt hn"
+  "state": {
+    "project": "fermat",
+    "title": "Two theorems of Fermat",
+    "revision": "adb46eb31b87eea8f34bc32f401af714706895c365930b5c66dc3db7010525a4",
+    "paperFile": "examples/Fermat/Paper.md",
+    "paperUrl": "sources/Paper.md",
+    "sourceFile": "examples/Fermat/Statements.lean",
+    "sourceUrl": "sources/Statements.lean",
+    "sourceModule": "Fermat.Statements",
+    "compiled": true,
+    "blocks": [
+      {
+        "kind": "markdown",
+        "text": "# Two theorems of Fermat",
+        "line": 1
       },
-      "proofFile": "examples/Fermat/proofs/Last.lean",
-      "sourceFile": "examples/Fermat/Statements.lean",
-      "sourceUrl": "sources/Statements.lean",
-      "proofUrl": "sources/proofs/5de7218ce272-Last.lean",
-      "checkerUrl": "checks/Fermat_last_statement-14492e61-5de7218c.lean",
-      "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement-14492e61-5de7218c.lean\"",
-      "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
-      "sourceFingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
-      "checkerSha256": "863c66e501fb28115bfdc4b2510f0eee9e46c3b9edc072933000771e8c0a8d3e",
-      "auditUrl": "checks/Fermat_last_statement-14492e61-5de7218c.json",
-      "wallMs": 19173
-    },
-    {
-      "kind": "candidate",
-      "leanVersion": "4.35.0",
-      "name": "Fermat.little_statement",
-      "sourceModule": "Fermat.Statements",
-      "statementHash": "737928072",
-      "statementLatex": "\\forall p : \\mathbb{N},\\ \\forall a : \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
-      "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
-      "proofDeclaration": "Fermat.Proofs.little",
-      "result": {
-        "axioms": [
-          "propext",
-          "Classical.choice",
-          "Quot.sound"
-        ],
-        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-        "ok": true
+      {
+        "kind": "lean",
+        "text": "import Mathlib.FieldTheory.Finite.Basic",
+        "line": 4,
+        "items": [
+          {
+            "type": "code",
+            "text": "import Mathlib.FieldTheory.Finite.Basic"
+          }
+        ]
       },
-      "proofFile": "examples/Fermat/proofs/Little.lean",
-      "sourceFile": "examples/Fermat/Statements.lean",
-      "sourceUrl": "sources/Statements.lean",
-      "proofUrl": "sources/proofs/824b62109b84-Little.lean",
-      "checkerUrl": "checks/Fermat_little_statement-14492e61-824b6210.lean",
-      "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement-14492e61-824b6210.lean\"",
-      "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-      "sourceFingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
-      "checkerSha256": "3f1f2e44d4c06193b90ad3c7d05322fbb0636bb2c28d57315198ab233566d938",
-      "auditUrl": "checks/Fermat_little_statement-14492e61-824b6210.json",
-      "wallMs": 19234
-    }
-  ],
-  "definitions": []
+      {
+        "kind": "lean",
+        "text": "/-- Fermat's last theorem -/\ndef Fermat.last_statement : Prop :=\n  ∀ n a b c : ℕ, 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n\n-- proof: proofs/Last.lean Fermat.Proofs.last",
+        "line": 8,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Fermat's last theorem",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 8,
+            "name": "Fermat.last_statement",
+            "sourceModule": "Fermat.Statements",
+            "statementHash": "592678445",
+            "statementLatex": "\\begin{gathered}\\forall n : \\mathbb{N},\\ \\forall a : \\mathbb{N},\\ \\forall b : \\mathbb{N},\\ \\forall c : \\mathbb{N},\\ 2 < n \\\\ \\implies (0 < a \\\\ \\implies (0 < b \\\\ \\implies (0 < c \\\\ \\implies a^{n} + b^{n} \\neq c^{n})))\\end{gathered}",
+            "statementLean": "def Fermat.last_statement : Prop := ∀ (n a b c : ℕ), 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n",
+            "block": 1,
+            "offset": 0,
+            "lines": 3,
+            "proofs": [
+              {
+                "file": "proofs/Last.lean",
+                "declaration": "Fermat.Proofs.last",
+                "name": "Fermat.last_statement",
+                "proofDeclaration": "Fermat.Proofs.last",
+                "result": {
+                  "ok": false,
+                  "diagnostics": "Application type mismatch: The argument\n  hn\nhas type\n  2 < n\nbut is expected to have type\n  a ^ n + b ^ n < c ^ n\nin the application\n  Nat.ne_of_lt hn"
+                },
+                "proofFile": "examples/Fermat/proofs/Last.lean",
+                "proofUrl": "sources/proofs/Last.lean",
+                "checkerUrl": "checks/Fermat_last_statement--Fermat_Proofs_last.lean",
+                "auditUrl": "checks/Fermat_last_statement--Fermat_Proofs_last.json",
+                "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
+                "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
+                "statementHash": "592678445",
+                "wallMs": 11643
+              }
+            ],
+            "statement": true,
+            "title": "Fermat's last theorem",
+            "caption": ""
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## Reading the last theorem\n\nFor an integer exponent $n>2$, no positive integers $a,b,c$ satisfy $a^n+b^n=c^n$. All four variables are natural numbers; the positivity assumptions exclude zero.\n\nFor an application involving integer solutions, first match the variables and check every assumption. This note is an explanation, not a proof of that application.\n\nThe attached demonstration proof is deliberately wrong: from $2<n$ it tries to conclude the required inequality using only `Nat.ne_of_lt hn`. **Not proved** describes that attempt; Fermat's last theorem itself is true.",
+        "line": 14
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Fermat's little theorem -/\ndef Fermat.little_statement : Prop :=\n  ∀ (p : ℕ) (a : ℤ), p.Prime → Int.ModEq (p : ℤ) (a ^ p) a\n-- proof: proofs/Little.lean Fermat.Proofs.little",
+        "line": 23,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Fermat's little theorem",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 23,
+            "name": "Fermat.little_statement",
+            "sourceModule": "Fermat.Statements",
+            "statementHash": "737928072",
+            "statementLatex": "\\forall p : \\mathbb{N},\\ \\forall a : \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
+            "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
+            "block": 2,
+            "offset": 0,
+            "lines": 3,
+            "proofs": [
+              {
+                "file": "proofs/Little.lean",
+                "declaration": "Fermat.Proofs.little",
+                "leanVersion": "4.35.0",
+                "name": "Fermat.little_statement",
+                "proofDeclaration": "Fermat.Proofs.little",
+                "result": {
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "737928072",
+                "proofFile": "examples/Fermat/proofs/Little.lean",
+                "proofUrl": "sources/proofs/Little.lean",
+                "checkerUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.lean",
+                "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
+                "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
+                "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
+                "wallMs": 10728
+              }
+            ],
+            "statement": true,
+            "title": "Fermat's little theorem",
+            "caption": ""
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## Reading the little theorem\n\nIf $p$ is prime, every integer $a$ satisfies $a^p\\equiv a\\pmod p$. The prime $p$ specifies the modulus, and $a$ may be any integer. For example, $2^5=32\\equiv2\\pmod5$, which Lean confirms:",
+        "line": 29
+      },
+      {
+        "kind": "lean",
+        "text": "example : Int.ModEq 5 (2 ^ 5) 2 := by decide",
+        "line": 34,
+        "items": [
+          {
+            "type": "code",
+            "text": "example : Int.ModEq 5 (2 ^ 5) 2 := by decide"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "When applying the statement to modular arithmetic, identify the modulus and establish that it is prime. The attached proof applies Mathlib's `Int.ModEq.pow_prime_eq_self`; its play button checks that proof against this statement.",
+        "line": 37
+      }
+    ]
+  }
 }

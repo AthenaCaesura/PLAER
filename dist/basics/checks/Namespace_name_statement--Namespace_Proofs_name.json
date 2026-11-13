@@ -1,0 +1,16 @@
+{
+  "name": "Namespace.name_statement",
+  "proofDeclaration": "Namespace.Proofs.name",
+  "result": {
+    "ok": false,
+    "diagnostics": "Tactic `rfl` failed: The left-hand side\n  n + 1\nis not definitionally equal to the right-hand side\n  n + 0\n\nn : ℕ\n⊢ n + 1 = n + 0"
+  },
+  "proofFile": "examples/Basics/proofs/File.lean",
+  "proofUrl": "sources/proofs/File.lean",
+  "checkerUrl": "checks/Namespace_name_statement--Namespace_Proofs_name.lean",
+  "auditUrl": "checks/Namespace_name_statement--Namespace_Proofs_name.json",
+  "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
+  "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
+  "statementHash": "975527729",
+  "wallMs": 1784
+}

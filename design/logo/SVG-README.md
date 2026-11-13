@@ -23,7 +23,7 @@ tracing, external font loading, or embedded bitmap is used. `GLYPHS.json`
 records the exact font/codepoint mappings. The SVGs remain sharp at any size.
 
 Font sources: `KaTeX_AMS-Regular` and `KaTeX_Main-Regular`, distributed with
-the project's pinned Verso/KaTeX package. Font metadata credits Design Science,
+KaTeX 0.16.22 (see `build_svg.py` for where to get its TTF fonts). Font metadata credits Design Science,
 Inc. (2009–2010) and Khan Academy (2014–2018), under the SIL Open Font License
 1.1, with the respective KaTeX font names reserved. These files are artwork
 exports, not replacement font files.

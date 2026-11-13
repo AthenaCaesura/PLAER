@@ -1,17 +1,18 @@
 # Definitions and statements example
 
-This small project demonstrates the engine independently of the Fermat example.
+| File | Role |
+| --- | --- |
+| `Paper.md` | The one file you write: definitions, statements, and notes. |
+| `Statements.lean` | Generated from `Paper.md`, line for line. This is what Lean compiles and what proofs import. |
+| `proofs/AddZero.lean`, `proofs/AddZeroBySimp.lean` | Two separate proofs attached to the adding-zero statement. |
+| `proofs/Double.lean` | The proof attached to the doubling statement. |
 
-`Statements.lean` contains a doubling definition and an adding-zero proposition.
-`proofs/AddZero.lean` proves the latter. The project manifest maps that proposition
-to the proof file and its exported Lean declaration.
+From the repository root:
 
 ```sh
-python scripts/build.py --project examples/Basics/project.json
-python scripts/serve.py --project examples/Basics/project.json
+python scripts/build.py examples/Basics/Paper.md
+python scripts/serve.py examples/Basics/Paper.md
 ```
 
-Use **+ Definition**, **+ Theorem**, and **+ Markdown** in the local document
-to add boxes. Formal boxes refer to declarations in `Statements.lean`.
-Theorem boxes name their proof file and proof declaration. The notes file stores
-those references; the source file remains the source of the mathematics.
+The paper also shows how to give one of your own definitions a LaTeX form, so
+statements that mention it get a LaTeX view.

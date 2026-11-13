@@ -11,25 +11,21 @@ name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
 rev = "v4.35.0"
 
-[[require]]
-name = "verso"
-git = "https://github.com/leanprover/verso"
-rev = "v4.35.0"
-
 [[lean_lib]]
 name = "Plaer"
 
+# One entry per folder under examples/. A folder's Paper.md generates its
+# Statements.lean, and its proof files import `<Folder>.Statements`.
+# To add a project, add its folder name to both lists.
 [[lean_lib]]
-name = "ExampleStatements"
+name = "Examples"
 srcDir = "examples"
-roots = ["Fermat.Statements", "Basics.Statements"]
+roots = ["Basics", "Fermat"]
+globs = ["Basics.+", "Fermat.+"]
 
-[[lean_lib]]
-name = "ExampleDocuments"
-srcDir = "examples"
-roots = ["Fermat.Paper", "Basics.Paper"]
-
+# `SelfTest` is a throwaway paper that tests/python/test_document.py creates.
 [[lean_lib]]
 name = "TestFixtures"
 srcDir = "tests"
-roots = ["fixtures.Interval"]
+roots = ["fixtures.Interval", "SelfTest"]
+globs = ["fixtures.Interval", "SelfTest.+"]

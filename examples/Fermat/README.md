@@ -1,21 +1,17 @@
 # Fermat example
 
-This is one example project using the PLAER engine.
-
 | File | Role |
 | --- | --- |
-| `Statements.lean` | Defines the two propositions without proving them. |
+| `Paper.md` | The one file you write: both statements and the notes about them. |
+| `Statements.lean` | Generated from `Paper.md`, line for line. This is what Lean compiles and what proofs import. |
 | `proofs/Last.lean` | An intentionally wrong proof attempt for `Fermat.last_statement`. |
 | `proofs/Little.lean` | A proof of `Fermat.little_statement` using Mathlib. |
-| `project.json` | Maps each statement to its own proof file and exported declaration. |
-| `Paper.lean` | Chooses the initial boxes. |
-| `notes.json` | Stores authored notes and boxes added through the interface. |
 
 From the repository root:
 
 ```sh
-python scripts/build.py --project examples/Fermat/project.json
-python scripts/serve.py --project examples/Fermat/project.json
+python scripts/build.py examples/Fermat/Paper.md
+python scripts/serve.py examples/Fermat/Paper.md
 ```
 
 The last-theorem attempt fails independently; it does not stop the little

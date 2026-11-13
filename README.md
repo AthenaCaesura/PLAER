@@ -14,44 +14,60 @@
 
 ## A reader for formal statements
 
-PLAER turns named Lean statements into readable mathematical documents. Each
-statement has a Lean view, space for authored explanations and application
-notes, and a play button for checking its separately mapped proof.
+PLAER turns Lean definitions and theorem statements into a readable document.
+Each one appears in a box that switches between **LaTeX** and **Lean**. Readers
+never have to look at a proof: a statement's box only says where its proofs
+live and whether Lean accepts them.
 
-Statements and proofs live in different files. An unproved statement can be a
-closed `Prop` definition: it describes a proposition without asserting that it
-has been proved. Ordinary theorem declarations are also supported. A project
-manifest maps each initially displayed statement to one proof
-file and the declaration that file should export.
+You write **one file per document**, `Paper.md`. It holds the definitions and
+theorem statements, as Lean, and your notes and examples, as Markdown:
 
-The build compiles the statement module as a whole. It does not slice arbitrary
-Lean files or compile every example's proofs. A play-button check compiles the
-mapped proof file and checks its exported declaration against the displayed
-proposition. **Source & proof** details show that mapping and the generated checker
-command; exported audit files make the check inspectable.
+````markdown
+# Two theorems of Fermat
 
-PLAER is a prototype. It supports registered mathematical notation and authored
-Markdown notes. Application connections are notes you write yourself; PLAER
-does not infer them automatically.
+```lean
+import Mathlib.FieldTheory.Finite.Basic
+```
+
+```lean
+/-- Fermat's little theorem -/
+def Fermat.little_statement : Prop :=
+  ∀ (p : ℕ) (a : ℤ), p.Prime → Int.ModEq (p : ℤ) (a ^ p) a
+-- proof: proofs/Little.lean Fermat.Proofs.little
+```
+
+If $p$ is prime, every integer $a$ satisfies $a^p\equiv a\pmod p$.
+````
+
+**Proofs live in completely separate files.** A `-- proof:` line attaches one
+to the statement above it, and a statement can have several. Pressing a play
+button compiles that proof file and checks that it proves exactly the displayed
+statement. A wrong or broken proof never stops the document from building.
+
+A statement without a proof is a closed `Prop` definition: it says what the
+claim is without asserting it. Ordinary `theorem` declarations work too.
+
+### The file you write and the Lean that is verified
+
+PLAER writes `Statements.lean` beside `Paper.md`. It is the paper with every
+line outside a `lean` block commented out, so **line 12 of the paper is line 12
+of the Lean file**. That file is what Lean compiles, what proof files import,
+and what Lean's error messages point into. The LaTeX in each box is produced
+from Lean's elaborated expression, not from the text you typed.
+
+```text
+examples/Fermat/Paper.md          you write this
+examples/Fermat/Statements.lean   generated; Lean compiles it; proofs import it
+examples/Fermat/proofs/*.lean     proofs, attached with `-- proof:` lines
+dist/fermat/index.html            the document, as one offline HTML file
+```
 
 ## Examples
 
-The engine has no built-in demonstration. Choose a project explicitly:
-
-| Project | What it illustrates | Manifest | Offline document |
+| Project | What it illustrates | Paper | Offline document |
 | --- | --- | --- | --- |
-| Basics | A small statement with one separate proof. | [Basics/project.json](examples/Basics/project.json) | [Adding zero](dist/basics/index.html) |
-| Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/project.json](examples/Fermat/project.json) | [Fermat document](dist/fermat/index.html) |
-
-```text
-Statements.lean       → Definition and theorem boxes
-proofs/<claim>.lean   → Play: check that claim's proof
-notes.json           → Markdown and user-added boxes
-```
-
-The document interface has **+ Definition**, **+ Theorem**, and **+ Markdown**.
-Formal boxes select declarations from the source file; theorem boxes map their
-own proof file. New boxes can be edited, reordered, removed, and saved.
+| Basics | A definition, a statement with two separate proofs, and LaTeX notation for your own definition. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
+| Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/Paper.md](examples/Fermat/Paper.md) | [dist/fermat](dist/fermat/index.html) |
 
 ## View a document
 
@@ -62,58 +78,53 @@ git clone https://github.com/AthenaCaesura/PLAER.git
 cd PLAER
 ```
 
-Open `dist/basics/index.html` or `dist/fermat/index.html` from that folder
-in your browser. Scripts, mathematical fonts, styles, and logos are embedded;
-viewing a document requires no Lean installation. GitHub's HTML file viewer
-shows source, so download the repository to open the actual document.
+Open `dist/basics/index.html` or `dist/fermat/index.html` in your browser.
+Scripts, mathematical fonts, styles, and logos are embedded; viewing a document
+requires no Lean installation. Offline pages show the result of the last build
+and cannot run fresh Lean checks.
 
-Offline pages cannot perform fresh Lean checks. Any archived result describes
-an earlier check, not a check performed in your browser.
-
-## Build and run a project
+## Build, check, and edit
 
 After installing Python and Lean as described in the
 [setup guide](docs/getting-started.md):
 
 ```sh
-python scripts/build.py --project examples/Basics/project.json
-python scripts/serve.py --project examples/Basics/project.json
+python scripts/build.py examples/Basics/Paper.md
+python scripts/serve.py examples/Basics/Paper.md
 ```
 
-Open **http://127.0.0.1:8767/**. On macOS or Ubuntu, use `python3` if that
-is your Python command. The first build downloads pinned dependencies, and
-checking a proof compiles that proof file with Lean.
+Open **http://127.0.0.1:8767/**. On macOS or Ubuntu, use `python3` if that is
+your Python command. With the server running:
 
-Use the Fermat manifest instead to run that example. There is no implicit
-example selection: pass `--project` or set `PLAER_PROJECT`. Run
-`python scripts/check.py` to check all included projects, or add
-`--project <manifest>` to check one. The suite requires Node.js as well as
-Python and Lean. Windows, macOS, and Ubuntu are covered by the
-[cross-platform workflow](https://github.com/AthenaCaesura/PLAER/actions/workflows/ci.yml).
+- every play button checks its proof file with Lean;
+- **Edit** on any box changes that part of `Paper.md`; **+ Definition**,
+  **+ Theorem**, and **+ Markdown** add boxes; boxes can be moved and removed;
+- Lean you type is compiled before it is saved, and rejected with Lean's
+  message if it does not compile.
+
+You can equally edit `Paper.md` in your own editor and reload the page.
+Run `python scripts/check.py` to build both examples and run every test.
 
 ## Repository map
 
 | Location | Purpose |
 | --- | --- |
-| [Plaer/](Plaer/) | Reusable Lean statement rendering and checking framework. |
-| [examples/](examples/) | Independent projects, each with statements, individual proofs, paper, notes, and manifest. |
-| [web/](web/) | Shared browser interface and canonical SVG branding assets. |
-| [scripts/](scripts/) | Project loading, builds, packaging, serving, and checks. |
-| [tests/](tests/) | Lean, Python, and JavaScript regressions and test fixtures. |
+| [Plaer/](Plaer/) | Lean: LaTeX notation rules, declaration reports, and the exact-statement proof check. |
+| [examples/](examples/) | Independent projects: a paper, its generated Lean file, and separate proofs. |
+| [scripts/](scripts/) | The paper format, the build, proof checks, packaging, and the local server. |
+| [web/](web/) | The page: one script, one stylesheet, logos, and bundled KaTeX and Marked. |
+| [tests/](tests/) | Lean, Python, and JavaScript tests and fixtures. |
 | [docs/](docs/) | Setup, authoring, architecture, and development guides. |
-| [design/logo/](design/logo/) | Reproducible wordmark source and glyph provenance. |
+| [design/logo/](design/logo/) | Wordmark source and glyph provenance. |
 | [vendor/LeanTeX/](vendor/LeanTeX/) | Maintained LeanTeX source fork and its license. |
-| [dist/](dist/) | Per-project documents, source/check audits, and build provenance. |
-
-Local intermediate files go under `build/<project-id>/`; readable checker files
-and their audit records accompany each document in `dist/<project-id>/`.
-Lake configuration and the pinned Lean toolchain stay at the repository root.
+| [dist/](dist/) | Per-project documents, source snapshots, checkers, and audit records. |
 
 ## Renderer and attribution
 
 PLAER uses a local fork of [Kyle Miller's LeanTeX](https://github.com/kmill/LeanTeX),
 ported to Lean 4.35.0. Mathematical notation comes from elaborated Lean
-expressions. Unsupported notation is rejected rather than guessed.
+expressions. Notation without a registered LaTeX form is never guessed: that
+box keeps its Lean view and says what is missing.
 
 See the [architecture guide](docs/architecture.md),
 [fork notes](vendor/LeanTeX/FORK.md), and

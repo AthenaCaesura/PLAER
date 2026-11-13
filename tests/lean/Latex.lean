@@ -27,7 +27,8 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("(1 + (2 + 3) : ℕ)", "1 + (2 + 3)"),
     ("{y : ℝ | -1 < y ∧ y ≤ 2}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; - 1 < y \\le 2\\right\\}"),
     ("{y : ℝ | y = 0 ∨ y = 1}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; y = 0 \\lor y = 1\\right\\}"),
-    ("∀ x : ℝ, ∃ x : ℝ, x = x", "\\forall x : \\mathbb{R},\\ \\exists x : \\mathbb{R},\\ x = x")]
+    ("∀ x : ℝ, ∃ x : ℝ, x = x", "\\forall x : \\mathbb{R},\\ \\exists x : \\mathbb{R},\\ x = x"),
+    ("∀ s : Set ℝ, s = s", "\\forall s : \\mathcal{P}(\\mathbb{R}),\\ s = s")]
   let mut fixtures : Array Json := #[]
   for (source, expected) in cases do
     let latex ← renderTerm source

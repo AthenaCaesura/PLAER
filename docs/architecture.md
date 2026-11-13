@@ -1,97 +1,100 @@
 # Architecture
 
-PLAER is a reusable statement-reader framework. Example mathematics lives in
-independent project directories. A manifest joins a statement source, document
-composition, notes, output directory, and explicit statement-to-proof mappings.
+## One paper, separate proofs
 
-## Statement and proof separation
+A document has one source: `Paper.md`. Its `lean` blocks hold definitions and
+statements; everything else is Markdown. Proofs are separate Lean files that
+import the paper's module. Nothing else describes a project: there is no
+manifest, and box titles come from doc comments.
 
-Unproved statement inputs can be closed definitions of type `Prop`. For example:
+```text
+Paper.md
+  │  scripts/paper.py: comment out every line outside a lean block
+  ▼
+Statements.lean                    same line numbers as the paper
+  │  lake build                    the paper's Lean compiles as one module
+  ▼
+Plaer.moduleReport (Lean)          every declaration: kind, lines, doc comment,
+  │                                pretty-printed Lean, LaTeX from LeanTeX
+  ▼
+scripts/document.py                place boxes by line; attach `-- proof:` lines
+  │
+  ├─ scripts/verify_proof.py       one checker file per attached proof
+  ▼
+scripts/package_document.py        dist/<project>/index.html + audit files
+```
+
+Because the generated Lean file keeps the paper's line numbers, Lean's report
+of where each declaration sits says directly where its box belongs in the
+paper, and Lean's errors name lines of the paper. Python never parses Lean:
+which declarations exist, what kind they are, and how they read all come from
+Lean's environment.
+
+## Statements and proofs
+
+An unproved statement is a closed definition of type `Prop`:
 
 ```lean
 def add_zero_statement : Prop := ∀ n : Nat, n + 0 = n
 ```
 
-This defines a proposition; it does not assert that the proposition is true and
-does not introduce an axiom. A proof lives in a separate file and exports a
-declaration named by the project manifest.
+This defines a proposition; it does not assert it and introduces no axiom.
 
-The statement module compiles as a whole. This is not declaration slicing:
-unrelated invalid code in that module can still prevent its compilation.
-Separating proof files keeps a broken proof from preventing statement reading.
+A proof check compiles a readable checker: the complete proof file, an added
+`import Plaer.Check`, and a final `#plaer_check_proof statement proof`. That
+command ([Plaer/Check.lean](../Plaer/Check.lean)) requires the proof's type to
+be definitionally the displayed proposition, rejects `sorry` and unresolved
+metavariables, runs Lean's kernel, and audits axioms. The check's statement
+hash must equal the hash of the statement the page displays.
 
-A play-button check compiles a readable checker containing the complete mapped
-proof file, an added checker import, and a final exact-proposition audit.
-The proof's exported declaration must actually prove
-that proposition. Imported dependencies of the proof still compile normally.
-A bad proof in another independent proof file is outside that check's imports.
+Each check compiles only its own proof file, so a broken proof elsewhere
+cannot affect it. A theorem proved inside the paper is checked the same way,
+with the paper's module standing in for the proof file.
 
-## Project context
+Saved results are reused only while the paper's Lean is unchanged. Editing
+prose keeps them; editing any Lean marks every proof not checked until it runs
+again.
 
-`scripts/project.py` loads each manifest into a `Project` context containing
-resolved input/output paths and its statement mappings. Paths are relative to
-the manifest directory and must stay inside the repository. A manifest is
-chosen explicitly or through `PLAER_PROJECT`; there is no example default.
+## Mathematical notation
 
-Each project has its own notes file, `build/<id>/` intermediates, output
-directory, and proof mappings. Framework modules do not import example proof
-files. See the [manifest guide](authoring.md#project-manifest).
+LaTeX is printed from elaborated Lean expressions by the maintained
+[LeanTeX fork](../vendor/LeanTeX/FORK.md) with PLAER's rules in
+[Plaer/Latex.lean](../Plaer/Latex.lean). Rendering is strict: an expression
+without a registered form is an error rather than guessed mathematics. In a
+document that error is confined to its box, which keeps its Lean view and
+reports the reason. This pretty printer is not itself a formal proof that the
+LaTeX is equivalent to the Lean.
 
-## Build and inspection
+## The page and the server
 
-```text
-project manifest
-  ├─ statement-only Lean module + project paper
-  ├─ authored Markdown notes
-  └─ statement → individual proof-file mappings
-                    ↓
-          Lean statement rendering
-                    ↓
-        project intermediate document
-                    ↓
-         shared browser asset packaging
-                    ↓
-    per-project HTML + provenance + audit
-```
+`web/paper.js` draws the document from a JSON state embedded in the HTML:
+the paper's blocks in order, each Lean block with its boxes. Opened as a file
+the page is read-only and shows saved checks.
 
-The build reads elaborated Lean expressions, not a browser-side reconstruction
-of their mathematics. The maintained
-[LeanTeX fork](../vendor/LeanTeX/FORK.md) supplies traversal, precedence,
-parentheses, binders, and extensible printers. PLAER enables strict rendering:
-unsupported notation causes an error instead of guessed mathematics. This
-pretty printer is not itself a formal proof of the LaTeX output's equivalence.
+`scripts/serve.py` serves the same page and adds two operations:
 
-The browser's **Source & proof** details expose the original statement source, exact
-proof path, exported declaration, and generated checker command. Each output
-also includes `audit.json` and `checks/*.lean` files so the mapping and checker
-can be inspected independently of the interface.
+- `POST /api/verify` runs one attached proof.
+- `POST /api/document` applies one edit (replace, insert, move, remove a block)
+  to `Paper.md`, rebuilds, and returns the new state. If Lean rejects the
+  result, the paper is restored and the error returned.
 
-Any archived proof result describes an earlier check. A live request must check
-the selected proof against the displayed statement, not merely report that an
-unrelated module compiled.
+Requests are accepted only from the local page. Lean work runs one request at
+a time.
 
 ## Repository responsibilities
 
 | Location | Responsibility |
 | --- | --- |
-| `Plaer/` | Reusable document blocks, statement extraction, notation, and checking support. |
-| `examples/<name>/` | A manifest, statement source, project paper, notes, and separate proof files. |
-| `scripts/` | Shared project loading, build, packaging, server, and check commands. |
-| `web/` | Shared browser UI, styling, and canonical SVG assets. |
-| `tests/` | Engine regressions, integration checks, and fixtures. |
+| `Plaer/` | Notation rules, declaration reports, and the proof check. No example mathematics. |
+| `examples/<Name>/` | A paper, its generated Lean file, and separate proof files. |
+| `scripts/` | Paper format, build, proof checks, packaging, server, and check runner. |
+| `web/` | The page script and stylesheet, SVG assets, bundled KaTeX and Marked. |
+| `tests/` | Engine and pipeline tests, and fixtures. |
 | `vendor/LeanTeX/` | Maintained upstream source fork, provenance, and license. |
-| `dist/<id>/` | Browser-ready project output and inspectable check artifacts. |
-| `build/<id>/` | Ignored intermediate output and compilation logs. |
-| `design/logo/` | Wordmark construction and mathematical-glyph provenance. |
-
-## Notes and branding
-
-Markdown cells provide authored explanations and application notes; the engine
-does not infer domain mappings. Server saves update the selected project's
-notes file and repackage its document. Offline edits use browser storage and
-can be included in a downloaded HTML copy.
+| `dist/<id>/` | The document, source snapshots, checkers, and audit records. |
+| `build/<id>/` | Ignored intermediates, caches, and logs. |
+| `design/logo/` | Wordmark construction and glyph provenance. |
 
 Packaging embeds the canonical `web/assets/plaer-wordmark.svg` and
-`web/assets/plaer-play.svg`. The play SVG is shared by the header, favicon,
-and proof-run controls. See the [asset guide](../web/assets/README.md) and
+`web/assets/plaer-play.svg`. See the [asset guide](../web/assets/README.md) and
 [glyph provenance](../design/logo/SVG-README.md).

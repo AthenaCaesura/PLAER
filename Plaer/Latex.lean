@@ -1,20 +1,25 @@
 module
 public import LeanTeX
 public meta import LeanTeX
-public import Mathlib.Basic.Real.Basic
-public import Mathlib.FieldTheory.Finite.Basic
 
 public meta section
 
 /-! PLAER's notation rules on top of the vendored LeanTeX expression printer.
 Typesetting reads elaborated expressions and has no dependency on example declarations.
+
+This module imports no Mathlib, because every paper imports it and Mathlib
+imports are what make a paper slow to compile. Rules for Mathlib constants are
+keyed by name (`kind := const.<full name>`), so they apply whenever the paper
+itself imports that constant. A misspelled name is not an error, so the LaTeX
+tests cover each of these rules.
 -/
 
 open Lean Meta LeanTeX
 
 namespace Plaer
 
-latex_pp_const_rule Real := pure <| LatexData.atomString "\\mathbb{R}"
+latex_pp_rules (kind := const.Real)
+  | _ => pure <| LatexData.atomString "\\mathbb{R}"
 latex_pp_const_rule Rat := pure <| LatexData.atomString "\\mathbb{Q}"
 latex_pp_const_rule True := pure <| LatexData.atomString "\\top"
 latex_pp_const_rule False := pure <| LatexData.atomString "\\bot"
@@ -41,12 +46,12 @@ latex_pp_app_rules (const := And)
     return (a.protectRight 50 ++ lop ++ x.protect 50 ++ rop ++ b.protectLeft 50)
       |>.resetBP (.NonAssoc 50) (.NonAssoc 50)
 
-latex_pp_app_rules (const := Set)
+latex_pp_app_rules (kind := const.Set)
   | _, #[domain] => do
     let domain ← latexPP domain
     return LatexData.atomString "\\mathcal{P}" ++ domain.parens
 
-latex_pp_app_rules (const := Set.ofPred)
+latex_pp_app_rules (kind := const.Set.ofPred)
   | _, #[domain, predicate] => do
     let domain ← latexPP domain
     withBindingBodyUnusedName' predicate none fun name body => do
@@ -55,7 +60,7 @@ latex_pp_app_rules (const := Set.ofPred)
         "\\left\\{" ++ name.toLatex ++ "\\in" ++ domain.latex.1 ++
         "\\;\\middle|\\; " ++ condition.latex.1 ++ "\\right\\}"
 
-latex_pp_app_rules (const := Nat.Prime)
+latex_pp_app_rules (kind := const.Nat.Prime)
   | _, #[p] => do
     let p ← latexPP p
     return LatexData.atomString "\\operatorname{Prime}" ++ p.parens
@@ -63,7 +68,7 @@ latex_pp_app_rules (const := Nat.Prime)
 latex_pp_app_rules (const := Nat.cast)
   | _, #[_, _, n] => latexPP n
 
-latex_pp_app_rules (const := Int.ModEq)
+latex_pp_app_rules (kind := const.Int.ModEq)
   | _, #[modulus, a, b] => do
     let modulus ← latexPP modulus
     let a ← latexPP a

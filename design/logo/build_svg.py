@@ -1,3 +1,4 @@
+import os
 """Rebuild the approved PLAER wordmark and its glyph provenance.
 
 Optional design dependency: pip install fonttools
@@ -18,7 +19,8 @@ from fontTools.pens.boundsPen import BoundsPen
 
 logging.getLogger("fontTools.ttLib.tables._h_e_a_d").setLevel(logging.ERROR)
 OUT = Path(__file__).resolve().parent
-FONTS = ROOT / ".lake/packages/verso/vendored-js/katex/fonts"
+# KaTeX's TTF fonts: run `npm install katex@0.16.22` in the repository root, or set KATEX_FONTS.
+FONTS = Path(os.environ.get("KATEX_FONTS", ROOT / "node_modules/katex/dist/fonts"))
 TEAL = "#134D43"
 
 

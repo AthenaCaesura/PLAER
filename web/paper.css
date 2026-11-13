@@ -236,3 +236,35 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 }
 
 .theorem-math { font-size:16px; overflow-x:auto; padding:12px 0; }
+
+/* ── One paper: prose, Lean, and boxes in document order ── */
+.block { margin: 0 0 26px; }
+.block.editable { border-top: 1px dashed transparent; }
+.block.editable > .cell-heading { margin: 0 0 6px; opacity: .55; }
+.block.editable:hover > .cell-heading, .block.editable:focus-within > .cell-heading { opacity: 1; }
+.lean-block > :first-child { margin-top: 0; }
+.prose > h1:first-child { margin: 0 0 21px; font-size: 43px; line-height: 1.18; letter-spacing: -1.6px; }
+.prose code { font: 13px Consolas, "Cascadia Code", monospace; background: #f5f6f1; padding: 1px 4px; border-radius: 3px; }
+.prose pre code { background: none; padding: 0; }
+.lean-code { margin: 0 0 14px; padding: 14px 18px; background: #f5f6f1; border: 1px solid #e7e9e0; border-radius: 3px; overflow: auto; }
+.lean-source .comment { color: var(--muted); font-style: italic; }
+.lean-setup { margin: 0 0 14px; font: 12px/1.6 var(--sans); color: var(--muted); }
+.lean-setup summary { cursor: pointer; width: fit-content; }
+.lean-setup .lean-code { margin-top: 8px; }
+.definition > .source-proof-details { margin: 0 27px; padding: 12px 0 14px; }
+.definition > .source-proof-details a { margin-left: 10px; color: var(--green); }
+.box-caption { padding: 8px 27px 0; font: 15px/1.6 Georgia, serif; color: #5e6d56; }
+.proof-check > .box-caption { padding: 8px 0 0; }
+.box-caption p { margin: 0; }
+.latex-missing { margin: 0; font: 13px/1.6 var(--sans); color: var(--muted); }
+.proof-row + .proof-row { margin-top: 2px; }
+.proof-where { font: 12px var(--sans); color: var(--muted); overflow-wrap: anywhere; }
+.proof-where code { font: 12px Consolas, "Cascadia Code", monospace; color: var(--ink); }
+.proof-none { margin: 8px 0 0; font: 12px/1.6 var(--sans); color: var(--muted); }
+.source-proof-list .proof-number { grid-column: 1 / -1; margin-top: 8px; font-weight: 600; color: var(--ink); }
+.source-proof-list .proof-number + dd { display: none; }
+.edit-error { white-space: pre-wrap; font: 12px/1.6 Consolas, "Cascadia Code", monospace; }
+.lean-pending .lean-code { opacity: .7; }
+.lean-pending-note { margin: 4px 0 0; color: #8a7a52; font-size: 12px; font-style: italic; }
+.build-error { margin: 0 0 24px; padding: 14px 18px; border: 1px solid #e4c2bc; border-radius: 5px; background: #fbf1ef; color: #a33f32; font: 12px/1.6 Consolas, monospace; white-space: pre-wrap; }
+@media print { .cell-heading, .cell-edit, .lean-setup, .proof-where { display: none !important; } }
