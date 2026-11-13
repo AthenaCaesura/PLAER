@@ -1,0 +1,20 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Spec.div_zero",
+  "proofDeclaration": "Spec.Proofs.div_zero",
+  "result": {
+    "axioms": [
+      "propext"
+    ],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "4273674726",
+  "proofFile": "examples/Spec/proofs/Symbols.lean",
+  "proofUrl": "sources/proofs/Symbols.lean",
+  "checkerUrl": "checks/Spec_div_zero--Spec_Proofs_div_zero.lean",
+  "auditUrl": "checks/Spec_div_zero--Spec_Proofs_div_zero.json",
+  "command": "lake env lean --json \"dist/spec/checks/Spec_div_zero--Spec_Proofs_div_zero.lean\"",
+  "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+  "wallMs": 442
+}

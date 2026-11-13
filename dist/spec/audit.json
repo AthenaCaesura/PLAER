@@ -1,0 +1,417 @@
+{
+  "project": "spec",
+  "paper": "examples/Spec/Paper.md",
+  "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
+  "source": "examples/Spec/Statements.lean",
+  "sourceModule": "Spec.Statements",
+  "sourceSha256": "7ca338b35edaa708fb146448ee4bea283997b0fe944be317a059b541667d1254",
+  "checks": [
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.monus_add",
+      "leanVersion": "4.35.0",
+      "name": "Spec.monus_add",
+      "proofDeclaration": "Spec.Proofs.monus_add",
+      "result": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "3738959399",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_monus_add--Spec_Proofs_monus_add.lean",
+      "auditUrl": "checks/Spec_monus_add--Spec_Proofs_monus_add.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_monus_add--Spec_Proofs_monus_add.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 2959
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.monus_zero",
+      "leanVersion": "4.35.0",
+      "name": "Spec.monus_zero",
+      "proofDeclaration": "Spec.Proofs.monus_zero",
+      "result": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "2289819965",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_monus_zero--Spec_Proofs_monus_zero.lean",
+      "auditUrl": "checks/Spec_monus_zero--Spec_Proofs_monus_zero.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_monus_zero--Spec_Proofs_monus_zero.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 470
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.monus_values",
+      "leanVersion": "4.35.0",
+      "name": "Spec.monus_values",
+      "proofDeclaration": "Spec.Proofs.monus_values",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "67086187",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_monus_values--Spec_Proofs_monus_values.lean",
+      "auditUrl": "checks/Spec_monus_values--Spec_Proofs_monus_values.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_monus_values--Spec_Proofs_monus_values.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 462
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.div_bounds",
+      "leanVersion": "4.35.0",
+      "name": "Spec.div_bounds",
+      "proofDeclaration": "Spec.Proofs.div_bounds",
+      "result": {
+        "axioms": [
+          "propext"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "301851002",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_div_bounds--Spec_Proofs_div_bounds.lean",
+      "auditUrl": "checks/Spec_div_bounds--Spec_Proofs_div_bounds.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_div_bounds--Spec_Proofs_div_bounds.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 510
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.div_zero",
+      "leanVersion": "4.35.0",
+      "name": "Spec.div_zero",
+      "proofDeclaration": "Spec.Proofs.div_zero",
+      "result": {
+        "axioms": [
+          "propext"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "4273674726",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_div_zero--Spec_Proofs_div_zero.lean",
+      "auditUrl": "checks/Spec_div_zero--Spec_Proofs_div_zero.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_div_zero--Spec_Proofs_div_zero.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 442
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.div_values",
+      "leanVersion": "4.35.0",
+      "name": "Spec.div_values",
+      "proofDeclaration": "Spec.Proofs.div_values",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "783887246",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_div_values--Spec_Proofs_div_values.lean",
+      "auditUrl": "checks/Spec_div_values--Spec_Proofs_div_values.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_div_values--Spec_Proofs_div_values.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 465
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.sub_add",
+      "leanVersion": "4.35.0",
+      "name": "Spec.sub_add",
+      "proofDeclaration": "Spec.Proofs.sub_add",
+      "result": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "2833285997",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_sub_add--Spec_Proofs_sub_add.lean",
+      "auditUrl": "checks/Spec_sub_add--Spec_Proofs_sub_add.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_sub_add--Spec_Proofs_sub_add.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 441
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.sub_self",
+      "leanVersion": "4.35.0",
+      "name": "Spec.sub_self",
+      "proofDeclaration": "Spec.Proofs.sub_self",
+      "result": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "2065408026",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_sub_self--Spec_Proofs_sub_self.lean",
+      "auditUrl": "checks/Spec_sub_self--Spec_Proofs_sub_self.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_sub_self--Spec_Proofs_sub_self.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 457
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.pow_zero",
+      "leanVersion": "4.35.0",
+      "name": "Spec.pow_zero",
+      "proofDeclaration": "Spec.Proofs.pow_zero",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "3776040218",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_pow_zero--Spec_Proofs_pow_zero.lean",
+      "auditUrl": "checks/Spec_pow_zero--Spec_Proofs_pow_zero.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_pow_zero--Spec_Proofs_pow_zero.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 445
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.pow_succ",
+      "leanVersion": "4.35.0",
+      "name": "Spec.pow_succ",
+      "proofDeclaration": "Spec.Proofs.pow_succ",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "393027510",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_pow_succ--Spec_Proofs_pow_succ.lean",
+      "auditUrl": "checks/Spec_pow_succ--Spec_Proofs_pow_succ.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_pow_succ--Spec_Proofs_pow_succ.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 445
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.pow_values",
+      "leanVersion": "4.35.0",
+      "name": "Spec.pow_values",
+      "proofDeclaration": "Spec.Proofs.pow_values",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1684536857",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_pow_values--Spec_Proofs_pow_values.lean",
+      "auditUrl": "checks/Spec_pow_values--Spec_Proofs_pow_values.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_pow_values--Spec_Proofs_pow_values.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 448
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.gt_iff",
+      "leanVersion": "4.35.0",
+      "name": "Spec.gt_iff",
+      "proofDeclaration": "Spec.Proofs.gt_iff",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1922081475",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_gt_iff--Spec_Proofs_gt_iff.lean",
+      "auditUrl": "checks/Spec_gt_iff--Spec_Proofs_gt_iff.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_gt_iff--Spec_Proofs_gt_iff.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 444
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.ge_iff",
+      "leanVersion": "4.35.0",
+      "name": "Spec.ge_iff",
+      "proofDeclaration": "Spec.Proofs.ge_iff",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "887800789",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_ge_iff--Spec_Proofs_ge_iff.lean",
+      "auditUrl": "checks/Spec_ge_iff--Spec_Proofs_ge_iff.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_ge_iff--Spec_Proofs_ge_iff.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 469
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.le_iff",
+      "leanVersion": "4.35.0",
+      "name": "Spec.le_iff",
+      "proofDeclaration": "Spec.Proofs.le_iff",
+      "result": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "3590635122",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_le_iff--Spec_Proofs_le_iff.lean",
+      "auditUrl": "checks/Spec_le_iff--Spec_Proofs_le_iff.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_le_iff--Spec_Proofs_le_iff.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 443
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.ne_iff",
+      "leanVersion": "4.35.0",
+      "name": "Spec.ne_iff",
+      "proofDeclaration": "Spec.Proofs.ne_iff",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1227601037",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_ne_iff--Spec_Proofs_ne_iff.lean",
+      "auditUrl": "checks/Spec_ne_iff--Spec_Proofs_ne_iff.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_ne_iff--Spec_Proofs_ne_iff.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 467
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.left_grouping",
+      "leanVersion": "4.35.0",
+      "name": "Spec.left_grouping",
+      "proofDeclaration": "Spec.Proofs.left_grouping",
+      "result": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "3659255092",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_left_grouping--Spec_Proofs_left_grouping.lean",
+      "auditUrl": "checks/Spec_left_grouping--Spec_Proofs_left_grouping.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_left_grouping--Spec_Proofs_left_grouping.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 449
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.bracket_values",
+      "leanVersion": "4.35.0",
+      "name": "Spec.bracket_values",
+      "proofDeclaration": "Spec.Proofs.bracket_values",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "218905892",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_bracket_values--Spec_Proofs_bracket_values.lean",
+      "auditUrl": "checks/Spec_bracket_values--Spec_Proofs_bracket_values.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_bracket_values--Spec_Proofs_bracket_values.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 441
+    },
+    {
+      "file": "proofs/Symbols.lean",
+      "declaration": "Spec.Proofs.function_values",
+      "leanVersion": "4.35.0",
+      "name": "Spec.function_values",
+      "proofDeclaration": "Spec.Proofs.function_values",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1471284050",
+      "proofFile": "examples/Spec/proofs/Symbols.lean",
+      "proofUrl": "sources/proofs/Symbols.lean",
+      "checkerUrl": "checks/Spec_function_values--Spec_Proofs_function_values.lean",
+      "auditUrl": "checks/Spec_function_values--Spec_Proofs_function_values.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_function_values--Spec_Proofs_function_values.lean\"",
+      "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+      "wallMs": 485
+    },
+    {
+      "file": "proofs/RoundTrip.lean",
+      "declaration": "Spec.Proofs.round_trip",
+      "leanVersion": "4.35.0",
+      "name": "Spec.round_trip",
+      "proofDeclaration": "Spec.Proofs.round_trip",
+      "result": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "3514222450",
+      "proofFile": "examples/Spec/proofs/RoundTrip.lean",
+      "proofUrl": "sources/proofs/RoundTrip.lean",
+      "checkerUrl": "checks/Spec_round_trip--Spec_Proofs_round_trip.lean",
+      "auditUrl": "checks/Spec_round_trip--Spec_Proofs_round_trip.json",
+      "command": "lake env lean --json \"dist/spec/checks/Spec_round_trip--Spec_Proofs_round_trip.lean\"",
+      "proofSha256": "709721118869a9839dbc4557df38a3ab6cd724ec000e36100d1f2ad12817f34e",
+      "wallMs": 377
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Spec.round_trip",
+  "proofDeclaration": "Spec.Proofs.round_trip",
+  "result": {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "3514222450",
+  "proofFile": "examples/Spec/proofs/RoundTrip.lean",
+  "proofUrl": "sources/proofs/RoundTrip.lean",
+  "checkerUrl": "checks/Spec_round_trip--Spec_Proofs_round_trip.lean",
+  "auditUrl": "checks/Spec_round_trip--Spec_Proofs_round_trip.json",
+  "command": "lake env lean --json \"dist/spec/checks/Spec_round_trip--Spec_Proofs_round_trip.lean\"",
+  "proofSha256": "709721118869a9839dbc4557df38a3ab6cd724ec000e36100d1f2ad12817f34e",
+  "wallMs": 377
+}

@@ -1,0 +1,21 @@
+\forall a , b \in \mathbb{N} ,\; a \ge b \implies a \mathbin{\dot{-}} b + b = a
+\forall a , b \in \mathbb{N} ,\; a < b \implies a \mathbin{\dot{-}} b = 0
+( 7 \mathbin{\dot{-}} 3 : \mathbb{N} ) = 4 \land ( 3 \mathbin{\dot{-}} 7 : \mathbb{N} ) = 0
+\forall a , b \in \mathbb{N} ,\; b > 0 \implies \left\lfloor \frac{ a }{ b } \right\rfloor \cdot b \le a \land a < ( \left\lfloor \frac{ a }{ b } \right\rfloor + 1 ) \cdot b
+\forall a \in \mathbb{N} ,\; \left\lfloor \frac{ a }{ 0 } \right\rfloor = 0
+\left\lfloor \frac{ 7 }{ 2 } \right\rfloor = 3 \land \left\lfloor \frac{ 6 }{ 2 } \right\rfloor = 3 \land \left\lfloor \frac{ 1 }{ 2 } \right\rfloor = 0
+\forall a , b \in \mathbb{Z} ,\; a - b + b = a
+\forall a \in \mathbb{Z} ,\; a - a = 0
+\forall a \in \mathbb{N} ,\; a ^{ 0 } = 1
+\forall a , n \in \mathbb{N} ,\; a ^{ n + 1 } = a ^{ n } \cdot a
+( 2 ^{ 10 } : \mathbb{N} ) = 1024 \land ( 0 ^{ 0 } : \mathbb{N} ) = 1
+\forall a , b \in \mathbb{N} ,\; a > b \iff b < a
+\forall a , b \in \mathbb{N} ,\; a \ge b \iff b \le a
+\forall a , b \in \mathbb{N} ,\; a \le b \iff a < b \lor a = b
+\forall a , b \in \mathbb{N} ,\; a \neq b \iff \neg a = b
+\forall a , b , c \in \mathbb{N} ,\; a \mathbin{\dot{-}} b \mathbin{\dot{-}} c = a \mathbin{\dot{-}} ( b + c )
+( ( 2 + 3 ) \cdot 4 : \mathbb{N} ) = 20 \land ( 2 + 3 \cdot 4 : \mathbb{N} ) = 14 \land ( 10 \mathbin{\dot{-}} ( 4 \mathbin{\dot{-}} 1 ) : \mathbb{N} ) = 7 \land ( 10 \mathbin{\dot{-}} 4 \mathbin{\dot{-}} 1 : \mathbb{N} ) = 5
+\operatorname{double} ( n ) \coloneqq 2 \cdot n
+\operatorname{larger} ( a , b ) \coloneqq a + ( b \mathbin{\dot{-}} a )
+\operatorname{double} ( 21 ) = 42 \land \operatorname{larger} ( 3 , 8 ) = 8 \land \operatorname{larger} ( 8 , 3 ) = 8
+\forall r \in \operatorname{Formula} ,\; \operatorname{showable} ( r ) \implies \operatorname{reads\_back} ( r )

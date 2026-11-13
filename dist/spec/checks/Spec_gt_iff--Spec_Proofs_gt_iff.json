@@ -1,0 +1,18 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Spec.gt_iff",
+  "proofDeclaration": "Spec.Proofs.gt_iff",
+  "result": {
+    "axioms": [],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "1922081475",
+  "proofFile": "examples/Spec/proofs/Symbols.lean",
+  "proofUrl": "sources/proofs/Symbols.lean",
+  "checkerUrl": "checks/Spec_gt_iff--Spec_Proofs_gt_iff.lean",
+  "auditUrl": "checks/Spec_gt_iff--Spec_Proofs_gt_iff.json",
+  "command": "lake env lean --json \"dist/spec/checks/Spec_gt_iff--Spec_Proofs_gt_iff.lean\"",
+  "proofSha256": "a7f37e45e15cce6488659ef73c7f1c214048c35bab137d3557e404585d829e93",
+  "wallMs": 444
+}
