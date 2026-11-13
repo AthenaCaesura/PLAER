@@ -1,6 +1,6 @@
-import Plaer.Extract
+import fixtures.Interval
 
-open Lean Meta Plaer
+open Lean Meta Plaer IntervalFixture
 
 namespace RendererTests
 

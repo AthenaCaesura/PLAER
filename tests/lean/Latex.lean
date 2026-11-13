@@ -1,6 +1,6 @@
-import Plaer.Check
+import fixtures.Interval
 
-open Lean Meta Elab Term Plaer
+open Lean Meta Elab Term Plaer IntervalFixture
 
 namespace LatexTests
 
@@ -18,8 +18,8 @@ private meta def renderTerm (source : String) : TermElabM String := do
 
 elab "#test_latex" : command => Command.liftTermElabM do
   let cases := [
-    ("(0 : ℝ) ∈ Plaer.I", "0 \\in I"),
-    ("(2 : ℝ) ∉ Plaer.I", "2 \\notin I"),
+    ("(0 : ℝ) ∈ IntervalFixture.I", "0 \\in I"),
+    ("(2 : ℝ) ∉ IntervalFixture.I", "2 \\notin I"),
     ("∀ x : ℝ, x ≤ 1 → x + 1 ≤ 2", "\\forall x : \\mathbb{R},\\ x \\le 1 \\implies x + 1 \\le 2"),
     ("∃ n : ℕ, 1 < n", "\\exists n : \\mathbb{N},\\ 1 < n"),
     ("((1 + 2) / 3 : ℝ)", "\\frac{1 + 2}{3}"),
@@ -49,7 +49,7 @@ elab "#test_latex" : command => Command.liftTermElabM do
   -- Unsupported plot shapes can still have supported mathematical notation.
   let alternate ← definitionLatex ``alternate
   fixtures := fixtures.push <| Json.mkObj [("source", toJson "definition alternate"), ("latex", toJson alternate)]
-  let report ← checkNamedTheorem ``quantified
+  let report ← statementReport ``quantified
   let latex ← ofExcept <| report.getObjValAs? String "statementLatex"
   unless latex == "\\forall n : \\mathbb{N},\\ n + 0 = n" do
     throwError "The shared proof checker did not use the general renderer: {latex}"

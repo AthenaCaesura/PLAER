@@ -1,0 +1,77 @@
+{
+  "built_at": "2026-11-13T03:06:03.426094+00:00",
+  "project": "fermat",
+  "lean_version": "4.35.0",
+  "source": "examples/Fermat/Statements.lean",
+  "source_fingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
+  "source_sha256": "a954e1ede4dfa094d8a4b5a949530d169baddbc8fc9b138556206bf3f5be14c3",
+  "document_sha256": "098e4977219a795d62cff67fb46dfee5899b57034f8aa40458d12df8a85c6f48",
+  "paper_source_sha256": "c6fa5342dba6114ab1f852071ff754128cfa1c6f7853932b0a5a3cce2d60ab57",
+  "dependencies_sha256": "c0f4de3c8079e91d4bcced86a48fac6e65533c1962c2bed70588ca5647e6db57",
+  "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
+  "latex_engine": {
+    "repository": "https://github.com/kmill/LeanTeX",
+    "commit": "d66db4582b6cb4d9fa0b6309168103a248a5fd46",
+    "license": "Apache-2.0",
+    "fork": "PLAER local source fork",
+    "lean_version": "4.35.0"
+  },
+  "theorem_checks": [
+    {
+      "kind": "candidate",
+      "leanVersion": "4.35.0",
+      "name": "Fermat.last_statement",
+      "sourceModule": "Fermat.Statements",
+      "statementHash": "592678445",
+      "statementLatex": "\\begin{gathered}\\forall n : \\mathbb{N},\\ \\forall a : \\mathbb{N},\\ \\forall b : \\mathbb{N},\\ \\forall c : \\mathbb{N},\\ 2 < n \\\\ \\implies (0 < a \\\\ \\implies (0 < b \\\\ \\implies (0 < c \\\\ \\implies a^{n} + b^{n} \\neq c^{n})))\\end{gathered}",
+      "statementLean": "def Fermat.last_statement : Prop := ∀ (n a b c : ℕ), 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n",
+      "proofDeclaration": "Fermat.Proofs.last",
+      "result": {
+        "ok": false,
+        "diagnostics": "Application type mismatch: The argument\n  hn\nhas type\n  2 < n\nbut is expected to have type\n  a ^ n + b ^ n < c ^ n\nin the application\n  Nat.ne_of_lt hn"
+      },
+      "proofFile": "examples/Fermat/proofs/Last.lean",
+      "sourceFile": "examples/Fermat/Statements.lean",
+      "sourceUrl": "sources/Statements.lean",
+      "proofUrl": "sources/proofs/5de7218ce272-Last.lean",
+      "checkerUrl": "checks/Fermat_last_statement-14492e61-5de7218c.lean",
+      "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement-14492e61-5de7218c.lean\"",
+      "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
+      "sourceFingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
+      "checkerSha256": "863c66e501fb28115bfdc4b2510f0eee9e46c3b9edc072933000771e8c0a8d3e",
+      "auditUrl": "checks/Fermat_last_statement-14492e61-5de7218c.json",
+      "wallMs": 19173
+    },
+    {
+      "kind": "candidate",
+      "leanVersion": "4.35.0",
+      "name": "Fermat.little_statement",
+      "sourceModule": "Fermat.Statements",
+      "statementHash": "737928072",
+      "statementLatex": "\\forall p : \\mathbb{N},\\ \\forall a : \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
+      "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
+      "proofDeclaration": "Fermat.Proofs.little",
+      "result": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "proofFile": "examples/Fermat/proofs/Little.lean",
+      "sourceFile": "examples/Fermat/Statements.lean",
+      "sourceUrl": "sources/Statements.lean",
+      "proofUrl": "sources/proofs/824b62109b84-Little.lean",
+      "checkerUrl": "checks/Fermat_little_statement-14492e61-824b6210.lean",
+      "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement-14492e61-824b6210.lean\"",
+      "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
+      "sourceFingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
+      "checkerSha256": "3f1f2e44d4c06193b90ad3c7d05322fbb0636bb2c28d57315198ab233566d938",
+      "auditUrl": "checks/Fermat_little_statement-14492e61-824b6210.json",
+      "wallMs": 19234
+    }
+  ],
+  "definitions": []
+}

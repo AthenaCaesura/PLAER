@@ -3,15 +3,22 @@ process.chdir(path.resolve(__dirname, '../..'));
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const katex = require('../../.lake/packages/verso/vendored-js/katex/katex.min.js');
-const build = JSON.parse(fs.readFileSync('dist/build.json','utf8'));
-const reports = build.theorem_checks;
-assert.equal(reports.length, 2);
-assert.equal(reports[0].name, 'Plaer.fermat_last_statement');
-assert.equal(reports[0].result.ok, false);
-assert.equal(reports[1].name, 'Plaer.fermat_little');
-assert.equal(reports[1].result.ok, true);
-for(const report of reports) katex.renderToString(report.statementLatex,{throwOnError:true,strict:'error'});
-const html=fs.readFileSync('dist/index.html','utf8');
-assert(html.includes('Nat.ne_of_lt hn'));
-assert(html.includes('Int.ModEq.pow_prime_eq_self hp a'));
-console.log('PASS: both Fermat statements render; wrong proof rejected; little theorem proved; explanations included');
+const output = process.env.PLAER_OUTPUT;
+assert(output, 'Choose PLAER_OUTPUT');
+const build = JSON.parse(fs.readFileSync(path.join(output, 'build.json'), 'utf8'));
+if (build.project !== 'fermat') {
+  console.log('SKIP: Fermat-specific example checks for another project');
+} else {
+  const reports = build.theorem_checks;
+  assert.deepEqual(reports.map(r=>r.name), ['Fermat.last_statement', 'Fermat.little_statement']);
+  assert.equal(reports[0].result.ok, false);
+  assert.equal(reports[1].result.ok, true);
+  assert.notEqual(reports[0].proofFile, reports[1].proofFile);
+  for(const r of reports) {
+    katex.renderToString(r.statementLatex,{throwOnError:true,strict:'error'});
+    assert(fs.existsSync(path.join(output,r.checkerUrl)));
+    assert(fs.existsSync(path.join(output,r.auditUrl)));
+  }
+  assert(!fs.readFileSync(path.join(output,'index.html'),'utf8').includes('One famous name'));
+  console.log('PASS: Fermat is one example with two independent proof files and correct results');
+}

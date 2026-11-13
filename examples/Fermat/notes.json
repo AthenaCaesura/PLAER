@@ -1,0 +1,14 @@
+{
+  "cells": [
+    {
+      "id": "last-statement",
+      "kind": "markdown",
+      "source": "## Reading the last theorem\nFor an integer exponent $n>2$, no positive integers $a,b,c$ satisfy $a^n+b^n=c^n$. All four variables are natural numbers; the positivity assumptions exclude zero.\n\nFor an application involving integer solutions, first match the variables and check every assumption. This note is an explanation, not a proof of that application.\n\nThe separate demonstration proof is deliberately wrong: from $2<n$ it tries to conclude the required inequality using only `Nat.ne_of_lt hn`. **Not proved** describes that attempt; Fermat’s last theorem itself is true."
+    },
+    {
+      "id": "little-statement",
+      "kind": "markdown",
+      "source": "## Reading the little theorem\nIf $p$ is prime, every integer $a$ satisfies $a^p\\equiv a\\pmod p$. The prime $p$ specifies the modulus, and $a$ may be any integer. For example, $2^5=32\\equiv2\\pmod5$.\n\nWhen applying the statement to modular arithmetic, identify the modulus and establish that it is prime. The separate proof applies Mathlib’s `Int.ModEq.pow_prime_eq_self`; its play button checks that exported proof against this statement."
+    }
+  ]
+}

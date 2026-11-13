@@ -1,79 +1,142 @@
-# Authoring a paper
+# Authoring a project
 
-A paper selects formal Lean declarations and places editable explanations
-beside them. Use those notes to describe assumptions, examples, and how a
-definition or theorem relates to your application. PLAER does not generate
-that application-specific explanation automatically.
+A project combines formal statements, a paper layout, authored notes, and an
+explicit mapping from each statement to its separate proof file. Read
+[Getting started](getting-started.md) to build an included project first.
 
-## Select a theorem
+## Add boxes in the document
 
-The current paper lives in `Paper.lean`. Its existing theorem block is:
+Start the chosen project's local server. Alongside **+ Markdown**, use
+**+ Definition** or **+ Theorem**. Enter the declaration's fully qualified
+Lean name and the title you want readers to see. A theorem box also asks for
+its proof file (relative to the project manifest) and exported proof declaration.
+Existing configured mappings fill those fields automatically.
 
-```text
-:::theoremStatement Plaer.fermat_little (title := "Fermat’s little theorem")
-:::
+The declaration must already exist in the statements file. If you edit that
+file, rebuild the project before adding boxes. Adding a box does not invent a
+new mathematical definition or assert a theorem. Lean renders the selected
+declaration, and a new theorem box starts **Not checked** until its play button
+runs the mapped proof file.
+
+Boxes are saved in the project's notes file and restored on reload. Use their
+edit, move, and remove controls to arrange the document. Downloaded documents
+preserve rendered formal boxes; adding formal boxes requires the local server.
+
+## Project manifest
+
+Create a project directory under `examples/` or another repository-contained
+location. The included Basics project provides a minimal manifest:
+
+```json
+{
+  "version": 1,
+  "id": "basics",
+  "title": "Adding zero",
+  "source": "Statements.lean",
+  "source_module": "Basics.Statements",
+  "paper": "Paper.lean",
+  "paper_module": "Basics.Paper",
+  "notes": "notes.json",
+  "output": "../../dist/basics",
+  "statements": [
+    {
+      "name": "Basics.add_zero_statement",
+      "title": "Adding zero leaves a natural number unchanged",
+      "proof_file": "proofs/AddZero.lean",
+      "proof_declaration": "Basics.Proofs.add_zero"
+    }
+  ]
+}
 ```
 
-The block takes a declaration name. It obtains the theorem's actual type and
-renders that statement; the paper does not duplicate the proof source.
+Paths are relative to the manifest's directory. They must remain inside the
+repository; input files must exist. Project IDs use lowercase letters, digits,
+hyphens, or underscores and begin with a letter. Declaration and module names
+use dotted Lean identifiers with ASCII letters, digits, underscores, or
+apostrophes. Each statement name must be unique within a project.
 
-To add another theorem:
+The Lean module names must also be available through the project's Lake
+configuration. Merely adding a filesystem path to a manifest does not install
+a new external Lean package.
 
-1. Add or import the declaration in the Lean sources. The current examples are
-   in `Plaer/Proofs.lean`, imported by `Plaer/Document.lean` and the live worker.
-2. Add a `theoremStatement` block to `Paper.lean` with that declaration's name
-   and a readable title.
-3. Run `python scripts/build.py` and inspect the generated paper.
-4. Add explanations through the local server or `Explanations/cells.json`.
-5. Run `python scripts/check.py` before committing.
+## Write statement-only input
 
-Use `python3` on macOS or Ubuntu if that is your Python command. Start the
-local server with `python scripts/serve.py` for fresh proof checks and notes
-saved back into the checkout.
+Represent each displayed proposition as a closed definition of type `Prop`:
 
-## Supported notation
+```lean
+namespace Basics
 
-The renderer supports registered mathematical notation; it does not yet
-render arbitrary Mathlib statements. An unsupported expression fails the
-build instead of being displayed with guessed notation.
+def add_zero_statement : Prop := ∀ n : Nat, n + 0 = n
 
-Project-specific rules are in `Plaer/Latex.lean`. Extend them through the
-vendored LeanTeX registration mechanisms: `latex_pp_const_rule`,
-`latex_pp_app_rules`, or `def_latex_binop`. Add a meaningful rendering fixture
-in `tests/lean/Latex.lean` and check it with the bundled KaTeX renderer.
+end Basics
+```
 
-Keep mathematical content in the Lean declaration. A definition's notation
-comes from its value; a theorem's notation comes from its type. The real
-interval in `Plaer/Definitions.lean` remains a definition and plot regression
-fixture, although the current Fermat paper displays only theorem statements.
+All parameters are bound inside the proposition. This defines what the claim
+says; it does not add an axiom or claim that a proof exists. The entire statement
+module must compile, including its imports. PLAER does not slice declarations
+out of an arbitrary broken source file.
 
-## Write explanations
+Keep proof attempts out of that module. Put each independently checkable proof
+in its own file, exporting the declaration named in the manifest. A proof file
+may import the statement module and the mathematical dependencies it needs.
+A play-button check must establish that its export proves the displayed
+proposition.
 
-With the local server running, use **+ Markdown** and **Edit** in the paper.
-Markdown supports inline mathematics with `$...$` and display mathematics with
-`$$...$$`. Code fences can illustrate source when useful.
+## Map statements to proofs
 
-Good statement-focused notes answer concrete questions:
+Proof files currently use ordinary Lean import headers, as in the included
+examples. The checker adds its import before the file and a final assertion
+after it; it does not replace the proof body. The optional Lean `module` header
+is not yet supported in proof files.
 
-- What are the inputs and their types?
-- Which assumptions must hold?
-- What does the conclusion say about those inputs?
-- Which object or constraint in your application corresponds to each symbol?
-- What is one example, and where would an assumption fail?
+The included projects make the mapping explicit:
 
-These are authored notes, separate from the checked formal statement. Editing
-them does not modify a theorem or prove a claim about your application. See
+| Statement | Proof file | Exported declaration |
+| --- | --- | --- |
+| `Basics.add_zero_statement` | `examples/Basics/proofs/AddZero.lean` | `Basics.Proofs.add_zero` |
+| `Fermat.last_statement` | `examples/Fermat/proofs/Last.lean` | `Fermat.Proofs.last` |
+| `Fermat.little_statement` | `examples/Fermat/proofs/Little.lean` | `Fermat.Proofs.little` |
+
+The Fermat last-theorem file is deliberately invalid. Its failure describes
+that proof attempt, not the truth of Fermat's last theorem. Its separate file
+must not prevent the little-theorem proof from being checked.
+
+Compose the paper using the framework's statement blocks and only the
+declarations listed by its manifest. Use the included `Paper.lean` files as
+working examples. Then build the chosen project:
+
+```sh
+python scripts/build.py --project examples/Basics/project.json
+python scripts/check.py --project examples/Basics/project.json
+```
+
+Use `python3` if that is your Python command.
+
+## Inspect what gets checked
+
+Open **Source & proof** on a statement to inspect its original source, exact proof
+file, exported declaration, and generated checker command. The output directory
+also contains `audit.json` and `checks/*.lean` files. Check those artifacts
+when reviewing or changing a proof mapping.
+
+Notation is registered in the framework's Lean renderer. Unsupported notation
+fails rather than being guessed. Extend the appropriate LeanTeX registration
+rules and add a rendering regression for new mathematical forms.
+
+## Write application notes
+
+Use **+ Markdown** and **Edit** with the local server, or edit the notes JSON
+named in the manifest. Markdown supports `$...$` and `$$...$$` mathematics.
+
+Useful notes explain:
+
+- What the inputs and types represent.
+- Which assumptions must hold.
+- What the conclusion guarantees.
+- Which object or constraint in your application corresponds to each symbol.
+- A concrete example and a situation where an assumption fails.
+
+These are authored explanations, separate from the formal statement. PLAER
+does not infer application mappings or verify claims made in Markdown. See
 [saving explanations](getting-started.md#keep-your-explanations) for the
 difference between server and offline storage.
-
-## Candidate propositions
-
-The last-theorem demonstration deliberately stores an invalid proof attempt
-for a proposition. It is not declared as an axiom or as a successfully proved
-theorem. The displayed **Not proved** result refers to that attempt.
-
-Ordinary theorem declarations use the generic named-theorem checker. Adding
-a new candidate proposition with its own attempt currently requires explicit
-dispatch in `Plaer/Check.lean`; copying a candidate block in the paper alone
-does not register a new attempt. Keep proof-checking examples secondary to the
-statement and its explanation.

@@ -1,13 +1,13 @@
 module
 public import LeanTeX
 public meta import LeanTeX
-public import Plaer.Definitions
+public import Mathlib.Basic.Real.Basic
 public import Mathlib.FieldTheory.Finite.Basic
 
 public meta section
 
 /-! PLAER's notation rules on top of the vendored LeanTeX expression printer.
-The interval extractor is used only for the illustration; typesetting reads Expr directly.
+Typesetting reads elaborated expressions and has no dependency on example declarations.
 -/
 
 open Lean Meta LeanTeX
@@ -16,7 +16,6 @@ namespace Plaer
 
 latex_pp_const_rule Real := pure <| LatexData.atomString "\\mathbb{R}"
 latex_pp_const_rule Rat := pure <| LatexData.atomString "\\mathbb{Q}"
-latex_pp_const_rule I := pure <| LatexData.atomString "I"
 latex_pp_const_rule True := pure <| LatexData.atomString "\\top"
 latex_pp_const_rule False := pure <| LatexData.atomString "\\bot"
 

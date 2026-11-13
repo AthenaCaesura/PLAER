@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "id": "fermat",
+  "title": "Two theorems of Fermat",
+  "source": "Statements.lean",
+  "source_module": "Fermat.Statements",
+  "paper": "Paper.lean",
+  "paper_module": "Fermat.Paper",
+  "notes": "notes.json",
+  "output": "../../dist/fermat",
+  "statements": [
+    {
+      "name": "Fermat.last_statement",
+      "title": "Fermat’s last theorem",
+      "proof_file": "proofs/Last.lean",
+      "proof_declaration": "Fermat.Proofs.last"
+    },
+    {
+      "name": "Fermat.little_statement",
+      "title": "Fermat’s little theorem",
+      "proof_file": "proofs/Little.lean",
+      "proof_declaration": "Fermat.Proofs.little"
+    }
+  ]
+}

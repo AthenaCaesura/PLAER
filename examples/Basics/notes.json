@@ -1,0 +1,9 @@
+{
+  "cells": [
+    {
+      "id": "reading-add-zero",
+      "kind": "markdown",
+      "source": "## Read the statement\nFor every natural number $n$, adding zero leaves $n$ unchanged: $n+0=n$. The variable ranges over nonnegative whole numbers.\n\nFor a counter in an application, $n$ could represent the current count and $0$ an update with no additional items. That correspondence is a note you supply; the formal statement remains about natural-number addition.\n\nUse **Source** to inspect the statement and the separate proof file. The play button checks that proof, rather than changing the statement."
+    }
+  ]
+}

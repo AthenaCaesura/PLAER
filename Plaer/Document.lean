@@ -1,7 +1,6 @@
 import Verso
 import Plaer.Extract
 import Plaer.Check
-import Plaer.Proofs
 
 open Lean Verso Doc Elab
 open Verso.ArgParse
@@ -44,7 +43,7 @@ private def definitionHtml (display : DefinitionDisplay) : Html :=
       ("aria-label", display.title)] #[
     tag "div" #[("class", "definition-heading")] #[
       tag "div" #[] #[
-        tag "p" #[("class", "eyebrow")] #[text "Definition 1"],
+        tag "p" #[("class", "eyebrow")] #[text "Definition"],
         tag "h2" #[] #[text display.title]],
       tag "div" #[("class", "view-toggle"), ("role", "tablist"),
           ("aria-label", "Definition representation")] #[
@@ -92,7 +91,7 @@ instance : GenreHtml PaperGenre (BuildLogT IO) where
     | .definition definition => definitionHtml definition
     | .proof proof => proofHtml proof
     | .explanations => tag "div" #[("class", "explanation-notebook"),
-        ("data-notebook", "paper-explanations"), ("aria-label", "Explanations")] #[]
+        ("data-notebook", "paper-explanations"), ("aria-label", "Document boxes")] #[]
   inline _ extension := nomatch extension
 
 structure DefinitionArgs where
@@ -101,21 +100,16 @@ structure DefinitionArgs where
 
 instance : FromArgs DefinitionArgs DocElabM where
   fromArgs := DefinitionArgs.mk <$> .positional `name .resolvedName <*>
-    .namedD `title .string "The closed unit interval"
+    .namedD `title .string "Definition"
 
 @[directive]
 meta def definition : DirectiveExpanderOf DefinitionArgs
   | args, contents => do
     unless contents.isEmpty do
       throwError "The definition block takes a Lean name and generates its own contents"
-    let shape ← extractInterval args.name
-    let (source, sourcePath) ← declarationSource args.name
-    let latex ← definitionLatex args.name
-    let samples ← certifiedSamples args.name shape
-    let payload := Json.mkObj [
-      ("name", toJson args.name.toString), ("shape", toJson shape),
-      ("samples", samples), ("sourcePath", toJson sourcePath),
-      ("leanVersion", toJson Lean.versionString), ("latex", toJson latex)]
+    let payload ← definitionReport args.name
+    let source ← ofExcept <| payload.getObjValAs? String "source"
+    let latex ← ofExcept <| payload.getObjValAs? String "latex"
     ``(Verso.Doc.Block.other
       (PaperBlock.definition (DefinitionDisplay.mk $(quote args.title) $(quote source) $(quote latex)
         $(quote payload.compress))) #[])
@@ -132,22 +126,25 @@ instance : FromArgs TheoremArgs DocElabM where
 meta def theoremStatement : DirectiveExpanderOf TheoremArgs
   | args, contents => do
     unless contents.isEmpty do throwError "The statement box only takes a theorem name"
-    let report ← checkDisplayedStatement args.name
+    let report ← statementReport args.name
     let payload := Json.mkObj [
       ("title", toJson args.title), ("report", report)]
     ``(Verso.Doc.Block.other (PaperBlock.proof (ProofDisplay.mk $(quote payload.compress))) #[])
 
 @[directive]
-meta def explanations : DirectiveExpanderOf Unit
+meta def boxes : DirectiveExpanderOf Unit
   | (), contents => do
-    unless contents.isEmpty do throwError "Explanation cells are edited in the notebook"
+    unless contents.isEmpty do throwError "Document boxes are edited in the interface"
     ``(Verso.Doc.Block.other PaperBlock.explanations #[])
 
-def renderPaper (doc : Part PaperGenre) : IO UInt32 := do
+@[directive]
+meta def explanations : DirectiveExpanderOf Unit := boxes
+
+def renderPaper (doc : Part PaperGenre) (destination : System.FilePath) : IO UInt32 := do
   Verso.withLogger fun logger => do
     let (content, _) ← PaperGenre.toHtml (m := BuildLogT IO) {} () () {} {} {} doc .empty |>.run logger
-    IO.FS.createDirAll "build"
-    IO.FS.writeFile "build/document.html" content.asString
-    IO.println "Rendered the checked Verso document to build/document.html"
+    IO.FS.createDirAll (destination.parent.getD ".")
+    IO.FS.writeFile destination content.asString
+    IO.println s!"Rendered the document to {destination}"
 
 end Plaer

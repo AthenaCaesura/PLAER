@@ -1,0 +1,58 @@
+{
+  "built_at": "2026-11-13T03:03:24.482710+00:00",
+  "project": "basics",
+  "lean_version": "4.35.0",
+  "source": "examples/Basics/Statements.lean",
+  "source_fingerprint": "80dffe5fd72b2bf3281586850bc85e4d9d2915083ab9d6f05c20878b341fac78",
+  "source_sha256": "a3b46f93902e4c4155df05178e7feb5b3677601ab3e6ac9b06f1230518c11593",
+  "document_sha256": "ef977caf869c21b4cb2c43028e9711446e4963cbb41c765ab9abc75963a093e6",
+  "paper_source_sha256": "21938a7e6eef3c0d48144ea4f5d50a50d63a88391755e121c9516c6e71b7c089",
+  "dependencies_sha256": "c0f4de3c8079e91d4bcced86a48fac6e65533c1962c2bed70588ca5647e6db57",
+  "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
+  "latex_engine": {
+    "repository": "https://github.com/kmill/LeanTeX",
+    "commit": "d66db4582b6cb4d9fa0b6309168103a248a5fd46",
+    "license": "Apache-2.0",
+    "fork": "PLAER local source fork",
+    "lean_version": "4.35.0"
+  },
+  "theorem_checks": [
+    {
+      "kind": "candidate",
+      "leanVersion": "4.35.0",
+      "name": "Basics.add_zero_statement",
+      "sourceModule": "Basics.Statements",
+      "statementHash": "720014397",
+      "statementLatex": "\\forall n : \\mathbb{N},\\ n + 0 = n",
+      "statementLean": "def Basics.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
+      "proofDeclaration": "Basics.Proofs.add_zero",
+      "result": {
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "proofFile": "examples/Basics/proofs/AddZero.lean",
+      "sourceFile": "examples/Basics/Statements.lean",
+      "sourceUrl": "sources/Statements.lean",
+      "proofUrl": "sources/proofs/dceec24b9f7b-AddZero.lean",
+      "checkerUrl": "checks/Basics_add_zero_statement-80dffe5f-dceec24b.lean",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement-80dffe5f-dceec24b.lean\"",
+      "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
+      "sourceFingerprint": "80dffe5fd72b2bf3281586850bc85e4d9d2915083ab9d6f05c20878b341fac78",
+      "checkerSha256": "ea3d185ba59f03d7406b27e30d4bcfe7962178273075e82a1948b0e7dd449ec9",
+      "auditUrl": "checks/Basics_add_zero_statement-80dffe5f-dceec24b.json",
+      "wallMs": 13334
+    }
+  ],
+  "definitions": [
+    {
+      "latex": "double \\coloneqq (n : \\mathbb{N}) \\mapsto n + n",
+      "leanVersion": "4.35.0",
+      "name": "Basics.double",
+      "source": "/-- Double a natural number; displaying a definition does not assert a theorem. -/\ndef double (n : ℕ) : ℕ := n + n",
+      "sourceModule": "Basics.Statements",
+      "sourceFile": "examples/Basics/Statements.lean",
+      "sourceUrl": "sources/Statements.lean"
+    }
+  ]
+}

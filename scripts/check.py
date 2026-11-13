@@ -1,40 +1,32 @@
-"""Build PLAER and run its Lean, frontend, persistence, and live endpoint checks."""
-
-from __future__ import annotations
-
+"""Run shared checks against every example, or one explicit project."""
 import argparse
+import os
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+from project import ROOT, load_project
 
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def main() -> None:
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--proof-mutation", action="store_true",
-        help="Also test rejection after temporarily changing and restoring the proof source",
-    )
+    parser.add_argument("--project")
     args = parser.parse_args()
     node = shutil.which("node")
     if not node:
-        parser.error("Install Node.js 22+ to run the frontend checks.")
-
-    def run(*arguments: str) -> None:
-        print("+", " ".join(arguments), flush=True)
-        subprocess.run(arguments, cwd=ROOT, check=True)
-
-    run(sys.executable, "scripts/build.py", "--test")
-    for name in ["test_latex", "test_fermat", "test_statement_ui"]:
-        run(node, f"tests/js/{name}.cjs")
-    for name in ["test_explanations", "test_branding", "test_verification"]:
-        run(sys.executable, f"tests/python/{name}.py")
-    if args.proof_mutation:
-        run(sys.executable, "tests/python/test_proof_rejection.py")
-    print("\nAll PLAER checks passed.")
-
+        parser.error("Install Node.js 22+ for frontend checks")
+    manifests = [Path(args.project)] if args.project else sorted((ROOT / "examples").glob("*/project.json"))
+    for index, manifest in enumerate(manifests):
+        project = load_project(manifest)
+        env = {**os.environ, "PLAER_PROJECT": str(project.manifest), "PLAER_OUTPUT": str(project.output)}
+        def run(*arguments):
+            print("+", " ".join(arguments), flush=True)
+            subprocess.run(arguments, cwd=ROOT, env=env, check=True)
+        run(sys.executable, "scripts/build.py", "--project", str(project.manifest), *(["--test"] if index == 0 else []))
+        for name in ["test_latex", "test_statement_ui", "test_fermat"]:
+            run(node, f"tests/js/{name}.cjs")
+        for name in ["test_explanations", "test_branding", "test_verification", "test_proof_rejection", "test_boxes"]:
+            run(sys.executable, f"tests/python/{name}.py")
+    print("All PLAER project checks passed.", flush=True)
 
 if __name__ == "__main__":
     try:

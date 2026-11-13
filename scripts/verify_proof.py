@@ -1,229 +1,147 @@
-"""Invoke the same Lean proof checker used by the Verso code block."""
-
+"""Compile one configured proof file and audit its exported theorem against the statement."""
 from __future__ import annotations
-
-import json
-import atexit
 import hashlib
-import os
-import queue
-import shutil
-import subprocess
-import sys
-import tempfile
-import threading
-import time
+import json
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def documented_statements() -> dict:
-    provenance = json.loads((ROOT / "dist/build.json").read_text(encoding="utf-8"))
-    return {report["name"]: report for report in provenance["theorem_checks"]}
-
-
+import re
+import subprocess
+import time
+from project import ROOT, Project, load_project
 from toolchain import lean_environment
 
+MARKER = "PLAER_PROOF_RESULT="
 
-class WarmLean:
-    """Own one Lean process; run a fresh check for each request in its loaded environment."""
+def relative(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
 
-    def __init__(self):
-        self.lock = threading.RLock()
-        self.process = None
-        self.lines = queue.Queue()
-        self.fingerprint = None
-        self.warming = False
-        self.error = None
-        self.log = None
-        atexit.register(self.close)
+def source_fingerprint(project: Project) -> str:
+    """Proof edits do not invalidate statements; statement/framework edits do."""
+    proofs = {entry["proof_file"] for entry in project.statements}
+    paths = {project.manifest, project.source, project.paper, ROOT / "lakefile.toml",
+             ROOT / "lake-manifest.json", ROOT / "lean-toolchain"}
+    paths.update((ROOT / "Plaer").rglob("*.lean"))
+    paths.update((ROOT / "vendor/LeanTeX").glob("LeanTeX.lean"))
+    paths.update((ROOT / "vendor/LeanTeX/LeanTeX").glob("*.lean"))
+    paths.update(p for p in project.manifest.parent.rglob("*.lean")
+                 if p not in proofs and "proofs" not in p.relative_to(project.manifest.parent).parts)
+    digest = hashlib.sha256()
+    for path in sorted(paths):
+        digest.update(relative(path).encode() + b"\0" + path.read_bytes() + b"\0")
+    return digest.hexdigest()
 
-    @staticmethod
-    def sources_hash() -> str:
-        digest = hashlib.sha256()
-        paths = [ROOT / "Worker.lean", ROOT / "lakefile.toml", ROOT / "lake-manifest.json",
-                 ROOT / "lean-toolchain", *sorted((ROOT / "Plaer").rglob("*.lean")),
-                 ROOT / "vendor/LeanTeX/LeanTeX.lean",
-                 ROOT / "vendor/LeanTeX/lakefile.lean",
-                 ROOT / "vendor/LeanTeX/lean-toolchain",
-                 *sorted((ROOT / "vendor/LeanTeX/LeanTeX").glob("*.lean"))]
-        for path in paths:
-            digest.update(str(path.relative_to(ROOT)).encode())
-            digest.update(path.read_bytes())
-        return digest.hexdigest()
+def documented_statements(project: Project) -> dict:
+    data = json.loads((project.output / "build.json").read_text(encoding="utf-8"))
+    return {report["name"]: report for report in data["theorem_checks"]}
 
-    @property
-    def ready(self) -> bool:
-        return bool(self.process and self.process.poll() is None
-                    and self.fingerprint == self.sources_hash())
+def prepare_source(project: Project) -> None:
+    lake, env = lean_environment(project)
+    result = subprocess.run([lake, "build", "Plaer.Check", project.source_module],
+        cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8", timeout=300)
+    project.build_dir.mkdir(parents=True, exist_ok=True)
+    (project.build_dir / "source-build.log").write_text(result.stdout + result.stderr, encoding="utf-8")
+    if result.returncode:
+        raise RuntimeError("The statements file failed to compile. See the project's source-build.log.")
 
-    def close(self):
-        if self.process:
-            self.process.terminate()
-            try:
-                self.process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                self.process.kill()
-                self.process.wait()
-            self.process = None
-        if self.log:
-            self.log.close()
-            self.log = None
-        self.fingerprint = None
+def proof_material(project: Project, entry: dict):
+    source_hash = source_fingerprint(project)
+    proof_bytes = entry["proof_file"].read_bytes()
+    proof_hash = hashlib.sha256(proof_bytes).hexdigest()
+    original = proof_bytes.decode("utf-8")
+    # Preserve the complete proof file. Only an import and final claim audit are added.
+    if re.match(r"\s*module\b", original):
+        raise ValueError("Proof files currently use ordinary import headers, without the module command.")
+    checker = ("import Plaer.Check\n" + original + "\n\n"
+        f'#plaer_check_proof {entry["name"]} {entry["proof_declaration"]}\n')
+    stem = entry["name"].replace(".", "_").replace("'", "_prime")
+    filename = f"{stem}-{source_hash[:8]}-{proof_hash[:8]}.lean"
+    check_dir = project.output / "checks"
+    check_dir.mkdir(parents=True, exist_ok=True)
+    checker_path = check_dir / filename
+    checker_path.write_bytes(checker.encode("utf-8"))
+    proof_snapshot = project.output / "sources/proofs" / (proof_hash[:12] + "-" + entry["proof_file"].name)
+    proof_snapshot.parent.mkdir(parents=True, exist_ok=True)
+    proof_snapshot.write_bytes(proof_bytes)
+    source_snapshot = project.output / "sources" / project.source.name
+    source_snapshot.parent.mkdir(parents=True, exist_ok=True)
+    source_snapshot.write_bytes(project.source.read_bytes())
+    metadata = {
+        "proofFile": relative(entry["proof_file"]), "proofDeclaration": entry["proof_declaration"],
+        "sourceFile": relative(project.source), "sourceUrl": "sources/" + project.source.name,
+        "proofUrl": proof_snapshot.relative_to(project.output).as_posix(), "checkerUrl": "checks/" + filename,
+        "command": "lake env lean --json " + json.dumps(relative(checker_path)),
+        "proofSha256": proof_hash, "sourceFingerprint": source_hash,
+        "checkerSha256": hashlib.sha256(checker_path.read_bytes()).hexdigest(),
+        "auditUrl": "checks/" + filename.removesuffix(".lean") + ".json",
+    }
+    return checker_path, proof_bytes, metadata
 
-    def read(self, timeout=90) -> str:
-        try:
-            line = self.lines.get(timeout=timeout)
-        except queue.Empty:
-            self.close()
-            raise RuntimeError("Lean did not respond in time. Retry to restart it.")
-        if line is None:
-            self.close()
-            raise RuntimeError("Lean stopped. See build/lean-worker.log.")
-        return line.rstrip("\r\n")
-
-    def prepare(self) -> bool:
-        with self.lock:
-            if self.ready:
-                return True
-            self.close()
-            fingerprint = self.sources_hash()
-            lake, environment = lean_environment()
-            (ROOT / "build").mkdir(exist_ok=True)
-            build = subprocess.run(
-                [lake, "build", "Plaer.Check"], cwd=ROOT, env=environment,
-                capture_output=True, text=True, encoding="utf-8", timeout=180)
-            (ROOT / "build/last-proof-check.log").write_text(build.stdout + build.stderr, encoding="utf-8")
-            if build.returncode:
-                self.error = "The external Lean source failed to compile."
-                return False
-            self.lines = queue.Queue()
-            self.log = (ROOT / "build/lean-worker.log").open("w", encoding="utf-8")
-            # Launch Lean directly so closing this owner also closes its worker on Windows.
-            environment = json.loads(subprocess.check_output(
-                [lake, "env", sys.executable, "-c", "import json,os; print(json.dumps(dict(os.environ)))"],
-                cwd=ROOT, env=environment, text=True, encoding="utf-8", timeout=30))
-            lean = shutil.which("lean", path=environment["PATH"])
-            self.process = subprocess.Popen(
-                [lean, "--run", "Worker.lean"], cwd=ROOT, env=environment,
-                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.log,
-                text=True, encoding="utf-8", bufsize=1)
-            process, lines = self.process, self.lines
-
-            def read_stdout():
-                for line in process.stdout:
-                    lines.put(line)
-                lines.put(None)
-
-            threading.Thread(target=read_stdout, daemon=True).start()
-            while (line := self.read(timeout=180)) != "LEAN_WORKER_READY":
-                self.log.write(line + "\n")
-                self.log.flush()
-            if self.sources_hash() != fingerprint:
-                self.close()
-                raise RuntimeError("Lean sources changed during loading. Retry the check.")
-            self.fingerprint = fingerprint
-            self.error = None
-            return True
-
-    def start_warmup(self):
-        if self.warming:
-            return
-        with self.lock:
-            if self.warming or self.ready or self.error:
-                return
-            self.warming = True
-
-        def warm():
-            try:
-                self.prepare()
-            except Exception as error:
-                self.error = str(error)
-            finally:
-                self.warming = False
-
-        threading.Thread(target=warm, daemon=True).start()
-
-    def check(self, name: str) -> dict:
-        documented = documented_statements()
-        if not isinstance(name, str) or name not in documented:
-            raise ValueError("Choose a statement from this document")
-        expected = documented[name]
-        started = time.perf_counter()
-        with self.lock:
-            if not self.prepare():
-                return {**expected, "result": {"ok": False},
-                        "wallMs": round((time.perf_counter() - started) * 1000)}
-            self.process.stdin.write(name + "\n")
-            self.process.stdin.flush()
-            report = json.loads(self.read(timeout=60))
-            if "error" in report:
-                raise RuntimeError(report["error"])
-            if report["name"] != name or report["statementHash"] != expected["statementHash"]:
-                raise RuntimeError("The statement changed. Rebuild the document.")
-            if report["statementLatex"] != expected["statementLatex"]:
-                raise RuntimeError("The statement's notation changed. Rebuild the document.")
-            if self.sources_hash() != self.fingerprint:
-                raise RuntimeError("Lean sources changed during verification. Retry the check.")
-            report["wallMs"] = round((time.perf_counter() - started) * 1000)
-            return report
-
-
-WARM_LEAN = WarmLean()
-
-
-def verify_theorem(name: str) -> dict:
-    """Recheck the external proof without returning any proof text."""
-    return WARM_LEAN.check(name)
-
-
-def verify_proof(point: int, source: str) -> dict:
-    if point not in (0, 2) or not isinstance(source, str) or len(source) > 4096:
-        raise ValueError("Choose one of the two displayed claims and a proof under 4096 characters")
-    lake, environment = lean_environment()
-    checks_dir = ROOT / "build/live-checks"
-    checks_dir.mkdir(parents=True, exist_ok=True)
-    program = (
-        "import Plaer.Check\n"
-        "set_option maxHeartbeats 2000000\n"
-        "set_option maxRecDepth 2048\n"
-        f"#check_point_proof {point} {json.dumps(source, ensure_ascii=False)}\n"
-    )
+def run_proof(project: Project, entry: dict, *, prepare: bool = True) -> dict:
+    if prepare:
+        prepare_source(project)
+    checker_path, proof_bytes, metadata = proof_material(project, entry)
+    source_hash, proof_hash = metadata['sourceFingerprint'], metadata['proofSha256']
+    lake, env = lean_environment(project)
     started = time.perf_counter()
-    with tempfile.TemporaryDirectory(prefix="proof-", dir=checks_dir) as task_dir:
-        check_file = Path(task_dir) / "Check.lean"
-        check_file.write_text(program, encoding="utf-8")
-        process = subprocess.run(
-            [lake, "env", "lean", "--json", str(check_file)], cwd=ROOT,
-            env=environment, capture_output=True, text=True, encoding="utf-8", timeout=60,
-        )
-    reports = []
-    errors = []
+    process = subprocess.run([lake, "env", "lean", "--json", str(checker_path)],
+        cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8", timeout=240)
+    diagnostics, reports = [], []
     for line in process.stdout.splitlines():
         try:
             message = json.loads(line)
         except json.JSONDecodeError:
             continue
-        data = message.get("data", "")
-        if isinstance(data, str) and data.startswith("LEAN_PROOF_RESULT="):
-            reports.append(json.loads(data.removeprefix("LEAN_PROOF_RESULT=")))
+        value = message.get("data", "")
+        if isinstance(value, str) and value.startswith(MARKER):
+            reports.append(json.loads(value[len(MARKER):]))
         if message.get("severity") == "error":
-            errors.append(data)
-    if process.returncode != 0 or errors or len(reports) != 1:
-        raise RuntimeError("\n".join(errors) or process.stderr.strip() or process.stdout.strip() or "Lean returned no verification result")
-    report = reports[0]
-    if report["point"] != point or report["source"] != source:
-        raise RuntimeError("Lean's result does not match the requested proof")
+            diagnostics.append(str(value))
+    if source_fingerprint(project) != source_hash or entry["proof_file"].read_bytes() != proof_bytes:
+        raise RuntimeError("The source or proof file changed during checking. Run it again.")
+    report = reports[0] if len(reports) == 1 else {}
+    if process.returncode or diagnostics or not report:
+        report = {"name": entry["name"], "proofDeclaration": entry["proof_declaration"],
+                  "result": {"ok": False, "diagnostics": "\n".join(diagnostics)
+                     or process.stderr.strip() or "Lean did not verify the configured proof declaration."}}
+    if report.get("name") != entry["name"] or report.get("proofDeclaration") != entry["proof_declaration"]:
+        raise RuntimeError("Lean checked a different proof declaration.")
+    report.update(metadata)
     report["wallMs"] = round((time.perf_counter() - started) * 1000)
+    (project.output / report["auditUrl"]).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    project.build_dir.mkdir(parents=True, exist_ok=True)
+    stem = entry["name"].replace(".", "_").replace("'", "_prime")
+    (project.build_dir / (stem + "-compiler.log")).write_text(process.stdout + process.stderr, encoding="utf-8")
     return report
 
+def verify_theorem(project: Project, name: str) -> dict:
+    documented = documented_statements(project)
+    if not isinstance(name, str) or name not in documented:
+        raise ValueError("Choose a statement from this document")
+    saved = json.loads((project.output / "build.json").read_text(encoding="utf-8"))
+    if saved["source_fingerprint"] != source_fingerprint(project):
+        raise RuntimeError("The statements or framework changed. Rebuild the document.")
+    entry = next((e for e in project.statements if e["name"] == name), None)
+    if entry is None:
+        from boxes import proof_entry
+        from explanations import read_cells
+        for cell in read_cells(project)["cells"]:
+            if cell["kind"] == "theorem":
+                candidate = proof_entry(project, cell["source"])
+                if candidate["name"] == name:
+                    entry = candidate
+                    break
+    if entry is None:
+        raise ValueError("No proof file is mapped to that statement")
+    report = run_proof(project, entry)
+    expected = documented[name]
+    if report.get("statementHash") is not None and report["statementHash"] != expected["statementHash"]:
+        raise RuntimeError("The proof was checked against a different statement. Rebuild.")
+    # A failing proof may never reach the final audit command; retain the displayed identity.
+    return {**expected, **report, "statementHash": expected["statementHash"]}
 
 if __name__ == "__main__":
     import argparse
-
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("point", type=int, choices=(0, 2))
-    parser.add_argument("--proof", default="by\n  norm_num [Plaer.I]")
+    parser.add_argument("--project")
+    parser.add_argument("name")
     args = parser.parse_args()
-    print(json.dumps(verify_proof(args.point, args.proof), indent=2, ensure_ascii=False))
+    print(json.dumps(verify_theorem(load_project(args.project), args.name), ensure_ascii=False, indent=2))

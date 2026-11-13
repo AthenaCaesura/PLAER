@@ -1,0 +1,19 @@
+{
+  "name": "Fermat.last_statement",
+  "proofDeclaration": "Fermat.Proofs.last",
+  "result": {
+    "ok": false,
+    "diagnostics": "Application type mismatch: The argument\n  hn\nhas type\n  2 < n\nbut is expected to have type\n  a ^ n + b ^ n < c ^ n\nin the application\n  Nat.ne_of_lt hn"
+  },
+  "proofFile": "examples/Fermat/proofs/Last.lean",
+  "sourceFile": "examples/Fermat/Statements.lean",
+  "sourceUrl": "sources/Statements.lean",
+  "proofUrl": "sources/proofs/5de7218ce272-Last.lean",
+  "checkerUrl": "checks/Fermat_last_statement-14492e61-5de7218c.lean",
+  "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement-14492e61-5de7218c.lean\"",
+  "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
+  "sourceFingerprint": "14492e61583d46a05535ac11ed7577c04e10313543be7dda57c2c7dc2e267fda",
+  "checkerSha256": "863c66e501fb28115bfdc4b2510f0eee9e46c3b9edc072933000771e8c0a8d3e",
+  "auditUrl": "checks/Fermat_last_statement-14492e61-5de7218c.json",
+  "wallMs": 19629
+}

@@ -14,6 +14,14 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
+.box-dialog { width:min(560px,calc(100vw - 32px)); border:1px solid var(--line); border-radius:8px; padding:28px; color:var(--ink); background:var(--paper); font:14px var(--sans); }
+.box-dialog::backdrop { background:#16262066; }
+.box-form h2 { margin:0 0 16px; font-size:22px; }
+.box-field { display:grid; gap:6px; margin:16px 0; font-weight:600; }
+.box-field input { padding:9px 11px; border:1px solid #bfc9bf; border-radius:4px; width:100%; font:14px var(--sans); }
+.box-hint { line-height:1.6; color:var(--muted); }
+.box-actions { display:flex; gap:12px; }
+.box-message { white-space:pre-wrap; line-height:1.5; }
 button, input { font: inherit; }
 button { cursor: pointer; }
 button:focus-visible, a:focus-visible, summary:focus-visible {
@@ -141,6 +149,15 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 .proof-idea p { font:14px/1.8 Georgia,serif; color:#5e6d56; margin:11px 0 0; }
 .proof-actions { margin:8px 0 0; }
 .proof-actions .proof-result { padding:0; border:0; font:12px var(--sans); }
+.proof-error { margin:10px 0 0; color:#a33f32; font:12px/1.6 var(--sans); overflow-wrap:anywhere; }
+.source-proof-details { margin-top:16px; border-top:1px solid var(--line); padding-top:12px; font:12px/1.6 var(--sans); color:var(--muted); }
+.source-proof-details summary { cursor:pointer; width:fit-content; color:var(--green); }
+.source-proof-list { display:grid; grid-template-columns:110px minmax(0,1fr); gap:7px 14px; margin:13px 0 0; }
+.source-proof-list dt { color:var(--muted); }
+.source-proof-list dd { min-width:0; margin:0; overflow-wrap:anywhere; }
+.source-proof-list a { color:var(--green); text-underline-offset:3px; }
+.source-proof-list code { font:11px/1.7 Consolas,"Cascadia Code",monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.source-proof-list .checker-command { display:block; padding:9px 11px; border-radius:4px; background:#f0f3eb; color:var(--ink); }
 .illustration .figure-heading { justify-content:flex-end; }
 .illustration .example-points { margin-bottom:0; }
 .explanation-notebook { margin:24px 0 32px; }
@@ -171,6 +188,8 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
   .proof-heading { flex-wrap:wrap; }
   .proof-mode { text-align:left; max-width:none; }
   .proof-actions { flex-wrap:wrap; }
+  .source-proof-list { grid-template-columns:1fr; gap:3px; }
+  .source-proof-list dd { margin-bottom:8px; }
 }
 @media (max-width:760px) {
   .masthead { height:65px; padding:0 20px; }

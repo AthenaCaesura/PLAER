@@ -1,32 +1,24 @@
-"""Confirm that changing the separate proof file is reflected by Run proof."""
-
-import os
-import subprocess
+"""A valid proof of the wrong proposition must never verify the displayed statement."""
+from dataclasses import replace
+import tempfile
+from pathlib import Path
 from _support import ROOT
-from verify_proof import WARM_LEAN, verify_theorem
+from project import load_project
+from verify_proof import run_proof
 
-proof_path = ROOT / "Plaer/Proofs.lean"
-original = proof_path.read_bytes()
-changed = original.replace(b"exact Int.ModEq.pow_prime_eq_self hp a", b"exact True.intro", 1)
-assert changed != original
-assert verify_theorem("Plaer.fermat_little")["result"]["ok"] is True
-previous_pid = WARM_LEAN.process.pid
-try:
-    proof_path.write_bytes(changed)
-    result = verify_theorem("Plaer.fermat_little")
-    assert result["result"]["ok"] is False
-    assert "source" not in result and "norm_num" not in str(result)
-    assert WARM_LEAN.process is None, "The stale worker survived a changed proof"
-    print("PASS: Lean rejects the changed external proof; the response contains no proof text", flush=True)
-finally:
-    if proof_path.read_bytes() != changed:
-        raise RuntimeError("The proof file changed concurrently; it has not been overwritten")
-    proof_path.write_bytes(original)
-    from toolchain import lean_environment
-    lake, environment = lean_environment()
-    subprocess.run([lake, "build", "Plaer.Proofs"], cwd=ROOT, env=environment, check=True)
-    print("Restored and rebuilt the original proof file", flush=True)
-    assert verify_theorem("Plaer.fermat_little")["result"]["ok"] is True
-    assert WARM_LEAN.process.pid != previous_pid
-    WARM_LEAN.close()
-    print("PASS: restored proof accepted by a freshly loaded worker", flush=True)
+project = load_project()
+with tempfile.TemporaryDirectory(dir=ROOT / "build", prefix="proof-audit-") as directory:
+    folder = Path(directory)
+    # This unrelated broken proof must not be loaded by the chosen check.
+    (folder / "Unrelated.lean").write_text("theorem broken : False := by exact True.intro\n", encoding="utf-8")
+    wrong = folder / "Wrong.lean"
+    wrong.write_text(f"import {project.source_module}\ntheorem Wrong.exported : True := by trivial\n", encoding="utf-8")
+    entry = {**project.statements[0], "proof_file": wrong, "proof_declaration": "Wrong.exported"}
+    isolated = replace(project, output=folder / "output")
+    report = run_proof(isolated, entry)
+    assert report["result"]["ok"] is False
+    assert "does not prove the displayed proposition" in report["result"]["diagnostics"], report
+    checker = (isolated.output / report["checkerUrl"]).read_text(encoding="utf-8")
+    assert "Unrelated" not in checker
+    assert "sorry" not in checker
+    print("PASS: a compiling proof of True is rejected; unrelated broken proof file is not compiled")

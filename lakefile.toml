@@ -1,6 +1,6 @@
 name = "plaer"
 version = "0.1.0"
-defaultTargets = ["Paper"]
+defaultTargets = ["Plaer"]
 
 [[require]]
 name = "LeanTeX"
@@ -20,9 +20,16 @@ rev = "v4.35.0"
 name = "Plaer"
 
 [[lean_lib]]
-name = "Paper"
+name = "ExampleStatements"
+srcDir = "examples"
+roots = ["Fermat.Statements", "Basics.Statements"]
 
-[[lean_exe]]
-name = "generate-paper"
-root = "Main"
-supportInterpreter = true
+[[lean_lib]]
+name = "ExampleDocuments"
+srcDir = "examples"
+roots = ["Fermat.Paper", "Basics.Paper"]
+
+[[lean_lib]]
+name = "TestFixtures"
+srcDir = "tests"
+roots = ["fixtures.Interval"]

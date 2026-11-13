@@ -5,6 +5,7 @@ from html.parser import HTMLParser
 import xml.etree.ElementTree as ET
 
 from _support import ROOT
+from project import load_project
 
 
 class BrandingParser(HTMLParser):
@@ -25,7 +26,7 @@ class BrandingParser(HTMLParser):
 
 
 def main():
-    html = (ROOT / "dist/index.html").read_text(encoding="utf-8")
+    html = (load_project().output / "index.html").read_text(encoding="utf-8")
     parser = BrandingParser()
     parser.feed(html)
     assert "__PLAER_" not in html, "An asset was not embedded"
