@@ -3,7 +3,7 @@
 -- ```lean
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Nat.Choose.Basic
-import Mathlib.Data.Nat.Prime.Infinite
+import Mathlib.Data.Nat.Prime.Defs
 import Mathlib.Algebra.BigOperators.Intervals
 import Plaer.Latex
 -- ```
@@ -19,13 +19,22 @@ import Plaer.Latex
 def Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i
 -- ```
 
--- A `structure`, `class`, or `inductive` type is a definition too. It has no formula to typeset, so its box shows only the Lean.
+-- A `structure` or `class` is a definition too. Its box lists its fields and their types:
 
 -- ```lean
 /-- A point with natural-number coordinates -/
 structure Basics.Point where
   x : ℕ
   y : ℕ
+-- ```
+
+-- An `inductive` definition lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$.
+
+-- ```lean
+/-- Even numbers, by two rules -/
+inductive Basics.even : ℕ → Prop
+  | zero : Basics.even 0
+  | step (n : ℕ) : Basics.even n → Basics.even (n + 2)
 -- ```
 
 -- ## Conjecture
@@ -58,12 +67,6 @@ def Basics.euler_statement : Prop := ∀ n : ℕ, (n ^ 2 + n + 41).Prime
 def Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)
 -- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction
 -- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_steps
--- ```
-
--- ```lean
-/-- There are infinitely many primes -/
-def Basics.infinitely_many_primes : Prop := ∀ n : ℕ, ∃ p : ℕ, p ≥ n ∧ p.Prime
--- proof: proofs/Primes.lean Basics.Proofs.infinitely_many_primes
 -- ```
 
 -- ## A theorem that assumes a conjecture
@@ -117,10 +120,3 @@ def Basics.pascal_statement : Prop :=
 def Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1
 -- proof: proofs/Notation.lean Basics.Proofs.sin_cos
 -- ```
-
--- ## What the play button says
-
--- - **Proved**: Lean accepts the proof, it proves exactly the claim shown, and it uses no axioms beyond Lean's own. The box becomes a theorem.
--- - **Not proved**: anything else. The proof is wrong, its file is missing, it uses `sorry`, or it proves a different claim.
--- - **Not checked**: the claim changed since its proofs were last checked. Press play to check again.
--- - **Unavailable**: the PLAER server could not run the check, for example because it stopped.

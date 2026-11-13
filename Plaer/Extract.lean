@@ -48,14 +48,56 @@ meta def statementReport (name : Name) : MetaM Json := do
 
 /-- Generic definition data. -/
 meta def definitionReport (name : Name) : MetaM Json := do
-  let _ ← getConstInfoDefn name
+  let info ← getConstInfoDefn name
   let moduleName := (← findModuleOf? name).getD .anonymous
+  -- Its type, as Lean elaborated it: `triangle : ℕ → ℕ`, domain and range first.
+  let signature ← try
+      pure (some (name.getString!.toLatex ++ " : " ++ (← expressionLatex info.type)))
+    catch _ => pure none
   return Json.mkObj <| [
     ("name", toJson name.toString), ("kind", toJson "definition"),
+    ("signatureLatex", toJson signature),
     ("sourceModule", toJson moduleName.toString),
     ("source", toJson (← declarationSource name)),
     ("leanVersion", toJson Lean.versionString)] ++
     (← latexFields "latex" (definitionLatex name))
+
+/-- A field or constructor name: upright when longer than one letter, so `step`
+does not read as the product s·t·e·p. -/
+meta def labelLatex (label : String) : String :=
+  if label.length > 1 then "\\operatorname{" ++ label.toLatex ++ "}" else label.toLatex
+
+/-- A structure or class lists its fields, an inductive type its constructors,
+each with its type as Lean elaborated it:
+
+    Point : Type          even : ℕ → Prop
+      x : ℕ                 zero : even(0)
+      y : ℕ                 step : ∀ n : ℕ, even(n) ⟹ even(n + 2)
+-/
+meta def inductiveReport (name : Name) (info : InductiveVal) : MetaM Json := do
+  let env ← getEnv
+  let signature ← try
+      pure (some (name.getString!.toLatex ++ " : " ++ (← expressionLatex info.type)))
+    catch _ => pure none
+  let rows : MetaM (List String) := do
+    if isStructure env name then
+      let ctor := getStructureCtor env name
+      forallTelescope ctor.type fun xs _ => do
+        let fields := xs.extract info.numParams xs.size
+        fields.toList.mapM fun field => do
+          let decl ← field.fvarId!.getDecl
+          return labelLatex decl.userName.toString ++ " &: " ++ (← expressionLatex decl.type)
+    else
+      info.ctors.mapM fun ctor => do
+        return labelLatex ctor.getString! ++ " &: " ++ (← expressionLatex (← getConstInfo ctor).type)
+  let body : MetaM String := do
+    return "\\begin{aligned}" ++ " \\\\ ".intercalate (← rows) ++ "\\end{aligned}"
+  return Json.mkObj <| [
+    ("name", toJson name.toString), ("kind", toJson "definition"),
+    ("signatureLatex", toJson signature),
+    ("source", toJson (← declarationSource name)),
+    ("leanVersion", toJson Lean.versionString)] ++
+    (← latexFields "latex" body)
 
 /-- The box for one declaration: a statement (a theorem, or a closed `Prop`
 definition awaiting proofs), a definition, or anything else shown as Lean only. -/
@@ -73,8 +115,7 @@ meta def declarationReport (name : Name) : MetaM Json := do
     (← latexFields "statementLatex" (expressionLatex info.type))
   | .defnInfo definition =>
     if definition.type.isProp then statementReport name else definitionReport name
-  -- A structure, class, or inductive type: a definition with no formula to typeset.
-  | .inductInfo _ => return (← plain "definition").mergeObj (Json.mkObj [("leanOnly", toJson true)])
+  | .inductInfo info => inductiveReport name info
   | _ => plain "other"
 
 /-- Reports for the given declarations, in source order, with line spans and doc

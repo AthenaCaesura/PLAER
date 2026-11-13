@@ -24,8 +24,8 @@ Lean has: definitions, and claims, which are conjectures until proved.
 
 | You write | The document shows |
 | --- | --- |
-| any `def` that is not a claim | A **Definition** box with LaTeX and Lean views. |
-| `structure`, `class`, `inductive` | A **Definition** box with only its Lean, since there is no formula. |
+| any `def` that is not a claim | A **Definition** box: its type, such as `triangle : ℕ → ℕ`, then its formula, with a Lean view. |
+| `structure`, `class`, `inductive` | A **Definition** box with its type, then its fields (structure, class) or constructors (inductive), each with its type. |
 | `def name : Prop := ...` (a proposition) | A **Conjecture** box, with a play button for each attached proof. |
 | the same, once a play button proves it | A **Theorem** box. It lists the axioms of Lean's logic its proof uses, and says so if the proof was checked earlier, such as when the page was built. |
 | anything else: imports, `instance`, notation rules, `example`, ... | One folded **Lean** line. |
@@ -69,8 +69,10 @@ and proves the claim by name:
 ```lean
 import Basics.Statements
 
-theorem Basics.Proofs.infinitely_many_primes : Basics.infinitely_many_primes :=
-  fun n => Nat.exists_infinite_primes n
+theorem Basics.Proofs.triangle_succ (n : ℕ) :
+    Basics.triangle (n + 1) = Basics.triangle n + (n + 1) := by
+  unfold Basics.triangle
+  exact Finset.sum_range_succ _ _
 ```
 
 Attach it with a comment line under the claim, inside the same block:

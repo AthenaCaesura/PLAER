@@ -242,12 +242,15 @@
     card.setAttribute("aria-label", item.title);
     const leanPanel = leanSourcePanel(item, blockIndex);
     const body = node("div", "definition-body");
-    if (item.leanOnly) {   // a structure or inductive type: there is no formula, so only its Lean
-      card.append(heading("definition-heading", "Definition", "", item.title, null, sourceLink(item)));
-      body.append(leanPanel);
-    } else {
+    {
       const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
         [{key: "lean", label: "Lean", panel: leanPanel}]);
+      // Domain and range first (Lean's own type for the name), then the definition.
+      if (item.signatureLatex) {
+        const signature = node("div", "display-math definition-signature");
+        renderLatex(item.signatureLatex, signature);
+        mathPanel.prepend(signature);
+      }
       card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
       body.append(mathPanel, leanPanel);
     }
@@ -288,7 +291,10 @@
         if (!proved.some(proof => proof.checkedNow)) notes.push("Proved by an earlier check. Press play to check it again.");
         // The proof that needs the fewest axioms is the one to cite.
         const fewest = proved.map(proof => proof.result.axioms || []).sort((a, b) => a.length - b.length)[0];
-        notes.push(fewest.length ? "Rests on Lean's axioms " + fewest.join(", ") + "." : "Uses none of Lean's axioms.");
+        // Every proof uses Lean's core logic (its type theory, with induction on
+        // types such as ℕ); these are the axioms some proofs add on top of it.
+        notes.push(fewest.length ? "Rests on Lean's core logic and the axioms " + fewest.join(", ") + "."
+          : "Rests on Lean's core logic alone, with no added axioms.");
       }
       eyebrow.textContent = proved.length ? "Theorem" : "Conjecture";
       card.dataset.kind = eyebrow.textContent.toLowerCase();

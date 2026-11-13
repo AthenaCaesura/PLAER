@@ -15,6 +15,6 @@
   "checkerUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.lean",
   "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
   "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
-  "proofSha256": "ba3e9a636a88cc9ce416c58b9dc23a914c3932cb30cafa7dff7268bcccda9ca5",
-  "wallMs": 1204
+  "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
+  "wallMs": 1383
 }

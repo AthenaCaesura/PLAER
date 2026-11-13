@@ -1,8 +1,9 @@
 triangle \coloneqq (n : \mathbb{N}) \mapsto \sum_{i = 0}^{n} i
+\begin{aligned}x &: \mathbb{N} \\ y &: \mathbb{N}\end{aligned}
+\begin{aligned}\operatorname{zero} &: \operatorname{even}(0) \\ \operatorname{step} &: \forall n : \mathbb{N},\ \operatorname{even}(n) \implies \operatorname{even}(n + 2)\end{aligned}
 \forall n : \mathbb{N},\ n > 2 \land 2 \mid n \implies \exists p : \mathbb{N},\ \exists q : \mathbb{N},\ \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = n
 \forall n : \mathbb{N},\ \operatorname{Prime}(n^{2} + n + 41)
 \forall n : \mathbb{N},\ 2 \cdot \operatorname{triangle}(n) = n \cdot (n + 1)
-\forall n : \mathbb{N},\ \exists p : \mathbb{N},\ p \ge n \land \operatorname{Prime}(p)
 \operatorname{goldbach} \implies \exists p : \mathbb{N},\ \exists q : \mathbb{N},\ \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = 100
 \forall n, k : \mathbb{N},\ \binom{n + 1}{k + 1} = \binom{n}{k} + \binom{n}{k + 1}
 \forall x : \mathbb{R},\ \sin(x)^{2} + \cos(x)^{2} = 1

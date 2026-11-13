@@ -4,7 +4,7 @@
   "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
   "source": "examples/Basics/Statements.lean",
   "sourceModule": "Basics.Statements",
-  "sourceSha256": "ab3bc412168b1724bd4680586cb11ed1b2091fd21949b0ffd81490077e726feb",
+  "sourceSha256": "e1de42ba5c5ab76063bca798836f39d5958f848f1ba957f13b09f65cc716d9b2",
   "checks": [
     {
       "file": "proofs/File.lean",
@@ -22,7 +22,7 @@
       "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
       "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
       "statementHash": "538884409",
-      "wallMs": 1137
+      "wallMs": 1329
     },
     {
       "file": "proofs/Missing.lean",
@@ -57,7 +57,7 @@
       "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
       "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-      "wallMs": 1671
+      "wallMs": 1463
     },
     {
       "file": "proofs/Gauss.lean",
@@ -81,31 +81,7 @@
       "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
       "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-      "wallMs": 1079
-    },
-    {
-      "file": "proofs/Primes.lean",
-      "declaration": "Basics.Proofs.infinitely_many_primes",
-      "leanVersion": "4.35.0",
-      "name": "Basics.infinitely_many_primes",
-      "proofDeclaration": "Basics.Proofs.infinitely_many_primes",
-      "result": {
-        "axioms": [
-          "propext",
-          "Classical.choice",
-          "Quot.sound"
-        ],
-        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-        "ok": true
-      },
-      "statementHash": "2446334636",
-      "proofFile": "examples/Basics/proofs/Primes.lean",
-      "proofUrl": "sources/proofs/Primes.lean",
-      "checkerUrl": "checks/Basics_infinitely_many_primes--Basics_Proofs_infinitely_many_primes.lean",
-      "auditUrl": "checks/Basics_infinitely_many_primes--Basics_Proofs_infinitely_many_primes.json",
-      "command": "lake env lean --json \"dist/basics/checks/Basics_infinitely_many_primes--Basics_Proofs_infinitely_many_primes.lean\"",
-      "proofSha256": "ba3e9a636a88cc9ce416c58b9dc23a914c3932cb30cafa7dff7268bcccda9ca5",
-      "wallMs": 1345
+      "wallMs": 1406
     },
     {
       "file": "proofs/Primes.lean",
@@ -126,8 +102,8 @@
       "checkerUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.lean",
       "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
-      "proofSha256": "ba3e9a636a88cc9ce416c58b9dc23a914c3932cb30cafa7dff7268bcccda9ca5",
-      "wallMs": 1204
+      "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
+      "wallMs": 1383
     },
     {
       "file": "proofs/Notation.lean",
@@ -147,7 +123,7 @@
       "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
       "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-      "wallMs": 1186
+      "wallMs": 1324
     },
     {
       "file": "proofs/Notation.lean",
@@ -171,7 +147,7 @@
       "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
       "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
       "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-      "wallMs": 1182
+      "wallMs": 1328
     }
   ]
 }
