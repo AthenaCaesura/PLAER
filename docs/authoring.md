@@ -19,18 +19,27 @@ module name, so it must be a capitalized Lean identifier such as `MyTopic`.
 `Paper.md` is ordinary Markdown. The first `# heading` is the document title.
 Write `$...$` and `$$...$$` for mathematics in your notes.
 
-A fenced block that says exactly ` ```lean ` is Lean. There are three kinds
-of box:
+A fenced block that says exactly ` ```lean ` is Lean. The boxes are the four
+things Lean has: definitions, claims, proved claims, and assumptions.
 
 | You write | The document shows |
 | --- | --- |
-| `def name : Prop := ...` | A **Statement** box with LaTeX and Lean views and its attached proofs. |
-| any other `def` | A **Definition** box with LaTeX and Lean views. |
-| anything else: imports, notation rules, `example`, `structure`, ... | One folded **Lean** line. |
+| any `def` that is not a claim | A **Definition** box with LaTeX and Lean views. |
+| `structure`, `class`, `inductive` | A **Definition** box with only its Lean, since there is no formula. |
+| `def name : Prop := ...` (a proposition) | A **Conjecture** box, with a play button for each attached proof. |
+| the same, once a play button proves it | A **Theorem** box. If the proof was checked earlier, such as when the page was built, the box says so. |
+| `axiom name : ...` | An **Axiom** box, marked as assumed without proof. A theorem whose proof uses it names it. |
+| anything else: imports, `instance`, notation rules, `example`, ... | One folded **Lean** line. |
 
-A `theorem` in the paper is an error: write it as a statement and put its
-proof in a separate file. That keeps every claim in the same form, and every
-proof out of the paper.
+A `theorem` in the paper is an error, because a `theorem` carries its proof:
+write it as a conjecture with a proof file. `sorry` is an error too. Imports
+come before all other Lean, and the editor refuses to move a box above them.
+
+The LaTeX view knows Lean's logic and arithmetic, sets, and this Mathlib
+notation: `∣`, `gcd`, `min`, `max`, `|x|`, `√x`, `n!`, `choose`, `∑` and `∏`
+over a `Finset` (with limits over `Finset.range`), `exp`, `log`, `sin`,
+`cos`, `π`, primes, and `≡ [ZMOD n]`. Anything else shows "No LaTeX" with
+the Lean view, until you add a rule as shown below.
 
 A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.

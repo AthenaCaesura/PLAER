@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T12:45:26.472697+00:00",
+  "built_at": "2026-11-13T13:28:38.301369+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
   "paper_sha256": "8a51e7766b38e6533cfc0f9e85e6e46f003a16dc2ec0c246ab24c7076948dd5b",
   "source_sha256": "5ff785f27e28bf974f20a8a8c65e397610b6b29949920617c35fd14e7e85330e",
-  "document_sha256": "58e6de8e2d5e44c2762091f24a65098cfd9ffbb407e63375b211781e7674efcb",
-  "engine_fingerprint": "e954cadebd29e46c1e77207c19f5ff033e2a74fe2b4a145a281ace549c8f8678",
+  "document_sha256": "c6d13f941efb1c06611638ad26ff0ae0a36c00ec7afa436a4d7258a193885816",
+  "engine_fingerprint": "4ff9d3a407d35aea8e287f184e8450fc0d9a60be9f6877a8e6a8d4d79c80d1ec",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -79,7 +79,7 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
                 "statementHash": "1861763117",
-                "wallMs": 9105
+                "wallMs": 1056
               }
             ],
             "statement": true,
@@ -121,6 +121,7 @@
                 "name": "Fermat.little_statement",
                 "proofDeclaration": "Fermat.Proofs.little",
                 "result": {
+                  "assumes": [],
                   "axioms": [
                     "propext",
                     "Classical.choice",
@@ -136,7 +137,7 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 780
+                "wallMs": 979
               }
             ],
             "statement": true,

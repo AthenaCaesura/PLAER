@@ -22,7 +22,7 @@
       "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
       "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
       "statementHash": "1861763117",
-      "wallMs": 9105
+      "wallMs": 1056
     },
     {
       "file": "proofs/Little.lean",
@@ -31,6 +31,7 @@
       "name": "Fermat.little_statement",
       "proofDeclaration": "Fermat.Proofs.little",
       "result": {
+        "assumes": [],
         "axioms": [
           "propext",
           "Classical.choice",
@@ -46,7 +47,7 @@
       "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
       "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
       "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-      "wallMs": 780
+      "wallMs": 979
     }
   ]
 }

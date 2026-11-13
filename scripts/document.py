@@ -123,6 +123,9 @@ def declarations(project: Project, blocks: list[paper.Block], compile: bool = Tr
         raise LeanRejected(f"{project.paper.name}: the imports do not load:\n{error}")
     errors = [f"{project.paper.name}:{m['pos']['line']}: {m['data']}"
               for m in messages if m.get("severity") == "error"]
+    # A paper states claims; `sorry` would quietly pretend one is proved.
+    sorries = [f"{project.paper.name}:{m['pos']['line']}: `sorry` is not allowed in a paper"
+               for m in messages if m.get("severity") == "warning" and "sorry" in m.get("data", "")]
     if errors:
         raise LeanRejected("\n\n".join(errors))
     messages = session.command(
@@ -134,12 +137,13 @@ def declarations(project: Project, blocks: list[paper.Block], compile: bool = Tr
         errors = [m["data"] for m in messages if m.get("severity") == "error"]
         raise RuntimeError("Lean could not describe the paper's declarations:\n" + "\n".join(errors)[-3000:])
     found = json.loads(reports[0])
-    theorems = [d for d in found if d["kind"] == "theorem"]
-    if theorems:
-        raise LeanRejected("\n\n".join(
-            f"{project.paper.name}:{d['line']}: write {d['name']} as a statement, "
-            f"`def {d['name']} : Prop := ...`, and put its proof in a separate file "
-            f"attached with a `-- proof:` line" for d in theorems))
+    refused = {"theorem": "write {name} as a conjecture, `def {name} : Prop := ...`, and put its proof "
+                          "in a separate file attached with a `-- proof:` line. It shows as a theorem "
+                          "once that proof is checked"}
+    problems = [f"{project.paper.name}:{d['line']}: " + refused[d["kind"]].format(name=d["name"])
+                for d in found if d["kind"] in refused] + sorries
+    if problems:
+        raise LeanRejected("\n\n".join(problems))
     for declaration in found:
         index = next(i for i, block in enumerate(lean_blocks)
                      if block.line <= declaration["line"] < block.line + block.text.count("\n") + 1)
@@ -236,7 +240,7 @@ def block_items(block: paper.Block, found: list[dict]) -> list[dict]:
     lines = block.text.splitlines()
     number = block.line
     while number < block.line + len(lines):
-        if number in starts and starts[number]["kind"] != "other":
+        if number in starts and starts[number]["kind"] not in ("other", "instance"):
             flush()
             declaration = starts[number]
             # The box's Lean is the paper's own lines, exactly as written. Editing

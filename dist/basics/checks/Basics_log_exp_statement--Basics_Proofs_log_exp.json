@@ -1,0 +1,23 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.log_exp_statement",
+  "proofDeclaration": "Basics.Proofs.log_exp",
+  "result": {
+    "assumes": [],
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "2359233529",
+  "proofFile": "examples/Basics/proofs/Notation.lean",
+  "proofUrl": "sources/proofs/Notation.lean",
+  "checkerUrl": "checks/Basics_log_exp_statement--Basics_Proofs_log_exp.lean",
+  "auditUrl": "checks/Basics_log_exp_statement--Basics_Proofs_log_exp.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_log_exp_statement--Basics_Proofs_log_exp.lean\"",
+  "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+  "wallMs": 763
+}

@@ -15,9 +15,11 @@
 ## A reader for formal statements
 
 PLAER turns Lean definitions and theorem statements into a readable document.
-Each one appears in a box that switches between **LaTeX** and **Lean**. Readers
-never have to look at a proof: a statement's box only says where its proofs
-live and whether Lean accepts them.
+Each one appears in a box that switches between **LaTeX** and **Lean**: a
+definition, a conjecture, a theorem, or an axiom. A claim is a conjecture until
+one of its proofs is checked, and then it is a theorem. Readers never have to
+look at a proof: a box only says where its proofs live and whether Lean
+accepts them.
 
 You write **one file per document**, `Paper.md`. It holds the definitions and
 theorem statements, as Lean, and your notes and examples, as Markdown:
@@ -107,7 +109,7 @@ your Python command. With the server running:
 
 - every play button checks its proof file with Lean;
 - **Edit** on any box changes that part of `Paper.md`; **+ Definition**,
-  **+ Statement**, and **+ Markdown** add boxes; boxes can be moved and removed;
+  **+ Conjecture**, and **+ Markdown** add boxes; boxes can be moved and removed;
 - Lean you type is compiled before it is saved, and rejected with Lean's
   message if it does not compile.
 

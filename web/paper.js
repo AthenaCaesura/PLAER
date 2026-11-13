@@ -242,10 +242,15 @@
     card.setAttribute("aria-label", item.title);
     const leanPanel = leanSourcePanel(item, blockIndex);
     const body = node("div", "definition-body");
-    const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
-      [{key: "lean", label: "Lean", panel: leanPanel}]);
-    card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
-    body.append(mathPanel, leanPanel);
+    if (item.leanOnly) {   // a structure or inductive type: there is no formula, so only its Lean
+      card.append(heading("definition-heading", "Definition", "", item.title, null, sourceLink(item)));
+      body.append(leanPanel);
+    } else {
+      const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
+        [{key: "lean", label: "Lean", panel: leanPanel}]);
+      card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
+      body.append(mathPanel, leanPanel);
+    }
     if (item.caption) card.append(caption(item.caption));
     card.append(body);
     return card;
@@ -261,30 +266,52 @@
   // Keep the math prominent. A proof appears only as where it lives and
   // whether Lean accepts it; proof bodies are never embedded in the card.
 
+  // A claim is a conjecture until one of its proofs is checked; then it is a
+  // theorem. An axiom is a claim Lean accepts without proof.
   function statementBox(item, blockIndex) {
+    const axiom = item.kind === "axiom";
     const card = node("section", "proof-check");
-    card.setAttribute("aria-label", "Statement and proof checks: " + item.title);
+    card.setAttribute("aria-label", (axiom ? "Axiom: " : "Claim and proof checks: ") + item.title);
     const leanPanel = leanSourcePanel(item, blockIndex);
     // Lean's own printing of the statement it checks: one line, implicit details shown.
     const reprintPanel = node("div");
     reprintPanel.append(node("pre", "theorem-lean", item.statementLean));
     const {toggle, mathPanel} = views(item.name, "Statement representation", item.statementLatex, item.latexError, "theorem-math",
       [{key: "lean", label: "Lean", panel: leanPanel}, {key: "reprint", label: "Reprint", panel: reprintPanel}]);
-    card.append(heading("proof-heading", "Statement", "theorem-label", item.title, toggle,
-      sourceLink(item)));
+    card.append(heading("proof-heading", "", "theorem-label", item.title, toggle, sourceLink(item)));
+    const eyebrow = card.querySelector(".eyebrow");
+    const caveat = node("p", "box-caveat");
+    card.append(caveat);
+    function refreshKind() {
+      const proved = (item.proofs || []).filter(proof => proof.result && proof.result.ok && !proof.result.pending);
+      const notes = [];
+      if (axiom) {
+        notes.push("Assumed without proof. A theorem that uses it says so.");
+      } else if (proved.length) {
+        if (!proved.some(proof => proof.checkedNow)) notes.push("Proved by an earlier check. Press play to check it again.");
+        const assumed = [...new Set(proved.flatMap(proof => proof.result.assumes || []))];
+        if (assumed.length) notes.push("Assumes the axiom" + (assumed.length > 1 ? "s " : " ") + assumed.join(", ") + ".");
+      }
+      eyebrow.textContent = axiom ? "Axiom" : proved.length ? "Theorem" : "Conjecture";
+      card.dataset.kind = eyebrow.textContent.toLowerCase();
+      caveat.textContent = notes.join(" ");
+      caveat.hidden = !notes.length;
+    }
+    refreshKind();
     if (item.caption) card.append(caption(item.caption));
     const statement = node("div", "theorem-statement");
     statement.append(mathPanel, leanPanel, reprintPanel);
     card.append(statement);
 
+    if (axiom) return card;
     if (!item.proofs.length) {
-      card.append(node("p", "proof-none", "No proof attached. Add a line such as “-- proof: proofs/File.lean Namespace.name” under the statement."));
+      card.append(node("p", "proof-none", "No proof attached. Add a line such as “-- proof: proofs/File.lean Namespace.name” under it."));
     }
-    item.proofs.forEach((proof, index) => card.append(proofRow(item, proof, index)));
+    item.proofs.forEach((proof, index) => card.append(proofRow(item, proof, index, refreshKind)));
     return card;
   }
 
-  function proofRow(item, proof, index) {
+  function proofRow(item, proof, index, changed) {
     const row = node("div", "proof-actions");
     const where = proof.file;
     const run = node("button", "verify-proof", "Run proof");
@@ -322,8 +349,9 @@
         if (report.name !== item.name || report.statementHash !== item.statementHash) {
           throw new Error("The statement changed. Reload the document.");
         }
-        Object.assign(proof, report);
+        Object.assign(proof, report, {checkedNow: true});
         show();
+        changed();
       } catch (problem) {
         result.dataset.state = "unverified";
         text.textContent = "Unavailable";
@@ -362,7 +390,7 @@
     }
     for (const item of block.items) {
       output.append(item.type === "code" ? codeBlock(item)
-        : item.statement ? statementBox(item, index) : definitionBox(item, index));
+        : item.statement || item.kind === "axiom" ? statementBox(item, index) : definitionBox(item, index));
     }
     return output;
   }
@@ -371,7 +399,7 @@
 
   const TEMPLATES = {
     definition: {kind: "lean", text: "/-- Title of the definition -/\ndef Namespace.name (n : ℕ) : ℕ := n"},
-    statement: {kind: "lean", text: "/-- Title of the statement -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 0 = n\n-- proof: proofs/File.lean Namespace.Proofs.name"},
+    conjecture: {kind: "lean", text: "/-- Title of the conjecture -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 0 = n\n-- proof: proofs/File.lean Namespace.Proofs.name"},
     markdown: {kind: "markdown", text: ""}
   };
 
@@ -478,7 +506,7 @@
 
   function toolbar() {
     const bar = node("div", "notebook-toolbar");
-    for (const [label, template] of [["+ Definition", "definition"], ["+ Statement", "statement"], ["+ Markdown", "markdown"]]) {
+    for (const [label, template] of [["+ Definition", "definition"], ["+ Conjecture", "conjecture"], ["+ Markdown", "markdown"]]) {
       bar.append(action(label, () => { draft = {...TEMPLATES[template]}; editing = "new"; draw(); }));
     }
     if (removed) {

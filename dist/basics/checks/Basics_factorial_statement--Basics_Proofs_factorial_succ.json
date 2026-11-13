@@ -1,0 +1,19 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.factorial_statement",
+  "proofDeclaration": "Basics.Proofs.factorial_succ",
+  "result": {
+    "assumes": [],
+    "axioms": [],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "313093904",
+  "proofFile": "examples/Basics/proofs/Notation.lean",
+  "proofUrl": "sources/proofs/Notation.lean",
+  "checkerUrl": "checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.lean",
+  "auditUrl": "checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.lean\"",
+  "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+  "wallMs": 711
+}

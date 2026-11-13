@@ -1,0 +1,24 @@
+{
+  "leanVersion": "4.35.0",
+  "name": "Basics.hundred_statement",
+  "proofDeclaration": "Basics.Proofs.hundred",
+  "result": {
+    "assumes": [
+      "Basics.goldbach"
+    ],
+    "axioms": [
+      "propext",
+      "Basics.goldbach"
+    ],
+    "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+    "ok": true
+  },
+  "statementHash": "2139854304",
+  "proofFile": "examples/Basics/proofs/Hundred.lean",
+  "proofUrl": "sources/proofs/Hundred.lean",
+  "checkerUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.lean",
+  "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
+  "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
+  "proofSha256": "6237d4ffb99aaa6c7f8e6da8b7233317860779c457c32a8961f9a9810c7e54ab",
+  "wallMs": 584
+}

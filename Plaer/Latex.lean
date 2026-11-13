@@ -92,6 +92,98 @@ latex_pp_app_rules (kind := const.Int.ModEq)
     return (a.protectRight 50 ++ " \\equiv " ++ b.protectLeft 50 ++
       " \\pmod{" ++ modulus.latex.1 ++ "}").resetBP (.NonAssoc 50) (.NonAssoc 50)
 
+/-! Common Mathlib notation. Each rule checks its argument count and otherwise
+declines, so an unexpected form shows "No LaTeX" rather than something wrong. -/
+
+/-- `\name(x)` for a named function of one argument, such as `\exp` or `\sin`. -/
+meta def namedFunction (command : String) (args : Array Expr) (arity : Nat) : LatexPrinterM LatexData := do
+  unless args.size == arity do failure
+  let x ← latexPP args.back!
+  -- One atom, so a power reads `\sin(x)^{2}` rather than `(\sin(x))^{2}`.
+  return LatexData.atomString (command ++ "(" ++ x.latex.1 ++ ")")
+
+/-- `\name(a, b)` for a named function of two arguments, such as `\gcd`. -/
+meta def namedFunction₂ (command : String) (args : Array Expr) (arity : Nat) : LatexPrinterM LatexData := do
+  unless args.size == arity do failure
+  let a ← latexPP args[arity - 2]!
+  let b ← latexPP args[arity - 1]!
+  return LatexData.atomString (command ++ "(" ++ a.latex.1 ++ ", " ++ b.latex.1 ++ ")")
+
+latex_pp_app_rules (kind := const.Real.exp) | _, args => namedFunction "\\exp" args 1
+latex_pp_app_rules (kind := const.Real.log) | _, args => namedFunction "\\log" args 1
+latex_pp_app_rules (kind := const.Real.sin) | _, args => namedFunction "\\sin" args 1
+latex_pp_app_rules (kind := const.Real.cos) | _, args => namedFunction "\\cos" args 1
+latex_pp_app_rules (kind := const.Nat.gcd) | _, args => namedFunction₂ "\\gcd" args 2
+latex_pp_app_rules (kind := const.Min.min) | _, args => namedFunction₂ "\\min" args 4
+latex_pp_app_rules (kind := const.Max.max) | _, args => namedFunction₂ "\\max" args 4
+latex_pp_rules (kind := const.Real.pi) | _ => pure <| LatexData.atomString "\\pi"
+
+/-- Divisibility, `a ∣ b`. -/
+latex_pp_app_rules (kind := const.Dvd.dvd)
+  | _, #[_, _, a, b] => do
+    let a ← latexPP a
+    let b ← latexPP b
+    return (a.protectRight 50 ++ " \\mid " ++ b.protectLeft 50).resetBP (.NonAssoc 50) (.NonAssoc 50)
+
+/-- Absolute value, `|x|`. -/
+latex_pp_app_rules (kind := const.abs)
+  | _, args => do
+    unless args.size == 4 do failure
+    let x ← latexPP args.back!
+    return LatexData.atomString ("\\left|" ++ x.latex.1 ++ "\\right|")
+
+/-- Square root, `√x`. -/
+latex_pp_app_rules (kind := const.Real.sqrt)
+  | _, #[x] => do
+    let x ← latexPP x
+    return LatexData.atomString ("\\sqrt{" ++ x.latex.1 ++ "}")
+
+/-- Factorial, `n!`. -/
+latex_pp_app_rules (kind := const.Nat.factorial)
+  | _, #[n] => do
+    let n ← latexPP n
+    return (n.protect 1024 ++ "!").resetBP .Infinity .Infinity
+
+/-- Binomial coefficient, `\binom{n}{k}`. -/
+latex_pp_app_rules (kind := const.Nat.choose)
+  | _, #[n, k] => do
+    let n ← latexPP n
+    let k ← latexPP k
+    return LatexData.atomString ("\\binom{" ++ n.latex.1 ++ "}{" ++ k.latex.1 ++ "}")
+
+/-- The last element of `Finset.range n`: `m` when `n` is `m + 1`, `2` when `n` is `3`,
+otherwise `n - 1`. -/
+meta def rangeTop (n : Expr) : LatexPrinterM String := do
+  if let some k := n.nat? then
+    if k > 0 then return toString (k - 1)
+  let args := n.getAppArgs
+  if n.isAppOfArity ``HAdd.hAdd 6 && isNumeral args[5]! && args[5]!.getAppArgs[1]?.bind (·.rawNatLit?) == some 1 then
+    return (← latexPP args[4]!).latex.1
+  return (← latexPP n).protectRight 65 |>.latex.1 |> (· ++ " - 1")
+
+/-- `Finset.range n` is `\{0, …, n - 1\}`. -/
+latex_pp_app_rules (kind := const.Finset.range)
+  | _, #[n] => do
+    return LatexData.atomString ("\\{0, \\ldots, " ++ (← rangeTop n) ++ "\\}")
+
+/-- `∑ i ∈ s, f i` and `∏ i ∈ s, f i`; over `Finset.range n`, with limits `0` and `n - 1`. -/
+meta def bigOperator (symbol : String) (s f : Expr) : LatexPrinterM LatexData := do
+  withBindingBodyUnusedName' f `i fun name body => do
+    let i := name.toLatex
+    let limits ←
+      if s.isAppOfArity `Finset.range 1 then
+        pure s!"_\{{i} = 0}^\{{← rangeTop s.appArg!}}"
+      else
+        pure s!"_\{{i} \\in {(← latexPP s).latex.1}}"
+    let body ← latexPP body
+    return (LatexData.atomString (symbol ++ limits ++ " ") ++ body.protect 70)
+      |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 65)
+
+latex_pp_app_rules (kind := const.Finset.sum)
+  | _, #[_, _, _, s, f] => bigOperator "\\sum" s f
+latex_pp_app_rules (kind := const.Finset.prod)
+  | _, #[_, _, _, s, f] => bigOperator "\\prod" s f
+
 /-- The same strict printer is used for saved statements and live verification. -/
 meta def expressionLatex (expression : Expr) : MetaM String := do
   let result ← run_latexPP expression { strict := true, collectHypotheses := true }

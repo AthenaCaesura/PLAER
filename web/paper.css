@@ -256,6 +256,7 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 .lean-setup .lean-code { margin-top: 8px; }
 .definition > .source-proof-details { margin: 0 27px; padding: 12px 0 14px; }
 .definition > .source-proof-details a { margin-left: 10px; color: var(--green); }
+.box-caveat { margin: 10px 0 0; font: 12px/1.5 var(--sans); color: #8a6d3b; }
 .box-source { margin: 4px 0 0; font: 12px var(--sans); }
 .box-source a { color: var(--muted); text-underline-offset: 3px; }
 .box-source a:hover { color: var(--green); }

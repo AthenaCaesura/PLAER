@@ -60,13 +60,22 @@ meta def definitionReport (name : Name) : MetaM Json := do
 /-- The box for one declaration: a statement (a theorem, or a closed `Prop`
 definition awaiting proofs), a definition, or anything else shown as Lean only. -/
 meta def declarationReport (name : Name) : MetaM Json := do
+  let plain (kind : String) : MetaM Json := return Json.mkObj [
+    ("name", toJson name.toString), ("kind", toJson kind),
+    ("source", toJson (← declarationSource name))]
+  if ← isInstance name then return ← plain "instance"
   match ← getConstInfo name with
   | .thmInfo _ => statementReport name
+  | .axiomInfo info => return Json.mkObj <| [
+    ("name", toJson name.toString), ("kind", toJson "axiom"),
+    ("statementLean", toJson ("axiom " ++ name.toString ++ " : " ++ (← ppExpr info.type).pretty)),
+    ("leanVersion", toJson Lean.versionString)] ++
+    (← latexFields "statementLatex" (expressionLatex info.type))
   | .defnInfo definition =>
     if definition.type.isProp then statementReport name else definitionReport name
-  | _ => return Json.mkObj [
-    ("name", toJson name.toString), ("kind", toJson "other"),
-    ("source", toJson (← declarationSource name))]
+  -- A structure, class, or inductive type: a definition with no formula to typeset.
+  | .inductInfo _ => return (← plain "definition").mergeObj (Json.mkObj [("leanOnly", toJson true)])
+  | _ => plain "other"
 
 /-- Reports for the given declarations, in source order, with line spans and doc
 comments. Constants Lean generates inside another declaration are skipped. -/

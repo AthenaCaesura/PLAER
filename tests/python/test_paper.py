@@ -51,6 +51,16 @@ for bad in [{"start": 3, "count": 2}, {"start": -1, "count": 1}, {"start": 0, "c
         continue
     raise AssertionError(f"accepted {bad}")
 
+# Imports stay first: a move or insert that would put Lean above them is refused.
+headed = paper.parse("# T\n\n```lean\nimport Mathlib\n```\n\n```lean\ndef a := 1\n```\n")
+for bad in [{"op": "move", "index": 1, "offset": 1}, {"op": "insert", "index": 0, "kind": "lean", "text": "def b := 2"}]:
+    try:
+        paper.edit(headed, bad)
+    except ValueError:
+        continue
+    raise AssertionError(f"accepted {bad}")
+assert paper.edit(headed, {"op": "move", "index": 0, "offset": 1})[1].kind == "markdown"   # prose may move above
+
 # Every edit can be written to the Markdown file and read back unchanged.
 # (Two prose blocks that end up adjacent simply become one.)
 for request in [{"op": "insert", "index": 3, "kind": "lean", "text": "def y := 2"},

@@ -87,8 +87,33 @@ def title(blocks: list[Block], fallback: str) -> str:
     return fallback
 
 
+def imports_first(blocks: list[Block]) -> bool:
+    """Lean needs every `import` before any other Lean in the paper."""
+    seen_code = False
+    for block in blocks:
+        if block.kind != "lean":
+            continue
+        for line in block.text.split("\n"):
+            stripped = line.strip()
+            if not stripped or stripped.startswith("--"):
+                continue
+            if re.match(r"import\s", stripped):
+                if seen_code:
+                    return False
+            else:
+                seen_code = True
+    return True
+
+
 def edit(blocks: list[Block], request: dict) -> list[Block]:
     """Apply one editing operation from the browser; return the new blocks."""
+    edited = _apply(blocks, request)
+    if imports_first(blocks) and not imports_first(edited):
+        raise ValueError("Imports must come before all other Lean, so that box stays at the top")
+    return edited
+
+
+def _apply(blocks: list[Block], request: dict) -> list[Block]:
     op, index = request.get("op"), request.get("index")
     blocks = list(blocks)
     if not isinstance(index, int) or isinstance(index, bool):

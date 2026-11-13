@@ -12,5 +12,5 @@
   "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
   "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
   "statementHash": "975527729",
-  "wallMs": 323
+  "wallMs": 620
 }

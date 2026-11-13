@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T12:44:57.961501+00:00",
+  "built_at": "2026-11-13T13:27:05.450784+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
-  "paper_sha256": "b9b32cd4f64ebcb3e0107e9b55db4156ef99b1c6cff647f6bac50ceca233863a",
-  "source_sha256": "c1e7992e84b634d2c2df1d346bbe246e4502cc67c84df2588448a6c8bbd7f6d7",
-  "document_sha256": "a48d11c36b1db77d89d876d8beea4d565b51128dc2ccf7a56162e7665ac97e49",
-  "engine_fingerprint": "e954cadebd29e46c1e77207c19f5ff033e2a74fe2b4a145a281ace549c8f8678",
+  "paper_sha256": "d2b8ad458b9ec057c8aa9c858bee3f67d4280c5648c940cccf870b066090c619",
+  "source_sha256": "b47c2ac39485aaec89459562cfdf671a2c5411d5e6c255aa6b60c860c0a5b60a",
+  "document_sha256": "aa6e8e442632023ba7419485d0c2d5fe34abf20eb5b8037542a3798b61b8267b",
+  "engine_fingerprint": "4ff9d3a407d35aea8e287f184e8450fc0d9a60be9f6877a8e6a8d4d79c80d1ec",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -18,8 +18,8 @@
   },
   "state": {
     "project": "basics",
-    "title": "The three kinds of box",
-    "revision": "b9b32cd4f64ebcb3e0107e9b55db4156ef99b1c6cff647f6bac50ceca233863a",
+    "title": "Theorems, conjectures, definitions, and axioms",
+    "revision": "d2b8ad458b9ec057c8aa9c858bee3f67d4280c5648c940cccf870b066090c619",
     "paperFile": "examples/Basics/Paper.md",
     "paperUrl": "sources/Paper.md",
     "sourceFile": "examples/Basics/Statements.lean",
@@ -29,104 +29,29 @@
     "blocks": [
       {
         "kind": "markdown",
-        "text": "# The three kinds of box",
+        "text": "# Theorems, conjectures, definitions, and axioms",
         "line": 1
       },
       {
         "kind": "lean",
-        "text": "import Mathlib.Data.Nat.Basic\nimport Plaer.Latex",
+        "text": "import Mathlib.Analysis.SpecialFunctions.Log.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Group.Finset.Basic\nimport Plaer.Latex",
         "line": 4,
         "items": [
           {
             "type": "code",
-            "text": "import Mathlib.Data.Nat.Basic\nimport Plaer.Latex"
+            "text": "import Mathlib.Analysis.SpecialFunctions.Log.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Group.Finset.Basic\nimport Plaer.Latex"
           }
         ]
       },
       {
         "kind": "markdown",
-        "text": "This paper shows the three kinds of box PLAER makes, and every answer a play button can give.\n\n## Statement\n\nA `def … : Prop` becomes a **Statement** box: a claim written down, not assumed true. Each `-- proof:` line under it attaches a proof file, and each proof gets its own play button. Proofs always live in separate files.",
-        "line": 8
-      },
-      {
-        "kind": "lean",
-        "text": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n\n-- proof: proofs/AddZero.lean Basics.Proofs.add_zero\n-- proof: proofs/AddZeroBySimp.lean Basics.Proofs.add_zero_by_simp",
-        "line": 15,
-        "items": [
-          {
-            "type": "declaration",
-            "doc": "Adding zero",
-            "kind": "candidate",
-            "leanVersion": "4.35.0",
-            "line": 15,
-            "name": "Basics.add_zero_statement",
-            "sourceModule": "[anonymous]",
-            "statementHash": "720014397",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ n + 0 = n",
-            "statementLean": "def Basics.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
-            "block": 1,
-            "offset": 0,
-            "lines": 2,
-            "proofs": [
-              {
-                "file": "proofs/AddZero.lean",
-                "declaration": "Basics.Proofs.add_zero",
-                "leanVersion": "4.35.0",
-                "name": "Basics.add_zero_statement",
-                "proofDeclaration": "Basics.Proofs.add_zero",
-                "result": {
-                  "axioms": [],
-                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-                  "ok": true
-                },
-                "statementHash": "720014397",
-                "proofFile": "examples/Basics/proofs/AddZero.lean",
-                "proofUrl": "sources/proofs/AddZero.lean",
-                "checkerUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean",
-                "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.json",
-                "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean\"",
-                "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
-                "wallMs": 329
-              },
-              {
-                "file": "proofs/AddZeroBySimp.lean",
-                "declaration": "Basics.Proofs.add_zero_by_simp",
-                "leanVersion": "4.35.0",
-                "name": "Basics.add_zero_statement",
-                "proofDeclaration": "Basics.Proofs.add_zero_by_simp",
-                "result": {
-                  "axioms": [
-                    "propext"
-                  ],
-                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-                  "ok": true
-                },
-                "statementHash": "720014397",
-                "proofFile": "examples/Basics/proofs/AddZeroBySimp.lean",
-                "proofUrl": "sources/proofs/AddZeroBySimp.lean",
-                "checkerUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean",
-                "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.json",
-                "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean\"",
-                "proofSha256": "f431fb551c8d5dc7b76daec86c03a84a880d4e745c8c11c43543240b4127b7c5",
-                "wallMs": 327
-              }
-            ],
-            "statement": true,
-            "title": "Adding zero",
-            "caption": "",
-            "source": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n"
-          }
-        ]
-      },
-      {
-        "kind": "markdown",
-        "text": "## Definition\n\nAny other `def` becomes a **Definition** box. Switch between its LaTeX and the Lean you wrote.",
-        "line": 21
+        "text": "A paper has the same four kinds of thing Lean has: definitions, claims, proved claims, and assumptions. PLAER shows each one in its own kind of box.\n\n## Definition\n\nA `def` gives a name a meaning. Switch between its LaTeX and the Lean you wrote.",
+        "line": 12
       },
       {
         "kind": "lean",
         "text": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
-        "line": 26,
+        "line": 19,
         "items": [
           {
             "type": "declaration",
@@ -134,11 +59,11 @@
             "kind": "definition",
             "latex": "double \\coloneqq (n : \\mathbb{N}) \\mapsto n + n",
             "leanVersion": "4.35.0",
-            "line": 26,
+            "line": 19,
             "name": "Basics.double",
             "source": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
             "sourceModule": "[anonymous]",
-            "block": 2,
+            "block": 1,
             "offset": 0,
             "lines": 2,
             "proofs": [],
@@ -150,98 +75,86 @@
       },
       {
         "kind": "markdown",
-        "text": "## Lean\n\nAll other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), structures, quick checks such as `example`, and LaTeX notation rules. This one checks that doubling 3 gives 6, and tells the LaTeX view how to write `Basics.double`:",
-        "line": 30
+        "text": "A `structure`, `class`, or `inductive` type is a definition too. It has no formula to typeset, so its box shows only the Lean.",
+        "line": 23
       },
       {
         "kind": "lean",
-        "text": "example : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens",
-        "line": 35,
+        "text": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
+        "line": 26,
         "items": [
           {
-            "type": "code",
-            "text": "example : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens"
+            "type": "declaration",
+            "doc": "A point with natural-number coordinates",
+            "kind": "definition",
+            "leanOnly": true,
+            "line": 26,
+            "name": "Basics.Point",
+            "source": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
+            "block": 2,
+            "offset": 0,
+            "lines": 4,
+            "proofs": [],
+            "statement": false,
+            "title": "A point with natural-number coordinates",
+            "caption": ""
           }
         ]
       },
       {
         "kind": "markdown",
-        "text": "With that rule, a statement about `Basics.double` has a LaTeX view:",
-        "line": 44
+        "text": "## Conjecture\n\nA `def … : Prop` is a claim: Lean calls it a proposition. Writing it down does not assert it. Until a proof of it is checked, it is a **Conjecture**.",
+        "line": 32
       },
       {
         "kind": "lean",
-        "text": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n\n-- proof: proofs/Double.lean Basics.Proofs.double_eq_two_mul",
-        "line": 47,
+        "text": "/-- Multiplying by one -/\ndef Basics.mul_one_statement : Prop := ∀ n : ℕ, n * 1 = n",
+        "line": 37,
         "items": [
           {
             "type": "declaration",
-            "doc": "Doubling is multiplying by two",
+            "doc": "Multiplying by one",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 47,
-            "name": "Basics.double_statement",
+            "line": 37,
+            "name": "Basics.mul_one_statement",
             "sourceModule": "[anonymous]",
-            "statementHash": "3076824760",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ \\operatorname{double}(n) = 2 \\cdot n",
-            "statementLean": "def Basics.double_statement : Prop := ∀ (n : ℕ), Basics.double n = 2 * n",
-            "block": 4,
+            "statementHash": "1353011585",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ n \\cdot 1 = n",
+            "statementLean": "def Basics.mul_one_statement : Prop := ∀ (n : ℕ), n * 1 = n",
+            "block": 3,
             "offset": 0,
             "lines": 2,
-            "proofs": [
-              {
-                "file": "proofs/Double.lean",
-                "declaration": "Basics.Proofs.double_eq_two_mul",
-                "leanVersion": "4.35.0",
-                "name": "Basics.double_statement",
-                "proofDeclaration": "Basics.Proofs.double_eq_two_mul",
-                "result": {
-                  "axioms": [
-                    "propext",
-                    "Quot.sound"
-                  ],
-                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-                  "ok": true
-                },
-                "statementHash": "3076824760",
-                "proofFile": "examples/Basics/proofs/Double.lean",
-                "proofUrl": "sources/proofs/Double.lean",
-                "checkerUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean",
-                "auditUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.json",
-                "command": "lake env lean --json \"dist/basics/checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean\"",
-                "proofSha256": "c28bd955bbfe5d729f0e1a07aa032694f074287d0f6f3a6fbb8ce83c3ce2001e",
-                "wallMs": 328
-              }
-            ],
+            "proofs": [],
             "statement": true,
-            "title": "Doubling is multiplying by two",
+            "title": "Multiplying by one",
             "caption": "",
-            "source": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n"
+            "source": "/-- Multiplying by one -/\ndef Basics.mul_one_statement : Prop := ∀ n : ℕ, n * 1 = n"
           }
         ]
       },
       {
         "kind": "markdown",
-        "text": "## What the play button says\n\n- **Proved**: Lean accepts the proof, and it proves exactly the statement shown. Every proof above says this.\n- **Not proved**: anything else. The proof is wrong, its file is missing, it uses `sorry`, or it proves a different statement. The box below has a wrong proof and a missing proof file.\n- **Not checked**: the statement changed since its proofs were last checked. Press play to check again.\n- **Unavailable**: the PLAER server could not run the check, for example because it stopped.",
-        "line": 52
+        "text": "A conjecture can be false. This one has a wrong proof and a proof file that does not exist, so it stays a conjecture.",
+        "line": 41
       },
       {
         "kind": "lean",
-        "text": "/-- Incorrect Theorem -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n\n-- proof: proofs/File.lean Namespace.Proofs.name\n-- proof: proofs/Missing.lean Namespace.Proofs.missing",
-        "line": 60,
+        "text": "/-- A false claim -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n\n-- proof: proofs/File.lean Namespace.Proofs.name\n-- proof: proofs/Missing.lean Namespace.Proofs.missing",
+        "line": 44,
         "items": [
           {
             "type": "declaration",
-            "doc": "Incorrect Theorem",
+            "doc": "A false claim",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 60,
+            "line": 44,
             "name": "Namespace.name_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "975527729",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n + 1 = n",
             "statementLean": "def Namespace.name_statement : Prop := ∀ (n : ℕ), n + 1 = n",
-            "block": 5,
+            "block": 4,
             "offset": 0,
             "lines": 3,
             "proofs": [
@@ -261,7 +174,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
                 "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
                 "statementHash": "975527729",
-                "wallMs": 323
+                "wallMs": 620
               },
               {
                 "file": "proofs/Missing.lean",
@@ -276,43 +189,764 @@
               }
             ],
             "statement": true,
-            "title": "Incorrect Theorem",
+            "title": "A false claim",
             "caption": "",
-            "source": "/-- Incorrect Theorem -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n"
+            "source": "/-- A false claim -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n"
           }
         ]
       },
       {
         "kind": "markdown",
-        "text": "A statement with no `-- proof:` line has no play button. Its box says that no proof is attached.",
-        "line": 67
+        "text": "## Theorem\n\nA `-- proof:` line attaches a proof file to a claim. When a play button checks a proof, Lean has proved the claim, and the box says **Theorem**. If the check happened earlier, for example when this page was built, the box says so; press play to check it again. A claim can have several proofs.",
+        "line": 51
       },
       {
         "kind": "lean",
-        "text": "/-- Multiplying by one -/\ndef Basics.mul_one_statement : Prop := ∀ n : ℕ, n * 1 = n",
-        "line": 70,
+        "text": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n\n-- proof: proofs/AddZero.lean Basics.Proofs.add_zero\n-- proof: proofs/AddZeroBySimp.lean Basics.Proofs.add_zero_by_simp",
+        "line": 56,
         "items": [
           {
             "type": "declaration",
-            "doc": "Multiplying by one",
+            "doc": "Adding zero",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 70,
-            "name": "Basics.mul_one_statement",
+            "line": 56,
+            "name": "Basics.add_zero_statement",
             "sourceModule": "[anonymous]",
-            "statementHash": "1353011585",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ n \\cdot 1 = n",
-            "statementLean": "def Basics.mul_one_statement : Prop := ∀ (n : ℕ), n * 1 = n",
+            "statementHash": "720014397",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ n + 0 = n",
+            "statementLean": "def Basics.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
+            "block": 5,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/AddZero.lean",
+                "declaration": "Basics.Proofs.add_zero",
+                "leanVersion": "4.35.0",
+                "name": "Basics.add_zero_statement",
+                "proofDeclaration": "Basics.Proofs.add_zero",
+                "result": {
+                  "assumes": [],
+                  "axioms": [],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "720014397",
+                "proofFile": "examples/Basics/proofs/AddZero.lean",
+                "proofUrl": "sources/proofs/AddZero.lean",
+                "checkerUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean",
+                "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean\"",
+                "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
+                "wallMs": 1297
+              },
+              {
+                "file": "proofs/AddZeroBySimp.lean",
+                "declaration": "Basics.Proofs.add_zero_by_simp",
+                "leanVersion": "4.35.0",
+                "name": "Basics.add_zero_statement",
+                "proofDeclaration": "Basics.Proofs.add_zero_by_simp",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "720014397",
+                "proofFile": "examples/Basics/proofs/AddZeroBySimp.lean",
+                "proofUrl": "sources/proofs/AddZeroBySimp.lean",
+                "checkerUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean",
+                "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean\"",
+                "proofSha256": "f431fb551c8d5dc7b76daec86c03a84a880d4e745c8c11c43543240b4127b7c5",
+                "wallMs": 651
+              }
+            ],
+            "statement": true,
+            "title": "Adding zero",
+            "caption": "",
+            "source": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## Axiom\n\nAn `axiom` is a claim Lean accepts without proof: an assumption. Its box is marked as assumed. Here, Goldbach's conjecture, which nobody has proved, is taken as an axiom:",
+        "line": 62
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Goldbach's conjecture, assumed -/\naxiom Basics.goldbach : ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n",
+        "line": 67,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Goldbach's conjecture, assumed",
+            "kind": "axiom",
+            "leanVersion": "4.35.0",
+            "line": 67,
+            "name": "Basics.goldbach",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ n > 2 \\land 2 \\mid n \\implies \\exists p : \\mathbb{N},\\ \\exists q : \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = n",
+            "statementLean": "axiom Basics.goldbach : ∀ n > 2, 2 ∣ n → ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n",
             "block": 6,
             "offset": 0,
             "lines": 2,
             "proofs": [],
-            "statement": true,
-            "title": "Multiplying by one",
+            "statement": false,
+            "title": "Goldbach's conjecture, assumed",
             "caption": "",
-            "source": "/-- Multiplying by one -/\ndef Basics.mul_one_statement : Prop := ∀ n : ℕ, n * 1 = n"
+            "source": "/-- Goldbach's conjecture, assumed -/\naxiom Basics.goldbach : ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n"
           }
         ]
+      },
+      {
+        "kind": "markdown",
+        "text": "A theorem whose proof uses an axiom is only as sure as the axiom, so its box names the axiom it assumes. This proof applies Goldbach's conjecture to 100 instead of finding the two primes:",
+        "line": 71
+      },
+      {
+        "kind": "lean",
+        "text": "/-- 100 is a sum of two primes -/\ndef Basics.hundred_statement : Prop := ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = 100\n-- proof: proofs/Hundred.lean Basics.Proofs.hundred",
+        "line": 74,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "100 is a sum of two primes",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 74,
+            "name": "Basics.hundred_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "2139854304",
+            "statementLatex": "\\exists p : \\mathbb{N},\\ \\exists q : \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = 100",
+            "statementLean": "def Basics.hundred_statement : Prop := ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = 100",
+            "block": 7,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Hundred.lean",
+                "declaration": "Basics.Proofs.hundred",
+                "leanVersion": "4.35.0",
+                "name": "Basics.hundred_statement",
+                "proofDeclaration": "Basics.Proofs.hundred",
+                "result": {
+                  "assumes": [
+                    "Basics.goldbach"
+                  ],
+                  "axioms": [
+                    "propext",
+                    "Basics.goldbach"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "2139854304",
+                "proofFile": "examples/Basics/proofs/Hundred.lean",
+                "proofUrl": "sources/proofs/Hundred.lean",
+                "checkerUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.lean",
+                "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
+                "proofSha256": "6237d4ffb99aaa6c7f8e6da8b7233317860779c457c32a8961f9a9810c7e54ab",
+                "wallMs": 584
+              }
+            ],
+            "statement": true,
+            "title": "100 is a sum of two primes",
+            "caption": "",
+            "source": "/-- 100 is a sum of two primes -/\ndef Basics.hundred_statement : Prop := ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = 100"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## Lean\n\nAll other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, quick checks such as `example`, and LaTeX notation rules. This one gives points a default value, checks that doubling 3 gives 6, and tells the LaTeX view how to write `Basics.double`:",
+        "line": 79
+      },
+      {
+        "kind": "lean",
+        "text": "instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩\n\nexample : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens",
+        "line": 84,
+        "items": [
+          {
+            "type": "code",
+            "text": "instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩\n\nexample : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "With that rule, a claim about `Basics.double` has a LaTeX view:",
+        "line": 95
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n\n-- proof: proofs/Double.lean Basics.Proofs.double_eq_two_mul",
+        "line": 98,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Doubling is multiplying by two",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 98,
+            "name": "Basics.double_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "3076824760",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ \\operatorname{double}(n) = 2 \\cdot n",
+            "statementLean": "def Basics.double_statement : Prop := ∀ (n : ℕ), Basics.double n = 2 * n",
+            "block": 9,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Double.lean",
+                "declaration": "Basics.Proofs.double_eq_two_mul",
+                "leanVersion": "4.35.0",
+                "name": "Basics.double_statement",
+                "proofDeclaration": "Basics.Proofs.double_eq_two_mul",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "3076824760",
+                "proofFile": "examples/Basics/proofs/Double.lean",
+                "proofUrl": "sources/proofs/Double.lean",
+                "checkerUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean",
+                "auditUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean\"",
+                "proofSha256": "c28bd955bbfe5d729f0e1a07aa032694f074287d0f6f3a6fbb8ce83c3ce2001e",
+                "wallMs": 629
+              }
+            ],
+            "statement": true,
+            "title": "Doubling is multiplying by two",
+            "caption": "",
+            "source": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## Not allowed in a paper\n\nA paper states claims; proofs live in proof files. Lean refuses to build a paper with a `theorem`, because a `theorem` contains its proof. Write it as a conjecture with a `-- proof:` line instead; it shows as a theorem once that proof is checked. A paper also may not use `sorry`, which would pretend a claim is proved. This sample is not compiled:\n\n```lean ignore\ntheorem Basics.zero_add (n : ℕ) : 0 + n = n := by simp       -- refused: the proof belongs in a proof file\ndef Basics.half : ℕ → ℕ := sorry                             -- refused: sorry\n```\n\n## Notation\n\nThe LaTeX view knows common mathematical notation. Each theorem below is proved in `proofs/Notation.lean`.",
+        "line": 103
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Divisibility and the greatest common divisor -/\ndef Basics.gcd_dvd_statement : Prop := ∀ a b : ℕ, Nat.gcd a b ∣ a\n-- proof: proofs/Notation.lean Basics.Proofs.gcd_dvd\n\n/-- Minimum and maximum -/\ndef Basics.min_le_max_statement : Prop := ∀ a b : ℕ, min a b ≤ max a b\n-- proof: proofs/Notation.lean Basics.Proofs.min_le_max\n\n/-- Absolute value -/\ndef Basics.abs_statement : Prop := ∀ x : ℝ, |x| ≥ 0\n-- proof: proofs/Notation.lean Basics.Proofs.abs_nonneg\n\n/-- Square roots -/\ndef Basics.sqrt_statement : Prop := ∀ x : ℝ, x ≥ 0 → Real.sqrt x * Real.sqrt x = x\n-- proof: proofs/Notation.lean Basics.Proofs.sqrt_mul_self\n\n/-- Factorials -/\ndef Basics.factorial_statement : Prop := ∀ n : ℕ, Nat.factorial (n + 1) = (n + 1) * Nat.factorial n\n-- proof: proofs/Notation.lean Basics.Proofs.factorial_succ\n\n/-- Binomial coefficients -/\ndef Basics.choose_statement : Prop := ∀ n : ℕ, Nat.choose n 1 = n\n-- proof: proofs/Notation.lean Basics.Proofs.choose_one\n\n/-- Sums -/\ndef Basics.sum_statement : Prop := ∀ n : ℕ, ∑ i ∈ Finset.range n, (2 * i + 1) = n ^ 2\n-- proof: proofs/Notation.lean Basics.Proofs.sum_odd\n\n/-- Products -/\ndef Basics.prod_statement : Prop := ∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n\n-- proof: proofs/Notation.lean Basics.Proofs.prod_succ\n\n/-- Exponential and logarithm -/\ndef Basics.log_exp_statement : Prop := ∀ x : ℝ, Real.log (Real.exp x) = x\n-- proof: proofs/Notation.lean Basics.Proofs.log_exp\n\n/-- Sine and cosine -/\ndef Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1\n-- proof: proofs/Notation.lean Basics.Proofs.sin_cos\n\n/-- Pi -/\ndef Basics.pi_statement : Prop := Real.pi > 0\n-- proof: proofs/Notation.lean Basics.Proofs.pi_pos",
+        "line": 117,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Divisibility and the greatest common divisor",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 117,
+            "name": "Basics.gcd_dvd_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "4096334385",
+            "statementLatex": "\\forall a, b : \\mathbb{N},\\ \\gcd(a, b) \\mid a",
+            "statementLean": "def Basics.gcd_dvd_statement : Prop := ∀ (a b : ℕ), a.gcd b ∣ a",
+            "block": 10,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.gcd_dvd",
+                "leanVersion": "4.35.0",
+                "name": "Basics.gcd_dvd_statement",
+                "proofDeclaration": "Basics.Proofs.gcd_dvd",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "4096334385",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_gcd_dvd_statement--Basics_Proofs_gcd_dvd.lean",
+                "auditUrl": "checks/Basics_gcd_dvd_statement--Basics_Proofs_gcd_dvd.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_gcd_dvd_statement--Basics_Proofs_gcd_dvd.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 673
+              }
+            ],
+            "statement": true,
+            "title": "Divisibility and the greatest common divisor",
+            "caption": "",
+            "source": "/-- Divisibility and the greatest common divisor -/\ndef Basics.gcd_dvd_statement : Prop := ∀ a b : ℕ, Nat.gcd a b ∣ a"
+          },
+          {
+            "type": "declaration",
+            "doc": "Minimum and maximum",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 121,
+            "name": "Basics.min_le_max_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "3889265800",
+            "statementLatex": "\\forall a, b : \\mathbb{N},\\ \\min(a, b) \\le \\max(a, b)",
+            "statementLean": "def Basics.min_le_max_statement : Prop := ∀ (a b : ℕ), min a b ≤ max a b",
+            "block": 10,
+            "offset": 4,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.min_le_max",
+                "leanVersion": "4.35.0",
+                "name": "Basics.min_le_max_statement",
+                "proofDeclaration": "Basics.Proofs.min_le_max",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "3889265800",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_min_le_max_statement--Basics_Proofs_min_le_max.lean",
+                "auditUrl": "checks/Basics_min_le_max_statement--Basics_Proofs_min_le_max.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_min_le_max_statement--Basics_Proofs_min_le_max.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 698
+              }
+            ],
+            "statement": true,
+            "title": "Minimum and maximum",
+            "caption": "",
+            "source": "/-- Minimum and maximum -/\ndef Basics.min_le_max_statement : Prop := ∀ a b : ℕ, min a b ≤ max a b"
+          },
+          {
+            "type": "declaration",
+            "doc": "Absolute value",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 125,
+            "name": "Basics.abs_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "1091935186",
+            "statementLatex": "\\forall x : \\mathbb{R},\\ \\left|x\\right| \\ge 0",
+            "statementLean": "def Basics.abs_statement : Prop := ∀ (x : ℝ), |x| ≥ 0",
+            "block": 10,
+            "offset": 8,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.abs_nonneg",
+                "leanVersion": "4.35.0",
+                "name": "Basics.abs_statement",
+                "proofDeclaration": "Basics.Proofs.abs_nonneg",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "1091935186",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_abs_statement--Basics_Proofs_abs_nonneg.lean",
+                "auditUrl": "checks/Basics_abs_statement--Basics_Proofs_abs_nonneg.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_abs_statement--Basics_Proofs_abs_nonneg.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 694
+              }
+            ],
+            "statement": true,
+            "title": "Absolute value",
+            "caption": "",
+            "source": "/-- Absolute value -/\ndef Basics.abs_statement : Prop := ∀ x : ℝ, |x| ≥ 0"
+          },
+          {
+            "type": "declaration",
+            "doc": "Square roots",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 129,
+            "name": "Basics.sqrt_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "2264345984",
+            "statementLatex": "\\forall x : \\mathbb{R},\\ x \\ge 0 \\implies \\sqrt{x} \\cdot \\sqrt{x} = x",
+            "statementLean": "def Basics.sqrt_statement : Prop := ∀ x ≥ 0, √x * √x = x",
+            "block": 10,
+            "offset": 12,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.sqrt_mul_self",
+                "leanVersion": "4.35.0",
+                "name": "Basics.sqrt_statement",
+                "proofDeclaration": "Basics.Proofs.sqrt_mul_self",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "2264345984",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_sqrt_statement--Basics_Proofs_sqrt_mul_self.lean",
+                "auditUrl": "checks/Basics_sqrt_statement--Basics_Proofs_sqrt_mul_self.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_sqrt_statement--Basics_Proofs_sqrt_mul_self.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 706
+              }
+            ],
+            "statement": true,
+            "title": "Square roots",
+            "caption": "",
+            "source": "/-- Square roots -/\ndef Basics.sqrt_statement : Prop := ∀ x : ℝ, x ≥ 0 → Real.sqrt x * Real.sqrt x = x"
+          },
+          {
+            "type": "declaration",
+            "doc": "Factorials",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 133,
+            "name": "Basics.factorial_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "313093904",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ (n + 1)! = (n + 1) \\cdot n!",
+            "statementLean": "def Basics.factorial_statement : Prop := ∀ (n : ℕ), (n + 1).factorial = (n + 1) * n.factorial",
+            "block": 10,
+            "offset": 16,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.factorial_succ",
+                "leanVersion": "4.35.0",
+                "name": "Basics.factorial_statement",
+                "proofDeclaration": "Basics.Proofs.factorial_succ",
+                "result": {
+                  "assumes": [],
+                  "axioms": [],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "313093904",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.lean",
+                "auditUrl": "checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_factorial_statement--Basics_Proofs_factorial_succ.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 711
+              }
+            ],
+            "statement": true,
+            "title": "Factorials",
+            "caption": "",
+            "source": "/-- Factorials -/\ndef Basics.factorial_statement : Prop := ∀ n : ℕ, Nat.factorial (n + 1) = (n + 1) * Nat.factorial n"
+          },
+          {
+            "type": "declaration",
+            "doc": "Binomial coefficients",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 137,
+            "name": "Basics.choose_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "762753006",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ \\binom{n}{1} = n",
+            "statementLean": "def Basics.choose_statement : Prop := ∀ (n : ℕ), n.choose 1 = n",
+            "block": 10,
+            "offset": 20,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.choose_one",
+                "leanVersion": "4.35.0",
+                "name": "Basics.choose_statement",
+                "proofDeclaration": "Basics.Proofs.choose_one",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "762753006",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_choose_statement--Basics_Proofs_choose_one.lean",
+                "auditUrl": "checks/Basics_choose_statement--Basics_Proofs_choose_one.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_choose_statement--Basics_Proofs_choose_one.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 741
+              }
+            ],
+            "statement": true,
+            "title": "Binomial coefficients",
+            "caption": "",
+            "source": "/-- Binomial coefficients -/\ndef Basics.choose_statement : Prop := ∀ n : ℕ, Nat.choose n 1 = n"
+          },
+          {
+            "type": "declaration",
+            "doc": "Sums",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 141,
+            "name": "Basics.sum_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "1060318762",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ \\sum_{i = 0}^{n - 1} (2 \\cdot i + 1) = n^{2}",
+            "statementLean": "def Basics.sum_statement : Prop := ∀ (n : ℕ), ∑ i ∈ Finset.range n, (2 * i + 1) = n ^ 2",
+            "block": 10,
+            "offset": 24,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.sum_odd",
+                "leanVersion": "4.35.0",
+                "name": "Basics.sum_statement",
+                "proofDeclaration": "Basics.Proofs.sum_odd",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "1060318762",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_sum_statement--Basics_Proofs_sum_odd.lean",
+                "auditUrl": "checks/Basics_sum_statement--Basics_Proofs_sum_odd.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_sum_statement--Basics_Proofs_sum_odd.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 722
+              }
+            ],
+            "statement": true,
+            "title": "Sums",
+            "caption": "",
+            "source": "/-- Sums -/\ndef Basics.sum_statement : Prop := ∀ n : ℕ, ∑ i ∈ Finset.range n, (2 * i + 1) = n ^ 2"
+          },
+          {
+            "type": "declaration",
+            "doc": "Products",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 145,
+            "name": "Basics.prod_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "217275052",
+            "statementLatex": "\\forall n : \\mathbb{N},\\ \\prod_{i = 0}^{n - 1} (i + 1) = n!",
+            "statementLean": "def Basics.prod_statement : Prop := ∀ (n : ℕ), ∏ i ∈ Finset.range n, (i + 1) = n.factorial",
+            "block": 10,
+            "offset": 28,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.prod_succ",
+                "leanVersion": "4.35.0",
+                "name": "Basics.prod_statement",
+                "proofDeclaration": "Basics.Proofs.prod_succ",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "217275052",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_prod_statement--Basics_Proofs_prod_succ.lean",
+                "auditUrl": "checks/Basics_prod_statement--Basics_Proofs_prod_succ.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_prod_statement--Basics_Proofs_prod_succ.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 762
+              }
+            ],
+            "statement": true,
+            "title": "Products",
+            "caption": "",
+            "source": "/-- Products -/\ndef Basics.prod_statement : Prop := ∀ n : ℕ, ∏ i ∈ Finset.range n, (i + 1) = Nat.factorial n"
+          },
+          {
+            "type": "declaration",
+            "doc": "Exponential and logarithm",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 149,
+            "name": "Basics.log_exp_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "2359233529",
+            "statementLatex": "\\forall x : \\mathbb{R},\\ \\log(\\exp(x)) = x",
+            "statementLean": "def Basics.log_exp_statement : Prop := ∀ (x : ℝ), Real.log (Real.exp x) = x",
+            "block": 10,
+            "offset": 32,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.log_exp",
+                "leanVersion": "4.35.0",
+                "name": "Basics.log_exp_statement",
+                "proofDeclaration": "Basics.Proofs.log_exp",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "2359233529",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_log_exp_statement--Basics_Proofs_log_exp.lean",
+                "auditUrl": "checks/Basics_log_exp_statement--Basics_Proofs_log_exp.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_log_exp_statement--Basics_Proofs_log_exp.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 763
+              }
+            ],
+            "statement": true,
+            "title": "Exponential and logarithm",
+            "caption": "",
+            "source": "/-- Exponential and logarithm -/\ndef Basics.log_exp_statement : Prop := ∀ x : ℝ, Real.log (Real.exp x) = x"
+          },
+          {
+            "type": "declaration",
+            "doc": "Sine and cosine",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 153,
+            "name": "Basics.sin_cos_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "1396079601",
+            "statementLatex": "\\forall x : \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1",
+            "statementLean": "def Basics.sin_cos_statement : Prop := ∀ (x : ℝ), Real.sin x ^ 2 + Real.cos x ^ 2 = 1",
+            "block": 10,
+            "offset": 36,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.sin_cos",
+                "leanVersion": "4.35.0",
+                "name": "Basics.sin_cos_statement",
+                "proofDeclaration": "Basics.Proofs.sin_cos",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "1396079601",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean",
+                "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 823
+              }
+            ],
+            "statement": true,
+            "title": "Sine and cosine",
+            "caption": "",
+            "source": "/-- Sine and cosine -/\ndef Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1"
+          },
+          {
+            "type": "declaration",
+            "doc": "Pi",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 157,
+            "name": "Basics.pi_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "842299629",
+            "statementLatex": "\\pi > 0",
+            "statementLean": "def Basics.pi_statement : Prop := Real.pi > 0",
+            "block": 10,
+            "offset": 40,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Notation.lean",
+                "declaration": "Basics.Proofs.pi_pos",
+                "leanVersion": "4.35.0",
+                "name": "Basics.pi_statement",
+                "proofDeclaration": "Basics.Proofs.pi_pos",
+                "result": {
+                  "assumes": [],
+                  "axioms": [
+                    "propext",
+                    "Classical.choice",
+                    "Quot.sound"
+                  ],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "842299629",
+                "proofFile": "examples/Basics/proofs/Notation.lean",
+                "proofUrl": "sources/proofs/Notation.lean",
+                "checkerUrl": "checks/Basics_pi_statement--Basics_Proofs_pi_pos.lean",
+                "auditUrl": "checks/Basics_pi_statement--Basics_Proofs_pi_pos.json",
+                "command": "lake env lean --json \"dist/basics/checks/Basics_pi_statement--Basics_Proofs_pi_pos.lean\"",
+                "proofSha256": "c01d31f2bc4756c35dc2b0d06963c34b7c22b1269bf51c5394c25d2a0341b8de",
+                "wallMs": 771
+              }
+            ],
+            "statement": true,
+            "title": "Pi",
+            "caption": "",
+            "source": "/-- Pi -/\ndef Basics.pi_statement : Prop := Real.pi > 0"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "## What the play button says\n\n- **Proved**: Lean accepts the proof, and it proves exactly the claim shown. The box becomes a theorem.\n- **Not proved**: anything else. The proof is wrong, its file is missing, it uses `sorry`, or it proves a different claim.\n- **Not checked**: the claim changed since its proofs were last checked. Press play to check again.\n- **Unavailable**: the PLAER server could not run the check, for example because it stopped.",
+        "line": 162
       }
     ]
   }
