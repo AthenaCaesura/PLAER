@@ -9,18 +9,44 @@
     {
       "file": "proofs/Last.lean",
       "declaration": "Fermat.Proofs.last",
+      "name": "Fermat.last_statement",
+      "proofDeclaration": "Fermat.Proofs.last",
       "result": {
         "ok": false,
-        "pending": true
-      }
+        "diagnostics": "Application type mismatch: The argument\n  hn\nhas type\n  n > 2\nbut is expected to have type\n  a ^ n + b ^ n < c ^ n\nin the application\n  Nat.ne_of_lt hn"
+      },
+      "proofFile": "examples/Fermat/proofs/Last.lean",
+      "proofUrl": "sources/proofs/Last.lean",
+      "checkerUrl": "checks/Fermat_last_statement--Fermat_Proofs_last.lean",
+      "auditUrl": "checks/Fermat_last_statement--Fermat_Proofs_last.json",
+      "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
+      "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
+      "statementHash": "1861763117",
+      "wallMs": 9105
     },
     {
       "file": "proofs/Little.lean",
       "declaration": "Fermat.Proofs.little",
+      "leanVersion": "4.35.0",
+      "name": "Fermat.little_statement",
+      "proofDeclaration": "Fermat.Proofs.little",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "737928072",
+      "proofFile": "examples/Fermat/proofs/Little.lean",
+      "proofUrl": "sources/proofs/Little.lean",
+      "checkerUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.lean",
+      "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
+      "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
+      "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
+      "wallMs": 780
     }
   ]
 }

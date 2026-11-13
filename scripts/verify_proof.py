@@ -58,10 +58,7 @@ def proof_messages(project: Project, statement: str, proof: dict, metadata: dict
     check = f"\n\n#plaer_check_proof {statement} {proof['declaration']}\n"
     session = session_for(project)
     paper_imports, paper_body = split_imports(project.source.read_text(encoding="utf-8"))
-    if proof.get("inline"):
-        proof_imports, proof_body = [], ""
-    else:
-        proof_imports, proof_body = split_imports(proof_path(project, proof["file"]).read_text(encoding="utf-8"))
+    proof_imports, proof_body = split_imports(proof_path(project, proof["file"]).read_text(encoding="utf-8"))
     if paper_imports is not None and proof_imports is not None:
         try:
             env, paper = session.paper(paper_imports, paper_body)
@@ -81,25 +78,20 @@ def proof_messages(project: Project, statement: str, proof: dict, metadata: dict
 def write_checker(project: Project, statement: str, proof: dict) -> dict:
     """Write the checker file and source snapshots; return what the page links to.
 
-    `proof` is {"file", "declaration"}, or {"inline": True, "declaration"} for a
-    theorem proved in the paper itself.
+    `proof` is {"file", "declaration"}.
     """
     declaration = proof["declaration"]
     if not IDENTIFIER.fullmatch(statement) or not IDENTIFIER.fullmatch(declaration):
         raise ValueError(f"Not a Lean declaration name: {declaration}")
-    if proof.get("inline"):
-        proof_file, original = project.source, f"import {project.source_module}\n"
-        snapshot = project.output / "sources" / project.source.name
-    else:
-        proof_file = proof_path(project, proof["file"])
-        original = proof_file.read_text(encoding="utf-8")
-        # Preserve the complete proof file. Only an import and final claim audit are added.
-        if re.match(r"\s*module\b", original):
-            raise ValueError("Proof files use ordinary import headers, without the module command.")
-        inside = os.path.relpath(proof_file, project.folder).replace(os.sep, "/")
-        snapshot = project.output / "sources" / (inside if not inside.startswith("..") else "external/" + proof_file.name)
-        snapshot.parent.mkdir(parents=True, exist_ok=True)
-        snapshot.write_bytes(proof_file.read_bytes())
+    proof_file = proof_path(project, proof["file"])
+    original = proof_file.read_text(encoding="utf-8")
+    # Preserve the complete proof file. Only an import and final claim audit are added.
+    if re.match(r"\s*module\b", original):
+        raise ValueError("Proof files use ordinary import headers, without the module command.")
+    inside = os.path.relpath(proof_file, project.folder).replace(os.sep, "/")
+    snapshot = project.output / "sources" / (inside if not inside.startswith("..") else "external/" + proof_file.name)
+    snapshot.parent.mkdir(parents=True, exist_ok=True)
+    snapshot.write_bytes(proof_file.read_bytes())
 
     stem = (statement + "--" + declaration).replace(".", "_").replace("'", "_prime")
     checker = project.output / "checks" / (stem + ".lean")

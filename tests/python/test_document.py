@@ -1,7 +1,7 @@
 """Build a throwaway paper with Lean: boxes, attached proofs, and rejected proofs."""
 import shutil
 from _support import ROOT
-from document import build_state
+from document import LeanRejected, build_state
 from package_document import declarations, package_document
 from project import load_project
 
@@ -27,9 +27,6 @@ def SelfTest.zero_add_statement : Prop := ∀ n : ℕ, 0 + n = n
 -- proof: proofs/Broken.lean SelfTest.Proofs.broken
 -- proof: proofs/Missing.lean SelfTest.Proofs.missing
 
-/-- Proved in the paper -/
-theorem SelfTest.inline (n : ℕ) : n = n := rfl
-
 /-- A point -/
 structure SelfTest.Point where
   x : ℕ
@@ -52,8 +49,8 @@ Prose after.
 
     state = build_state(project, run_proofs=True)
     boxes = {d["name"]: d for d in declarations(state)}
-    assert list(boxes) == ["SelfTest.triple", "SelfTest.zero_add_statement", "SelfTest.inline",
-                           "SelfTest.Point", "SelfTest.unsupported_statement"], list(boxes)
+    assert list(boxes) == ["SelfTest.triple", "SelfTest.zero_add_statement",
+                           "SelfTest.unsupported_statement"], list(boxes)
     assert boxes["SelfTest.triple"]["kind"] == "definition" and "\\coloneqq" in boxes["SelfTest.triple"]["latex"]
     statement = boxes["SelfTest.zero_add_statement"]
     assert (statement["kind"], statement["title"], statement["caption"]) == ("candidate", "Zero on the left", "A caption.")
@@ -69,9 +66,9 @@ Prose after.
     assert checker.startswith("import Plaer.Check\n") and checker.rstrip().endswith(
         "#plaer_check_proof SelfTest.zero_add_statement SelfTest.Proofs.good")
     assert "Wrong" not in checker and "Broken" not in checker   # one check compiles one proof file
-    inline = boxes["SelfTest.inline"]
-    assert inline["kind"] == "theorem" and inline["proofs"][0]["inline"] and inline["proofs"][0]["result"]["ok"]
-    assert boxes["SelfTest.Point"]["kind"] == "other" and "structure" in boxes["SelfTest.Point"]["source"]
+    # A structure is not a box: it folds into the Lean around it.
+    code = [i["text"] for b in state["blocks"] for i in b.get("items", []) if i["type"] == "code"]
+    assert any("structure SelfTest.Point" in text for text in code), code
     # Unsupported notation keeps the Lean view and says why, instead of guessing or failing the build.
     unsupported = boxes["SelfTest.unsupported_statement"]
     assert unsupported["statementLatex"] is None and "No LaTeX" in unsupported["latexError"]
@@ -88,6 +85,13 @@ Prose after.
     (folder / "Paper.md").write_text(text, encoding="utf-8")
     again = {d["name"]: d for d in declarations(build_state(project, run_proofs=False))}
     assert again["SelfTest.zero_add_statement"]["proofs"][0]["result"].get("pending") is True
+    # A theorem in the paper is rejected: proofs belong in proof files.
+    (folder / "Paper.md").write_text(text + "\n```lean\ntheorem SelfTest.inline (n : ℕ) : n = n := rfl\n```\n", encoding="utf-8")
+    try:
+        build_state(project, run_proofs=False)
+        raise AssertionError("a theorem in the paper was accepted")
+    except LeanRejected as error:
+        assert "SelfTest.inline as a statement" in str(error), error
     print("PASS: boxes from one paper; good proof accepted; wrong, sorry, broken and missing proofs rejected")
 finally:
     shutil.rmtree(folder, ignore_errors=True)

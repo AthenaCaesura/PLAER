@@ -1,12 +1,12 @@
 {
-  "built_at": "2026-11-13T12:30:32.580632+00:00",
+  "built_at": "2026-11-13T12:44:57.961501+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
-  "paper_sha256": "35ec1e39a551d7487cbc84e000918bbec1e7e4f69d99a398cd60d481edff197c",
-  "source_sha256": "75c23c32eea9d7240cc3d797d42ca25ff1341ac893b318a966f1ac7cb16e20fa",
-  "document_sha256": "9f964e452e6cbbbecf1fcb921d4821e7744e08a695eecf044956275b1f5f1034",
+  "paper_sha256": "b9b32cd4f64ebcb3e0107e9b55db4156ef99b1c6cff647f6bac50ceca233863a",
+  "source_sha256": "c1e7992e84b634d2c2df1d346bbe246e4502cc67c84df2588448a6c8bbd7f6d7",
+  "document_sha256": "a48d11c36b1db77d89d876d8beea4d565b51128dc2ccf7a56162e7665ac97e49",
   "engine_fingerprint": "e954cadebd29e46c1e77207c19f5ff033e2a74fe2b4a145a281ace549c8f8678",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
@@ -18,8 +18,8 @@
   },
   "state": {
     "project": "basics",
-    "title": "Every kind of box",
-    "revision": "35ec1e39a551d7487cbc84e000918bbec1e7e4f69d99a398cd60d481edff197c",
+    "title": "The three kinds of box",
+    "revision": "b9b32cd4f64ebcb3e0107e9b55db4156ef99b1c6cff647f6bac50ceca233863a",
     "paperFile": "examples/Basics/Paper.md",
     "paperUrl": "sources/Paper.md",
     "sourceFile": "examples/Basics/Statements.lean",
@@ -29,7 +29,7 @@
     "blocks": [
       {
         "kind": "markdown",
-        "text": "# Every kind of box",
+        "text": "# The three kinds of box",
         "line": 1
       },
       {
@@ -45,72 +45,26 @@
       },
       {
         "kind": "markdown",
-        "text": "This paper shows every kind of box PLAER makes, and every answer a play button can give.\n\nThe folded line above is a **Lean setup** box. Imports, `open`, and LaTeX notation rules fold away, because they matter to Lean, not to the reader.\n\n## Definition\n\nA `def` that is not a claim becomes a **Definition** box. Switch between its LaTeX and the Lean you wrote.",
+        "text": "This paper shows the three kinds of box PLAER makes, and every answer a play button can give.\n\n## Statement\n\nA `def … : Prop` becomes a **Statement** box: a claim written down, not assumed true. Each `-- proof:` line under it attaches a proof file, and each proof gets its own play button. Proofs always live in separate files.",
         "line": 8
       },
       {
         "kind": "lean",
-        "text": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
-        "line": 17,
-        "items": [
-          {
-            "type": "declaration",
-            "doc": "Doubling a natural number",
-            "kind": "definition",
-            "latex": "double \\coloneqq (n : \\mathbb{N}) \\mapsto n + n",
-            "leanVersion": "4.35.0",
-            "line": 17,
-            "name": "Basics.double",
-            "source": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
-            "sourceModule": "[anonymous]",
-            "block": 1,
-            "offset": 0,
-            "lines": 2,
-            "proofs": [],
-            "statement": false,
-            "title": "Doubling a natural number",
-            "caption": ""
-          }
-        ]
-      },
-      {
-        "kind": "markdown",
-        "text": "## Lean code\n\nLean that names nothing, such as an `example` or `#eval`, is shown as plain code, with no LaTeX. Lean still checks it whenever the paper compiles: this one confirms that doubling 3 gives 6.",
-        "line": 21
-      },
-      {
-        "kind": "lean",
-        "text": "example : Basics.double 3 = 6 := rfl",
-        "line": 26,
-        "items": [
-          {
-            "type": "code",
-            "text": "example : Basics.double 3 = 6 := rfl"
-          }
-        ]
-      },
-      {
-        "kind": "markdown",
-        "text": "## Statement\n\nA `def … : Prop` becomes a **Statement** box: a claim written down, not assumed true. Each `-- proof:` line under it attaches a proof file, and each proof gets its own play button.",
-        "line": 29
-      },
-      {
-        "kind": "lean",
         "text": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n\n-- proof: proofs/AddZero.lean Basics.Proofs.add_zero\n-- proof: proofs/AddZeroBySimp.lean Basics.Proofs.add_zero_by_simp",
-        "line": 34,
+        "line": 15,
         "items": [
           {
             "type": "declaration",
             "doc": "Adding zero",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 34,
+            "line": 15,
             "name": "Basics.add_zero_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "720014397",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n + 0 = n",
             "statementLean": "def Basics.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
-            "block": 3,
+            "block": 1,
             "offset": 0,
             "lines": 2,
             "proofs": [
@@ -132,7 +86,7 @@
                 "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean\"",
                 "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
-                "wallMs": 449
+                "wallMs": 329
               },
               {
                 "file": "proofs/AddZeroBySimp.lean",
@@ -154,7 +108,7 @@
                 "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean\"",
                 "proofSha256": "f431fb551c8d5dc7b76daec86c03a84a880d4e745c8c11c43543240b4127b7c5",
-                "wallMs": 250
+                "wallMs": 327
               }
             ],
             "statement": true,
@@ -166,117 +120,72 @@
       },
       {
         "kind": "markdown",
-        "text": "## Theorem\n\nA `theorem` carries its proof in the paper itself. It gets a **Theorem** box with a play button like a statement's. The proof is checked but never shown.",
-        "line": 40
+        "text": "## Definition\n\nAny other `def` becomes a **Definition** box. Switch between its LaTeX and the Lean you wrote.",
+        "line": 21
       },
       {
         "kind": "lean",
-        "text": "/-- One plus a number -/\ntheorem Basics.one_add (n : ℕ) : 1 + n = n + 1 := Nat.add_comm 1 n",
-        "line": 45,
+        "text": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
+        "line": 26,
         "items": [
           {
             "type": "declaration",
-            "doc": "One plus a number",
-            "kind": "theorem",
+            "doc": "Doubling a natural number",
+            "kind": "definition",
+            "latex": "double \\coloneqq (n : \\mathbb{N}) \\mapsto n + n",
             "leanVersion": "4.35.0",
-            "line": 45,
-            "name": "Basics.one_add",
+            "line": 26,
+            "name": "Basics.double",
+            "source": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
             "sourceModule": "[anonymous]",
-            "statementHash": "1627815279",
-            "statementLatex": "\\forall n : \\mathbb{N},\\ 1 + n = n + 1",
-            "statementLean": "theorem Basics.one_add : ∀ (n : ℕ), 1 + n = n + 1",
-            "block": 4,
+            "block": 2,
             "offset": 0,
             "lines": 2,
-            "proofs": [
-              {
-                "inline": true,
-                "declaration": "Basics.one_add",
-                "leanVersion": "4.35.0",
-                "name": "Basics.one_add",
-                "proofDeclaration": "Basics.one_add",
-                "result": {
-                  "axioms": [],
-                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
-                  "ok": true
-                },
-                "statementHash": "1627815279",
-                "proofFile": "examples/Basics/Statements.lean",
-                "proofUrl": "sources/Statements.lean",
-                "checkerUrl": "checks/Basics_one_add--Basics_one_add.lean",
-                "auditUrl": "checks/Basics_one_add--Basics_one_add.json",
-                "command": "lake env lean --json \"dist/basics/checks/Basics_one_add--Basics_one_add.lean\"",
-                "proofSha256": "d8cedb63601a2b6e192b4343bb0c477de61c18ab3b495c57833db586c1b08b53",
-                "wallMs": 288
-              }
-            ],
-            "statement": true,
-            "title": "One plus a number",
-            "caption": "",
-            "source": "/-- One plus a number -/\ntheorem Basics.one_add (n : ℕ) : 1 + n = n + 1 := Nat.add_comm 1 n"
-          }
-        ]
-      },
-      {
-        "kind": "markdown",
-        "text": "## Declaration\n\nA `structure`, `inductive`, or `axiom` becomes a **Declaration** box. It shows only the Lean, because there is no formula to typeset.",
-        "line": 49
-      },
-      {
-        "kind": "lean",
-        "text": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
-        "line": 54,
-        "items": [
-          {
-            "type": "declaration",
-            "doc": "A point with natural-number coordinates",
-            "kind": "other",
-            "line": 54,
-            "name": "Basics.Point",
-            "source": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
-            "block": 5,
-            "offset": 0,
-            "lines": 4,
             "proofs": [],
             "statement": false,
-            "title": "A point with natural-number coordinates",
+            "title": "Doubling a natural number",
             "caption": ""
           }
         ]
       },
       {
         "kind": "markdown",
-        "text": "## Notation for your own definitions\n\nThe LaTeX comes from Lean and never guesses. A statement that uses `Basics.double` needs a rule saying how to write it. That rule is setup, so it folds away too.",
-        "line": 60
+        "text": "## Lean\n\nAll other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), structures, quick checks such as `example`, and LaTeX notation rules. This one checks that doubling 3 gives 6, and tells the LaTeX view how to write `Basics.double`:",
+        "line": 30
       },
       {
         "kind": "lean",
-        "text": "open Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens",
-        "line": 65,
+        "text": "example : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens",
+        "line": 35,
         "items": [
           {
             "type": "code",
-            "text": "open Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens"
+            "text": "example : Basics.double 3 = 6 := rfl\n\nopen Lean LeanTeX in\nlatex_pp_app_rules (const := Basics.double)\n  | _, #[n] => do\n    let n ← latexPP n\n    return LatexData.atomString \"\\\\operatorname{double}\" ++ n.parens"
           }
         ]
       },
       {
+        "kind": "markdown",
+        "text": "With that rule, a statement about `Basics.double` has a LaTeX view:",
+        "line": 44
+      },
+      {
         "kind": "lean",
         "text": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n\n-- proof: proofs/Double.lean Basics.Proofs.double_eq_two_mul",
-        "line": 73,
+        "line": 47,
         "items": [
           {
             "type": "declaration",
             "doc": "Doubling is multiplying by two",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 73,
+            "line": 47,
             "name": "Basics.double_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "3076824760",
             "statementLatex": "\\forall n : \\mathbb{N},\\ \\operatorname{double}(n) = 2 \\cdot n",
             "statementLean": "def Basics.double_statement : Prop := ∀ (n : ℕ), Basics.double n = 2 * n",
-            "block": 7,
+            "block": 4,
             "offset": 0,
             "lines": 2,
             "proofs": [
@@ -301,7 +210,7 @@
                 "auditUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean\"",
                 "proofSha256": "c28bd955bbfe5d729f0e1a07aa032694f074287d0f6f3a6fbb8ce83c3ce2001e",
-                "wallMs": 266
+                "wallMs": 328
               }
             ],
             "statement": true,
@@ -314,25 +223,25 @@
       {
         "kind": "markdown",
         "text": "## What the play button says\n\n- **Proved**: Lean accepts the proof, and it proves exactly the statement shown. Every proof above says this.\n- **Not proved**: anything else. The proof is wrong, its file is missing, it uses `sorry`, or it proves a different statement. The box below has a wrong proof and a missing proof file.\n- **Not checked**: the statement changed since its proofs were last checked. Press play to check again.\n- **Unavailable**: the PLAER server could not run the check, for example because it stopped.",
-        "line": 78
+        "line": 52
       },
       {
         "kind": "lean",
         "text": "/-- Incorrect Theorem -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n\n-- proof: proofs/File.lean Namespace.Proofs.name\n-- proof: proofs/Missing.lean Namespace.Proofs.missing",
-        "line": 86,
+        "line": 60,
         "items": [
           {
             "type": "declaration",
             "doc": "Incorrect Theorem",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 86,
+            "line": 60,
             "name": "Namespace.name_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "975527729",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n + 1 = n",
             "statementLean": "def Namespace.name_statement : Prop := ∀ (n : ℕ), n + 1 = n",
-            "block": 8,
+            "block": 5,
             "offset": 0,
             "lines": 3,
             "proofs": [
@@ -352,7 +261,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
                 "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
                 "statementHash": "975527729",
-                "wallMs": 297
+                "wallMs": 323
               },
               {
                 "file": "proofs/Missing.lean",
@@ -376,25 +285,25 @@
       {
         "kind": "markdown",
         "text": "A statement with no `-- proof:` line has no play button. Its box says that no proof is attached.",
-        "line": 93
+        "line": 67
       },
       {
         "kind": "lean",
         "text": "/-- Multiplying by one -/\ndef Basics.mul_one_statement : Prop := ∀ n : ℕ, n * 1 = n",
-        "line": 96,
+        "line": 70,
         "items": [
           {
             "type": "declaration",
             "doc": "Multiplying by one",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 96,
+            "line": 70,
             "name": "Basics.mul_one_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "1353011585",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n \\cdot 1 = n",
             "statementLean": "def Basics.mul_one_statement : Prop := ∀ (n : ℕ), n * 1 = n",
-            "block": 9,
+            "block": 6,
             "offset": 0,
             "lines": 2,
             "proofs": [],

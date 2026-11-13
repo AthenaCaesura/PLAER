@@ -242,15 +242,10 @@
     card.setAttribute("aria-label", item.title);
     const leanPanel = leanSourcePanel(item, blockIndex);
     const body = node("div", "definition-body");
-    if (item.kind === "definition") {
-      const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
-        [{key: "lean", label: "Lean", panel: leanPanel}]);
-      card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
-      body.append(mathPanel, leanPanel);
-    } else {   // a structure, inductive type, axiom…: Lean only
-      card.append(heading("definition-heading", "Declaration", "", item.title, null, sourceLink(item)));
-      body.append(leanPanel);
-    }
+    const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
+      [{key: "lean", label: "Lean", panel: leanPanel}]);
+    card.append(heading("definition-heading", "Definition", "", item.title, toggle, sourceLink(item)));
+    body.append(mathPanel, leanPanel);
     if (item.caption) card.append(caption(item.caption));
     card.append(body);
     return card;
@@ -275,7 +270,7 @@
     reprintPanel.append(node("pre", "theorem-lean", item.statementLean));
     const {toggle, mathPanel} = views(item.name, "Statement representation", item.statementLatex, item.latexError, "theorem-math",
       [{key: "lean", label: "Lean", panel: leanPanel}, {key: "reprint", label: "Reprint", panel: reprintPanel}]);
-    card.append(heading("proof-heading", item.kind === "candidate" ? "Statement" : "Theorem", "theorem-label", item.title, toggle,
+    card.append(heading("proof-heading", "Statement", "theorem-label", item.title, toggle,
       sourceLink(item)));
     if (item.caption) card.append(caption(item.caption));
     const statement = node("div", "theorem-statement");
@@ -291,7 +286,7 @@
 
   function proofRow(item, proof, index) {
     const row = node("div", "proof-actions");
-    const where = proof.inline ? "proved in the paper" : proof.file;
+    const where = proof.file;
     const run = node("button", "verify-proof", "Run proof");
     run.type = "button";
     run.setAttribute("aria-label", `Run proof ${proof.declaration}: ${item.title}`);
@@ -344,21 +339,16 @@
 
 
 
-  // ── Other Lean in a block: imports, examples, commands ────────────────────
-
-  // Lines that matter to Lean, not to the reader: imports, namespaces, and
-  // LaTeX notation rules. A block made only of these is folded away.
-  const SETUP_COMMAND = /^(--|import|open|namespace|section|end|universe|variable|set_option|noncomputable section|latex_pp_\w+|def_latex_\w+)\b/;
-  const isSetup = text => text.split("\n").every(line => !line.trim() || /^\s/.test(line) || SETUP_COMMAND.test(line));
+  // ── All other Lean: imports, notation rules, examples, structures ─────────
+  // It matters to Lean, not to the reader, so it is folded into one line.
 
   function codeBlock(item) {
     const pre = node("pre", "lean-code");
     const code = node("code", "lean-source");
     highlightLean(code, item.text);
     pre.append(code);
-    if (!isSetup(item.text)) return pre;
     const details = node("details", "lean-setup");
-    details.append(node("summary", "", "Lean setup"), pre);
+    details.append(node("summary", "", "Lean"), pre);
     return details;
   }
 
@@ -381,7 +371,7 @@
 
   const TEMPLATES = {
     definition: {kind: "lean", text: "/-- Title of the definition -/\ndef Namespace.name (n : ℕ) : ℕ := n"},
-    theorem: {kind: "lean", text: "/-- Title of the statement -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 0 = n\n-- proof: proofs/File.lean Namespace.Proofs.name"},
+    statement: {kind: "lean", text: "/-- Title of the statement -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 0 = n\n-- proof: proofs/File.lean Namespace.Proofs.name"},
     markdown: {kind: "markdown", text: ""}
   };
 
@@ -488,7 +478,7 @@
 
   function toolbar() {
     const bar = node("div", "notebook-toolbar");
-    for (const [label, template] of [["+ Definition", "definition"], ["+ Theorem", "theorem"], ["+ Markdown", "markdown"]]) {
+    for (const [label, template] of [["+ Definition", "definition"], ["+ Statement", "statement"], ["+ Markdown", "markdown"]]) {
       bar.append(action(label, () => { draft = {...TEMPLATES[template]}; editing = "new"; draw(); }));
     }
     if (removed) {

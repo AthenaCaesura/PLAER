@@ -1,34 +1,15 @@
-# Every kind of box
+# The three kinds of box
 
 ```lean
 import Mathlib.Data.Nat.Basic
 import Plaer.Latex
 ```
 
-This paper shows every kind of box PLAER makes, and every answer a play button can give.
-
-The folded line above is a **Lean setup** box. Imports, `open`, and LaTeX notation rules fold away, because they matter to Lean, not to the reader.
-
-## Definition
-
-A `def` that is not a claim becomes a **Definition** box. Switch between its LaTeX and the Lean you wrote.
-
-```lean
-/-- Doubling a natural number -/
-def Basics.double (n : ℕ) : ℕ := n + n
-```
-
-## Lean code
-
-Lean that names nothing, such as an `example` or `#eval`, is shown as plain code, with no LaTeX. Lean still checks it whenever the paper compiles: this one confirms that doubling 3 gives 6.
-
-```lean
-example : Basics.double 3 = 6 := rfl
-```
+This paper shows the three kinds of box PLAER makes, and every answer a play button can give.
 
 ## Statement
 
-A `def … : Prop` becomes a **Statement** box: a claim written down, not assumed true. Each `-- proof:` line under it attaches a proof file, and each proof gets its own play button.
+A `def … : Prop` becomes a **Statement** box: a claim written down, not assumed true. Each `-- proof:` line under it attaches a proof file, and each proof gets its own play button. Proofs always live in separate files.
 
 ```lean
 /-- Adding zero -/
@@ -37,37 +18,30 @@ def Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n
 -- proof: proofs/AddZeroBySimp.lean Basics.Proofs.add_zero_by_simp
 ```
 
-## Theorem
+## Definition
 
-A `theorem` carries its proof in the paper itself. It gets a **Theorem** box with a play button like a statement's. The proof is checked but never shown.
+Any other `def` becomes a **Definition** box. Switch between its LaTeX and the Lean you wrote.
 
 ```lean
-/-- One plus a number -/
-theorem Basics.one_add (n : ℕ) : 1 + n = n + 1 := Nat.add_comm 1 n
+/-- Doubling a natural number -/
+def Basics.double (n : ℕ) : ℕ := n + n
 ```
 
-## Declaration
+## Lean
 
-A `structure`, `inductive`, or `axiom` becomes a **Declaration** box. It shows only the Lean, because there is no formula to typeset.
-
-```lean
-/-- A point with natural-number coordinates -/
-structure Basics.Point where
-  x : ℕ
-  y : ℕ
-```
-
-## Notation for your own definitions
-
-The LaTeX comes from Lean and never guesses. A statement that uses `Basics.double` needs a rule saying how to write it. That rule is setup, so it folds away too.
+All other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), structures, quick checks such as `example`, and LaTeX notation rules. This one checks that doubling 3 gives 6, and tells the LaTeX view how to write `Basics.double`:
 
 ```lean
+example : Basics.double 3 = 6 := rfl
+
 open Lean LeanTeX in
 latex_pp_app_rules (const := Basics.double)
   | _, #[n] => do
     let n ← latexPP n
     return LatexData.atomString "\\operatorname{double}" ++ n.parens
 ```
+
+With that rule, a statement about `Basics.double` has a LaTeX view:
 
 ```lean
 /-- Doubling is multiplying by two -/

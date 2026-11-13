@@ -134,6 +134,12 @@ def declarations(project: Project, blocks: list[paper.Block], compile: bool = Tr
         errors = [m["data"] for m in messages if m.get("severity") == "error"]
         raise RuntimeError("Lean could not describe the paper's declarations:\n" + "\n".join(errors)[-3000:])
     found = json.loads(reports[0])
+    theorems = [d for d in found if d["kind"] == "theorem"]
+    if theorems:
+        raise LeanRejected("\n\n".join(
+            f"{project.paper.name}:{d['line']}: write {d['name']} as a statement, "
+            f"`def {d['name']} : Prop := ...`, and put its proof in a separate file "
+            f"attached with a `-- proof:` line" for d in theorems))
     for declaration in found:
         index = next(i for i, block in enumerate(lean_blocks)
                      if block.line <= declaration["line"] < block.line + block.text.count("\n") + 1)
@@ -171,11 +177,8 @@ def attach_proofs(blocks: list[paper.Block], found: list[dict], pending: set[int
     """
     lean_blocks = [block for block in blocks if block.kind == "lean"]
     for declaration in found:
-        is_statement = declaration["kind"] in ("theorem", "candidate")
-        # A theorem proved in the paper is its own first proof.
-        declaration["proofs"] = ([{"inline": True, "declaration": declaration["name"]}]
-                                 if declaration["kind"] == "theorem" else [])
-        declaration["statement"] = is_statement
+        declaration["proofs"] = []
+        declaration["statement"] = declaration["kind"] == "candidate"
     for index, block in enumerate(lean_blocks):
         if index in pending:
             continue
@@ -219,7 +222,8 @@ def box_title(declaration: dict) -> tuple[str, str]:
 
 
 def block_items(block: paper.Block, found: list[dict]) -> list[dict]:
-    """What a lean block shows: a box per declaration, and any other code between."""
+    """What a lean block shows: a box per statement or definition. All other Lean
+    (imports, notation, examples, structures, ...) is one folded code item."""
     starts = {d["line"]: d for d in found}
     items, code = [], []
 
@@ -232,7 +236,7 @@ def block_items(block: paper.Block, found: list[dict]) -> list[dict]:
     lines = block.text.splitlines()
     number = block.line
     while number < block.line + len(lines):
-        if number in starts:
+        if number in starts and starts[number]["kind"] != "other":
             flush()
             declaration = starts[number]
             # The box's Lean is the paper's own lines, exactly as written. Editing

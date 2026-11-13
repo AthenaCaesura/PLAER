@@ -45,7 +45,7 @@ button compiles that proof file and checks that it proves exactly the displayed
 statement. A wrong or broken proof never stops the document from building.
 
 A statement without a proof is a closed `Prop` definition: it says what the
-claim is without asserting it. Ordinary `theorem` declarations work too.
+claim is without asserting it. Proofs never go in the paper.
 
 ### The file you write and the Lean that is verified
 
@@ -107,7 +107,7 @@ your Python command. With the server running:
 
 - every play button checks its proof file with Lean;
 - **Edit** on any box changes that part of `Paper.md`; **+ Definition**,
-  **+ Theorem**, and **+ Markdown** add boxes; boxes can be moved and removed;
+  **+ Statement**, and **+ Markdown** add boxes; boxes can be moved and removed;
 - Lean you type is compiled before it is saved, and rejected with Lean's
   message if it does not compile.
 

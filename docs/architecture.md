@@ -58,8 +58,8 @@ metavariables, runs Lean's kernel, and audits axioms. The check's statement
 hash must equal the hash of the statement the page displays.
 
 Each check compiles only its own proof file, so a broken proof elsewhere
-cannot affect it. A theorem proved inside the paper is checked the same way,
-with the paper's module standing in for the proof file.
+cannot affect it. Papers contain no proofs: a `theorem` in a paper is
+rejected with a message asking for a statement and a proof file.
 
 Saved results are reused only while the paper's Lean is unchanged. Editing
 prose keeps them; editing any Lean marks every proof not checked until it runs

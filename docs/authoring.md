@@ -19,17 +19,18 @@ module name, so it must be a capitalized Lean identifier such as `MyTopic`.
 `Paper.md` is ordinary Markdown. The first `# heading` is the document title.
 Write `$...$` and `$$...$$` for mathematics in your notes.
 
-A fenced block that says exactly ` ```lean ` is Lean. Each declaration in it
-becomes a box:
+A fenced block that says exactly ` ```lean ` is Lean. There are three kinds
+of box:
 
 | You write | The document shows |
 | --- | --- |
 | `def name : Prop := ...` | A **Statement** box with LaTeX and Lean views and its attached proofs. |
-| `theorem name : ... := ...` | A **Theorem** box. Its own proof is checked like an attached one and is never displayed. |
 | any other `def` | A **Definition** box with LaTeX and Lean views. |
-| `structure`, `inductive`, `axiom`, ... | A **Declaration** box with its Lean source. |
-| `example`, `#eval`, other commands | A plain Lean code block. |
-| `import`, `open`, `namespace`, notation rules | A folded **Lean setup** line. |
+| anything else: imports, notation rules, `example`, `structure`, ... | One folded **Lean** line. |
+
+A `theorem` in the paper is an error: write it as a statement and put its
+proof in a separate file. That keeps every claim in the same form, and every
+proof out of the paper.
 
 A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.

@@ -55,7 +55,7 @@ check with its play button.
 ## Edit the document
 
 With the server running, each box has **Edit**, **↑**, **↓**, and **Remove**,
-and the bottom of the page has **+ Definition**, **+ Theorem**, and
+and the bottom of the page has **+ Definition**, **+ Statement**, and
 **+ Markdown**. Every change is written to the project's `Paper.md`, and the
 offline HTML is regenerated.
 
