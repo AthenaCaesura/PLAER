@@ -1,12 +1,12 @@
 {
-  "built_at": "2026-11-13T05:28:40.367771+00:00",
+  "built_at": "2026-11-13T08:14:49.064854+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
   "paper_sha256": "adb46eb31b87eea8f34bc32f401af714706895c365930b5c66dc3db7010525a4",
   "source_sha256": "3bf968a2b38a9c72cb01ad8b60053d01e7b8d10ecea60b8fd5c2c72c06169211",
-  "document_sha256": "27f3e6c9652270f1a7bad2fea11b458daf728be5fbed60280ec460362970da5d",
+  "document_sha256": "e46ad7f2bb833d40dcab645e974ba35afcd77b290b95a9393eea68c9fd631671",
   "engine_fingerprint": "9ee9ac1676d0c65f3a201d4cb84db5c5892f23457c9dd475c069f2ee3ae8d39f",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
@@ -79,12 +79,13 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
                 "statementHash": "592678445",
-                "wallMs": 11643
+                "wallMs": 5650
               }
             ],
             "statement": true,
             "title": "Fermat's last theorem",
-            "caption": ""
+            "caption": "",
+            "source": "/-- Fermat's last theorem -/\ndef Fermat.last_statement : Prop :=\n  ∀ n a b c : ℕ, 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n"
           }
         ]
       },
@@ -135,12 +136,13 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 10728
+                "wallMs": 8357
               }
             ],
             "statement": true,
             "title": "Fermat's little theorem",
-            "caption": ""
+            "caption": "",
+            "source": "/-- Fermat's little theorem -/\ndef Fermat.little_statement : Prop :=\n  ∀ (p : ℕ) (a : ℤ), p.Prime → Int.ModEq (p : ℤ) (a ^ p) a"
           }
         ]
       },

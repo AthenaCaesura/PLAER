@@ -207,8 +207,13 @@ def block_items(block: paper.Block, found: list[dict]) -> list[dict]:
     while number < block.line + len(lines):
         if number in starts:
             flush()
-            items.append({"type": "declaration", **starts[number]})
-            number += starts[number]["lines"]
+            declaration = starts[number]
+            # The box's Lean is the paper's own lines, exactly as written. Editing
+            # the box replaces these lines.
+            start = number - block.line
+            source = "\n".join(lines[start:start + declaration["lines"]])
+            items.append({"type": "declaration", **declaration, "source": source})
+            number += declaration["lines"]
         else:
             if not paper.PROOF_LINE.match(lines[number - block.line]):
                 code.append(lines[number - block.line])

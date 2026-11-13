@@ -39,6 +39,17 @@ assert paper.lean_fingerprint(edited) == fingerprint and paper.title(edited, "")
 edited = paper.edit(blocks, {"op": "replace", "index": 1, "text": "def x := 1"})
 assert paper.lean_fingerprint(edited) != fingerprint
 
+# Editing one declaration in its box replaces only that declaration's lines.
+three = [paper.Block("lean", "def a := 1\ndef b := 2\n-- proof: proofs/B.lean B.p\ndef c := 3")]
+edited = paper.edit(three, {"op": "replace_lines", "index": 0, "start": 1, "count": 1, "text": "def b := 20\n"})
+assert edited[0].text == "def a := 1\ndef b := 20\n-- proof: proofs/B.lean B.p\ndef c := 3", edited[0].text
+for bad in [{"start": 3, "count": 2}, {"start": -1, "count": 1}, {"start": 0, "count": 0}, {"start": True, "count": 1}]:
+    try:
+        paper.edit(three, {"op": "replace_lines", "index": 0, "text": "def z := 0", **bad})
+    except ValueError:
+        continue
+    raise AssertionError(f"accepted {bad}")
+
 # Every edit can be written to the Markdown file and read back unchanged.
 # (Two prose blocks that end up adjacent simply become one.)
 for request in [{"op": "insert", "index": 3, "kind": "lean", "text": "def y := 2"},

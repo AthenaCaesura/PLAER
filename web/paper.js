@@ -13,6 +13,8 @@
   let live = false;        // scripts/serve.py is answering
   let editing = null;      // index of the block being edited, or "new"
   let draft = null;        // a box being added: {kind, text}
+  let leanEdit = null;     // a declaration being edited in its Lean tab: {name, text}
+  const chosenView = new Map();   // declaration name → the tab last chosen for it
   let removed = null;      // the last removed block, for Undo
   let watching = false;    // polling the server while Lean compiles
   let nextId = 0;
@@ -113,7 +115,8 @@
 
   // Returns the switch and its two panels. Without LaTeX from Lean, the box
   // opens on its Lean view and says why.
-  function views(label, latex, latexError, leanPanel, mathClass) {
+  // A box's tabs: LaTeX first, then Lean panels such as "Lean" and "Reprint".
+  function views(name, label, latex, latexError, mathClass, others) {
     const id = "box-" + nextId++;
     const toggle = node("div", "view-toggle");
     toggle.setAttribute("role", "tablist");
@@ -124,39 +127,96 @@
     if (latex) renderLatex(latex, math);
     else math.append(node("p", "latex-missing", "Lean could not typeset this in LaTeX: " +
       String(latexError || "unsupported notation").split("\n")[0]));
-    const panels = {latex: mathPanel, lean: leanPanel};
-    const tabs = ["latex", "lean"].map(view => {
-      const tab = node("button", "", view === "latex" ? "LaTeX" : "Lean");
+    const all = [{key: "latex", label: "LaTeX", panel: mathPanel}, ...others];
+    const tabs = all.map(({key, label: text, panel}) => {
+      const tab = node("button", "", text);
       tab.type = "button";
-      tab.id = `${id}-${view}-tab`;
-      tab.dataset.view = view;
+      tab.id = `${id}-${key}-tab`;
+      tab.dataset.view = key;
       tab.setAttribute("role", "tab");
-      tab.setAttribute("aria-controls", `${id}-${view}-panel`);
-      panels[view].id = `${id}-${view}-panel`;
-      panels[view].setAttribute("role", "tabpanel");
-      panels[view].setAttribute("aria-labelledby", tab.id);
+      tab.setAttribute("aria-controls", `${id}-${key}-panel`);
+      panel.id = `${id}-${key}-panel`;
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tab.id);
       return tab;
     });
     function select(view, focus = false) {
-      for (const tab of tabs) {
-        const selected = tab.dataset.view === view;
-        tab.setAttribute("aria-selected", String(selected));
-        tab.tabIndex = selected ? 0 : -1;
-        if (selected && focus) tab.focus();
-        panels[tab.dataset.view].hidden = !selected;
-      }
+      all.forEach(({key, panel}, index) => {
+        const selected = key === view;
+        tabs[index].setAttribute("aria-selected", String(selected));
+        tabs[index].tabIndex = selected ? 0 : -1;
+        if (selected && focus) tabs[index].focus();
+        panel.hidden = !selected;
+      });
     }
     tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => select(tab.dataset.view));
+      tab.addEventListener("click", () => { chosenView.set(name, tab.dataset.view); select(tab.dataset.view); });
       tab.addEventListener("keydown", event => {
-        const next = {ArrowRight: (index + 1) % 2, ArrowLeft: (index + 1) % 2, Home: 0, End: 1}[event.key];
-        if (next !== undefined) { event.preventDefault(); select(tabs[next].dataset.view, true); }
+        const last = tabs.length - 1;
+        const next = {ArrowRight: index === last ? 0 : index + 1, ArrowLeft: index === 0 ? last : index - 1,
+                      Home: 0, End: last}[event.key];
+        if (next !== undefined) {
+          event.preventDefault();
+          chosenView.set(name, tabs[next].dataset.view);
+          select(tabs[next].dataset.view, true);
+        }
       });
     });
     toggle.append(...tabs);
-    select(latex ? "latex" : "lean");
+    const remembered = leanEdit?.name === name ? "lean" : chosenView.get(name);
+    select(all.some(v => v.key === remembered) ? remembered : latex ? "latex" : "lean");
     return {toggle, mathPanel};
   }
+
+  // The Lean tab: the declaration exactly as written in the paper. Served by
+  // scripts/serve.py, it can be edited in place; saving replaces those lines.
+  function leanSourcePanel(item, blockIndex) {
+    const panel = node("div", "definition-panel lean-panel");
+    if (leanEdit?.name === item.name) {
+      const area = node("textarea", "cell-editor lean-inline-editor");
+      area.value = leanEdit.text;
+      area.spellcheck = false;
+      area.rows = Math.max(3, leanEdit.text.split("\n").length + 1);
+      area.setAttribute("aria-label", "Lean source of " + item.title);
+      area.addEventListener("input", () => { leanEdit.text = area.value; });
+      const problem = node("pre", "proof-error edit-error");
+      problem.hidden = true;
+      const cancel = () => { leanEdit = null; draw(); };
+      const save = async () => {
+        saveButton.disabled = true;
+        const outcome = await send({op: "replace_lines", index: blockIndex, start: item.offset,
+                                    count: item.lines, text: area.value}, "Saving…");
+        if (outcome === true) return;
+        problem.textContent = outcome;
+        problem.hidden = false;
+        saveButton.disabled = false;
+      };
+      const saveButton = action("Save", save);
+      area.addEventListener("keydown", event => {
+        if (event.key === "Enter" && (event.shiftKey || event.ctrlKey || event.metaKey)) { event.preventDefault(); save(); }
+        if (event.key === "Escape") cancel();
+      });
+      const actions = node("div", "cell-edit-actions");
+      actions.append(saveButton, action("Cancel", cancel), node("span", "cell-shortcut", "Shift+Enter"));
+      panel.append(area, problem, actions);
+      requestAnimationFrame(() => area.focus());
+      return panel;
+    }
+    const pre = node("pre");
+    const code = node("code", "lean-source");
+    highlightLean(code, item.source);
+    pre.append(code);
+    panel.append(pre);
+    if (live) {
+      const edit = action("Edit", () => { leanEdit = {name: item.name, text: item.source}; chosenView.set(item.name, "lean"); draw(); },
+        "Edit the Lean of " + item.title);
+      edit.classList.add("lean-edit-button");
+      panel.append(edit);
+      pre.addEventListener("dblclick", () => edit.click());
+    }
+    return panel;
+  }
+
 
   function heading(className, eyebrow, eyebrowClass, title, toggle) {
     const box = node("div", className);
@@ -171,18 +231,14 @@
 
   // ── Definition boxes ──────────────────────────────────────────────────────
 
-  function definitionBox(item) {
+  function definitionBox(item, blockIndex) {
     const card = node("section", "definition");
     card.setAttribute("aria-label", item.title);
-    const leanPanel = node("div", "definition-panel lean-panel");
-    const pre = node("pre");
-    const code = node("code", "lean-source");
-    highlightLean(code, item.source);
-    pre.append(code);
-    leanPanel.append(pre);
+    const leanPanel = leanSourcePanel(item, blockIndex);
     const body = node("div", "definition-body");
     if (item.kind === "definition") {
-      const {toggle, mathPanel} = views("Definition representation", item.latex, item.latexError, leanPanel, "display-math");
+      const {toggle, mathPanel} = views(item.name, "Definition representation", item.latex, item.latexError, "display-math",
+        [{key: "lean", label: "Lean", panel: leanPanel}]);
       card.append(heading("definition-heading", "Definition", "", item.title, toggle));
       body.append(mathPanel, leanPanel);
     } else {   // a structure, inductive type, axiom…: Lean only
@@ -207,16 +263,19 @@
   // Keep the math prominent. A proof appears only as where it lives and
   // whether Lean accepts it; proof bodies are never embedded in the card.
 
-  function statementBox(item) {
+  function statementBox(item, blockIndex) {
     const card = node("section", "proof-check");
     card.setAttribute("aria-label", "Statement and proof checks: " + item.title);
-    const leanPanel = node("div");
-    leanPanel.append(node("pre", "theorem-lean", item.statementLean));
-    const {toggle, mathPanel} = views("Statement representation", item.statementLatex, item.latexError, leanPanel, "theorem-math");
+    const leanPanel = leanSourcePanel(item, blockIndex);
+    // Lean's own printing of the statement it checks: one line, implicit details shown.
+    const reprintPanel = node("div");
+    reprintPanel.append(node("pre", "theorem-lean", item.statementLean));
+    const {toggle, mathPanel} = views(item.name, "Statement representation", item.statementLatex, item.latexError, "theorem-math",
+      [{key: "lean", label: "Lean", panel: leanPanel}, {key: "reprint", label: "Reprint", panel: reprintPanel}]);
     card.append(heading("proof-heading", item.kind === "candidate" ? "Statement" : "Theorem", "theorem-label", item.title, toggle));
     if (item.caption) card.append(caption(item.caption));
     const statement = node("div", "theorem-statement");
-    statement.append(mathPanel, leanPanel);
+    statement.append(mathPanel, leanPanel, reprintPanel);
     card.append(statement);
 
     if (!item.proofs.length) {
@@ -302,7 +361,7 @@
     return details;
   }
 
-  function blockContent(block) {
+  function blockContent(block, index) {
     const output = node("div", block.kind === "markdown" ? "cell-output prose" : "lean-block");
     if (block.kind === "markdown") { renderMarkdown(block.text, output); return output; }
     if (block.pending) {
@@ -312,7 +371,7 @@
     }
     for (const item of block.items) {
       output.append(item.type === "code" ? codeBlock(item)
-        : item.statement ? statementBox(item) : definitionBox(item));
+        : item.statement ? statementBox(item, index) : definitionBox(item, index));
     }
     return output;
   }
@@ -339,7 +398,7 @@
         state = latest;
       }
       if (!state.compiling) {
-        if (editing === null && !draft) draw();
+        if (editing === null && !draft && !leanEdit) draw();
         status.textContent = state.leanError ? "Saved. Lean rejected the paper (see above)" : "Saved and compiled";
       }
     } catch (problem) {
@@ -356,6 +415,7 @@
       state = await api("/api/document", {...request, revision: state.revision});
       editing = null;
       draft = null;
+      leanEdit = null;
       draw();
       status.textContent = "Saved to " + state.paperFile + (state.compiling ? ". Lean is compiling…" : "");
       watch();
@@ -453,7 +513,7 @@
       if (live) cell.append(controls(block, index));
       if (editing === index) cell.append(editor(block, index));
       else {
-        const content = blockContent(block);
+        const content = blockContent(block, index);
         if (live && block.kind === "markdown") content.addEventListener("dblclick", () => { editing = index; draw(); });
         cell.append(content);
       }

@@ -1,12 +1,12 @@
 {
-  "built_at": "2026-11-13T05:25:00.824144+00:00",
+  "built_at": "2026-11-13T08:13:18.092948+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
   "paper_sha256": "276e6739ba3ee9f1d890bb2f5f3e2de7b0984f9eed0d4cb506f2777f0be9b24d",
   "source_sha256": "a676d562f3f7cde6e57879c242e358097f1ddfbe31dc86209c8fae51ab6bc13b",
-  "document_sha256": "35eb41dd369b18a948fdaaa4614f4ce8138b48c6f46a088a974f5051dfdf769c",
+  "document_sha256": "37c2358f41257415a698375051c81b801ebe22c3f8f07c598600f642003d29d9",
   "engine_fingerprint": "9ee9ac1676d0c65f3a201d4cb84db5c5892f23457c9dd475c069f2ee3ae8d39f",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
@@ -149,7 +149,8 @@
             ],
             "statement": true,
             "title": "Adding zero",
-            "caption": ""
+            "caption": "",
+            "source": "/-- Adding zero -/\ndef Basics.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n"
           }
         ]
       },
@@ -210,7 +211,8 @@
             ],
             "statement": true,
             "title": "Doubling is multiplying by two",
-            "caption": ""
+            "caption": "",
+            "source": "/-- Doubling is multiplying by two -/\ndef Basics.double_statement : Prop := ∀ n : ℕ, Basics.double n = 2 * n"
           }
         ]
       },
@@ -280,7 +282,8 @@
             ],
             "statement": true,
             "title": "Incorrect Theorem",
-            "caption": ""
+            "caption": "",
+            "source": "/-- Incorrect Theorem -/\ndef Namespace.name_statement : Prop :=\n  ∀ n : ℕ, n + 1 = n"
           }
         ]
       }

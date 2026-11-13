@@ -64,6 +64,9 @@ article > h1 + p { max-width:640px; font-size:18px; color:#686d65; line-height:1
 .definition-panel { min-width:0; }
 .display-math { font-size:17px; overflow-x:auto; overflow-y:hidden; padding:12px 0; scrollbar-width:thin; }
 .katex-display { margin:0 !important; }
+.lean-panel { position:relative; }
+.lean-edit-button { position:absolute; top:8px; right:8px; }
+.lean-inline-editor { width:100%; font:12px/1.7 Consolas, ui-monospace, monospace; }
 .lean-panel pre { margin:0; padding:14px 18px; background:#f5f6f1; border:1px solid #e7e9e0; border-radius:3px; overflow:auto; }
 .lean-source { font-family:Consolas,"Cascadia Code",monospace; font-size:13px; line-height:1.8; color:#344341; white-space:pre; }
 .lean-source .keyword { color:#7d4388; }

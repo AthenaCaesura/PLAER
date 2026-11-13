@@ -105,6 +105,18 @@ def edit(blocks: list[Block], request: dict) -> list[Block]:
         raise ValueError("That box no longer exists. Reload the document.")
     if op == "replace":
         blocks[index] = Block(blocks[index].kind, _clean(blocks[index].kind, request.get("text")))
+    elif op == "replace_lines":
+        # Edit one declaration inside a lean block: lines [start, start + count).
+        start, count, text = request.get("start"), request.get("count"), request.get("text")
+        lines = blocks[index].text.split("\n")
+        if blocks[index].kind != "lean" or not isinstance(text, str):
+            raise ValueError("Only Lean declarations are edited this way")
+        if not all(isinstance(n, int) and not isinstance(n, bool) for n in (start, count)) \
+                or start < 0 or count < 1 or start + count > len(lines):
+            raise ValueError("That declaration moved. Reload the document.")
+        replacement = text.replace("\r\n", "\n").strip("\n").split("\n") if text.strip() else []
+        joined = "\n".join(lines[:start] + replacement + lines[start + count:])
+        blocks[index] = Block("lean", _clean("lean", joined))
     elif op == "remove":
         del blocks[index]
     elif op == "move":
