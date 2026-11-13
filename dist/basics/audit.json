@@ -4,63 +4,150 @@
   "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
   "source": "examples/Basics/Statements.lean",
   "sourceModule": "Basics.Statements",
-  "sourceSha256": "529cd20c585397aa38792ebdde2667a12246514015cf16f06daa50891478e7ca",
+  "sourceSha256": "8e5950fce3839af852584da3b4fbeca8c16e923b96332966ab06d00e79bd3f07",
   "checks": [
     {
       "file": "proofs/File.lean",
       "declaration": "Basics.Proofs.euler",
+      "name": "Basics.euler_statement",
+      "proofDeclaration": "Basics.Proofs.euler",
       "result": {
         "ok": false,
-        "pending": true
-      }
+        "diagnostics": "Expected type must not contain free variables\n  Nat.Prime (n ^ 2 + n + 41)\n\nHint: Use the `+revert` option to automatically clean up and revert free variables"
+      },
+      "proofFile": "examples/Basics/proofs/File.lean",
+      "proofUrl": "sources/proofs/File.lean",
+      "checkerUrl": "checks/Basics_euler_statement--Basics_Proofs_euler.lean",
+      "auditUrl": "checks/Basics_euler_statement--Basics_Proofs_euler.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
+      "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
+      "statementHash": "538884409",
+      "wallMs": 1332
     },
     {
       "file": "proofs/Missing.lean",
       "declaration": "Basics.Proofs.euler_missing",
+      "name": "Basics.euler_statement",
+      "proofDeclaration": "Basics.Proofs.euler_missing",
+      "statementHash": "538884409",
       "result": {
         "ok": false,
-        "pending": true
+        "diagnostics": "Proof file not found: proofs/Missing.lean"
       }
     },
     {
       "file": "proofs/Gauss.lean",
       "declaration": "Basics.Proofs.gauss_by_induction",
+      "leanVersion": "4.35.0",
+      "name": "Basics.gauss_statement",
+      "proofDeclaration": "Basics.Proofs.gauss_by_induction",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "985449252",
+      "proofFile": "examples/Basics/proofs/Gauss.lean",
+      "proofUrl": "sources/proofs/Gauss.lean",
+      "checkerUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean",
+      "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
+      "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
+      "wallMs": 1322
     },
     {
       "file": "proofs/Gauss.lean",
       "declaration": "Basics.Proofs.gauss_by_steps",
+      "leanVersion": "4.35.0",
+      "name": "Basics.gauss_statement",
+      "proofDeclaration": "Basics.Proofs.gauss_by_steps",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "985449252",
+      "proofFile": "examples/Basics/proofs/Gauss.lean",
+      "proofUrl": "sources/proofs/Gauss.lean",
+      "checkerUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean",
+      "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
+      "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
+      "wallMs": 1315
     },
     {
       "file": "proofs/Primes.lean",
       "declaration": "Basics.Proofs.hundred",
+      "leanVersion": "4.35.0",
+      "name": "Basics.hundred_statement",
+      "proofDeclaration": "Basics.Proofs.hundred",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [
+          "propext"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1879992750",
+      "proofFile": "examples/Basics/proofs/Primes.lean",
+      "proofUrl": "sources/proofs/Primes.lean",
+      "checkerUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.lean",
+      "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
+      "proofSha256": "3af2be9df859035b97d7eac4979b968fedba0f3bca9eb7424f350ab48ffbd738",
+      "wallMs": 1275
     },
     {
       "file": "proofs/Notation.lean",
       "declaration": "Basics.Proofs.pascal",
+      "leanVersion": "4.35.0",
+      "name": "Basics.pascal_statement",
+      "proofDeclaration": "Basics.Proofs.pascal",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "2248319565",
+      "proofFile": "examples/Basics/proofs/Notation.lean",
+      "proofUrl": "sources/proofs/Notation.lean",
+      "checkerUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.lean",
+      "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
+      "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
+      "wallMs": 1273
     },
     {
       "file": "proofs/Notation.lean",
       "declaration": "Basics.Proofs.sin_cos",
+      "leanVersion": "4.35.0",
+      "name": "Basics.sin_cos_statement",
+      "proofDeclaration": "Basics.Proofs.sin_cos",
       "result": {
-        "ok": false,
-        "pending": true
-      }
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+        "ok": true
+      },
+      "statementHash": "1396079601",
+      "proofFile": "examples/Basics/proofs/Notation.lean",
+      "proofUrl": "sources/proofs/Notation.lean",
+      "checkerUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean",
+      "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
+      "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
+      "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
+      "wallMs": 1306
     }
   ]
 }

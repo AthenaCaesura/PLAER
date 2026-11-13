@@ -1,4 +1,10 @@
+\operatorname{triangle}(n) \coloneqq \sum_{i=0}^{n} i
 \begin{aligned}x &: \mathbb{N} \\ y &: \mathbb{N}\end{aligned}
-\begin{aligned}\operatorname{op} &: ( \alpha , \alpha ) \to \alpha \\ \operatorname{unit} &: \alpha \\ \operatorname{op\_assoc} &: \forall a , b , c \in \alpha ,\; \operatorname{op} ( \operatorname{op} ( a , b ) , c ) = \operatorname{op} ( a , \operatorname{op} ( b , c ) ) \\ \operatorname{op\_unit} &: \forall a \in \alpha ,\; \operatorname{op} ( a , \operatorname{unit} ) = a\end{aligned}
-\begin{aligned}\operatorname{zero} &: \operatorname{even} ( 0 ) \\ \operatorname{step} &: \forall n \in \mathbb{N} ,\; \operatorname{even} ( n ) \implies \operatorname{even} ( n + 2 )\end{aligned}
-\forall n \in \mathbb{N} ,\; 2 \cdot \operatorname{triangle} ( n ) = n \cdot ( n + 1 )
+\begin{aligned}\operatorname{op} &: (\alpha, \alpha) \to \alpha \\ \operatorname{unit} &: \alpha \\ \operatorname{op\_assoc} &: \forall a, b, c \in \alpha,\; \operatorname{op}(\operatorname{op}(a, b), c) = \operatorname{op}(a, \operatorname{op}(b, c)) \\ \operatorname{op\_unit} &: \forall a \in \alpha,\; \operatorname{op}(a, \operatorname{unit}) = a\end{aligned}
+\begin{aligned}\operatorname{zero} &: \operatorname{even}(0) \\ \operatorname{step} &: \forall n \in \mathbb{N},\; \operatorname{even}(n) \implies \operatorname{even}(n + 2)\end{aligned}
+\forall n \in \mathbb{N},\; n > 2 \land 2 \mid n \implies (\exists p, q \in \mathbb{N},\; \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = n)
+\forall n \in \mathbb{N},\; \operatorname{Prime}(n^{2} + n + 41)
+\forall n \in \mathbb{N},\; 2 \cdot \operatorname{triangle}(n) = n \cdot (n + 1)
+\operatorname{goldbach} \implies (\exists p, q \in \mathbb{N},\; \operatorname{Prime}(p) \land \operatorname{Prime}(q) \land p + q = 100)
+\forall n, k \in \mathbb{N},\; \binom{n + 1}{k + 1} = \binom{n}{k} + \binom{n}{k + 1}
+\forall x \in \mathbb{R},\; \sin(x)^{2} + \cos(x)^{2} = 1

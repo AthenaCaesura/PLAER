@@ -12,5 +12,5 @@
   "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
   "proofSha256": "905057e9ed6075ef53a061dfffd1b77ed6dd2f1ad1ee1230dfba564a39c5ab93",
   "statementHash": "2894794718",
-  "wallMs": 1244
+  "wallMs": 1492
 }

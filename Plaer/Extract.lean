@@ -1,14 +1,12 @@
 module
 public import Plaer.Check
-public import Plaer.Formula.Reflect
-public import Plaer.Formula.RoundTrip
-
+public import Plaer.Latex.Print
 
 public section
 
 open Lean Meta
-open Plaer.Formula (statementFormula signatureLatex definitionLatex rowLatex bindParams
-  notesOf latexOf constName Scope)
+open Plaer.Latex (statementLatex signatureLatex definitionLatex rowLatex typeLatex nameLatex
+  entries entryFormLatex entryMeaning)
 
 namespace Plaer
 
@@ -24,12 +22,12 @@ meta def declarationSource (name : Name) : MetaM String := do
   let stop := fileMap.ofPosition ranges.range.endPos
   return (String.Pos.Raw.extract source start stop).trimAscii.copy
 
-/-- LaTeX fields for a box. Every formula is kernel-checked to mean the declaration
-(`Plaer.Formula.Reflect`); one outside the formula language, or failing the check, does
-not fail the document: the box keeps its Lean view and reports the reason. -/
-private meta def latexFields (field : String) (render : MetaM String) : MetaM (List (String × Json)) := do
+/-- LaTeX fields for a box. Every formula is read back by Lean, through the dictionary,
+and must be exactly the declaration (`Plaer.Latex.checkLatex`); one that is not does not
+fail the document: the box keeps its Lean view and reports the reason. -/
+private meta def latexFields (field : String) (render : Elab.TermElabM String) : MetaM (List (String × Json)) := do
   try
-    return [(field, toJson (← render))]
+    return [(field, toJson (← render.run'))]
   catch error =>
     return [(field, Json.null), ("latexError", toJson (← error.toMessageData.toString))]
 
@@ -49,18 +47,14 @@ meta def statementReport (name : Name) : MetaM Json := do
     ("statementHash", toJson (toString (hash proposition))),
     ("sourceModule", toJson moduleName.toString),
     ("leanVersion", toJson Lean.versionString)] ++
-    (← try
-        let (r, latex) ← statementFormula proposition
-        pure [("statementLatex", toJson latex), ("notes", toJson (notesOf r))]
-      catch error =>
-        pure [("statementLatex", Json.null), ("latexError", toJson (← error.toMessageData.toString))])
+    (← latexFields "statementLatex" (statementLatex proposition))
 
 /-- Generic definition data. -/
 meta def definitionReport (name : Name) : MetaM Json := do
   let info ← getConstInfoDefn name
   let moduleName := (← findModuleOf? name).getD .anonymous
   -- Its type, as Lean elaborated it: `triangle : ℕ → ℕ`, domain and range first.
-  let signature ← try pure (some (← signatureLatex name)) catch _ => pure none
+  let signature ← try pure (some (← (signatureLatex name).run')) catch _ => pure none
   return Json.mkObj <| [
     ("name", toJson name.toString), ("kind", toJson "definition"),
     ("signatureLatex", toJson signature),
@@ -70,8 +64,8 @@ meta def definitionReport (name : Name) : MetaM Json := do
     (← latexFields "latex" (definitionLatex name))
 
 /-- A structure or class lists its fields, an inductive type its constructors, each
-with its type. Each row is checked like any formula: a field whose type is a proposition
-is a formula over the parameters and the fields before it.
+with its type. Each row is checked like any formula, with the parameters and the fields
+before it in scope, so a law reads `\operatorname{op}(a, b)`.
 
     Monoid(α) : Type   for α : Type        even : ℕ → Prop
       op : (α, α) → α                        zero : even(0)
@@ -79,53 +73,33 @@ is a formula over the parameters and the fields before it.
 -/
 meta def inductiveReport (name : Name) (info : InductiveVal) : MetaM Json := do
   let env ← getEnv
-  let label (n : String) : MetaM String := return latexOf [.name (← Plaer.Formula.displayNameM n)]
   let signature ← try
       forallBoundedTelescope info.type (some info.numParams) fun params result => do
         -- a family of propositions, `even : ℕ → Prop`, has a checked type line
         unless (← whnf result).isSort do
           unless params.isEmpty do throwError "a family with parameters"
-          return some (← signatureLatex name)
-        let head ← label name.getString!
-        let names ← params.toList.mapM fun p => do label (← p.fvarId!.getDecl).userName.toString
+          return some (← (signatureLatex name).run')
+        let head ← nameLatex name
+        let names ← params.toList.mapM fun p => do nameLatex (← p.fvarId!.getDecl).userName
         -- `Monoid(α) : Type for α : Type`: a type and its parameters, in a fixed template
         let given ← params.toList.mapM fun p => do
           let decl ← p.fvarId!.getDecl
           unless (← whnf decl.type).isType do throwError "a parameter that is not a type"
-          return (← label decl.userName.toString) ++ " : \\mathbf{Type}"
-        return some (head ++ (if names.isEmpty then "" else " ( " ++ " , ".intercalate names ++ " )") ++
-          " : \\mathbf{Type}" ++ (if given.isEmpty then "" else " \\quad \\text{for } " ++ " , ".intercalate given))
+          return (← nameLatex decl.userName) ++ " : \\mathbf{Type}"
+        return some (head ++ (if names.isEmpty then "" else "(" ++ ", ".intercalate names ++ ")") ++
+          " : \\mathbf{Type}" ++ (if given.isEmpty then "" else " \\quad \\text{for } " ++ ", ".intercalate given))
     catch _ => pure none
-  let rows : MetaM (List String) := do
+  let rows : Elab.TermElabM (List String) := do
     if isStructure env name then
       forallTelescope (← getConstInfo info.ctors.head!).type fun binders _ => do
-        let params := binders[:info.numParams].toArray
-        let fields := binders[info.numParams:].toArray
-        let (vars, scope) ← (bindParams params (implicitOk := true)).run {}
-        let mut vars := vars
-        let mut scope := scope
-        let mut rows := #[]
-        for i in [0:fields.size] do
-          let field := fields[i]!
+        binders[info.numParams:].toList.mapM fun field => do
           let decl ← field.fvarId!.getDecl
-          let row ← rowLatex scope (params ++ fields[:i].toArray) vars decl.type
-          rows := rows.push ((← label decl.userName.toString) ++ " &: " ++ row)
-          -- later fields may mention this one by name
-          unless ← isProp decl.type do
-            let ((t, n), s) ← (show Plaer.Formula.ReflectM (Plaer.Formula.Ty × Plaer.Formula.Name) from do
-                let t ← Plaer.Formula.reflectTy decl.type
-                let n ← Plaer.Formula.displayName decl.userName.toString
-                modify fun (s : Scope) => { s with vars := s.vars.push (field.fvarId!, n) }
-                return (t, n)).run scope
-            scope := s
-            vars := (n, t, field) :: vars
-        return rows.toList
+          return (← nameLatex decl.userName) ++ " &: " ++ (← rowLatex decl.type)
     else
       info.ctors.mapM fun ctor => do
-        forallBoundedTelescope (← getConstInfo ctor).type (some info.numParams) fun params type => do
-          let (vars, scope) ← (bindParams params (implicitOk := true)).run {}
-          return (← label ctor.getString!) ++ " &: " ++ (← rowLatex scope params vars type)
-  let body : MetaM String := do
+        forallBoundedTelescope (← getConstInfo ctor).type (some info.numParams) fun _ type => do
+          return (← nameLatex (Name.mkSimple ctor.getString!)) ++ " &: " ++ (← rowLatex type)
+  let body : Elab.TermElabM String := do
     return "\\begin{aligned}" ++ " \\\\ ".intercalate (← rows) ++ "\\end{aligned}"
   return Json.mkObj <| [
     ("name", toJson name.toString), ("kind", toJson "definition"),
@@ -133,6 +107,15 @@ meta def inductiveReport (name : Name) (info : InductiveVal) : MetaM Json := do
     ("source", toJson (← declarationSource name)),
     ("leanVersion", toJson Lean.versionString)] ++
     (← latexFields "latex" body)
+
+/-- A dictionary entry: its LaTeX form, and the Lean definition it stands for. -/
+meta def notationReport (name : Name) (entry : Plaer.Latex.Entry) : MetaM Json := do
+  let (meaning, function, type) ← entryMeaning entry
+  return Json.mkObj [
+    ("name", toJson name.toString), ("kind", toJson "notation"),
+    ("formLatex", toJson (← entryFormLatex entry)),
+    ("meaningLean", toJson meaning), ("leanFunction", toJson function), ("typeLean", toJson type),
+    ("source", toJson (← declarationSource name))]
 
 /-- The box for one declaration: a statement (a theorem, or a closed `Prop`
 definition awaiting proofs), a definition, or anything else shown as Lean only. -/
@@ -147,8 +130,9 @@ meta def declarationReport (name : Name) : MetaM Json := do
     ("name", toJson name.toString), ("kind", toJson "axiom"),
     ("statementLean", toJson ("axiom " ++ name.toString ++ " : " ++ (← ppExpr info.type).pretty)),
     ("leanVersion", toJson Lean.versionString)] ++
-    (← latexFields "statementLatex" (return (← statementFormula info.type).2))
+    (← latexFields "statementLatex" (statementLatex info.type))
   | .defnInfo definition =>
+    if let some entry := (entries (← getEnv)).find? (·.decl == name) then return ← notationReport name entry
     if definition.type.isProp then statementReport name else definitionReport name
   | .inductInfo info => inductiveReport name info
   | _ => plain "other"
@@ -160,6 +144,9 @@ meta def reportOf (names : Array Name) : MetaM Json := do
   let mut spans : Array (Nat × Nat × Name) := #[]
   for name in names do
     if name.isInternal then continue
+    -- a syntax declaration, such as a dictionary entry's LaTeX form, is not a box
+    if let some info := env.find? name then
+      if info.type.isConstOf ``Lean.ParserDescr || info.type.isConstOf ``Lean.TrailingParserDescr then continue
     let some ranges ← findDeclarationRanges? name | continue
     spans := spans.push (ranges.range.pos.line, ranges.range.endPos.line, name)
   -- Outermost first: earlier start, then later end, then the shorter name.

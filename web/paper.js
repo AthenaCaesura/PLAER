@@ -237,6 +237,29 @@
 
   // ── Definition boxes ──────────────────────────────────────────────────────
 
+  // A dictionary entry: a piece of LaTeX, and the Lean it means. Every formula
+  // in every paper is read back by Lean through these entries.
+  function notationBox(item, blockIndex) {
+    const card = node("section", "definition notation");
+    card.setAttribute("aria-label", item.title);
+    const leanPanel = leanSourcePanel(item, blockIndex);
+    const meaning = node("p", "notation-meaning");
+    meaning.append("Means, in Lean: ", node("code", "", item.meaningLean));
+    if (item.leanFunction && item.leanFunction !== item.meaningLean) {
+      meaning.append(", that is ", node("code", "", item.leanFunction));
+    }
+    meaning.append(", with ", node("code", "", item.typeLean));
+    const {toggle, mathPanel} = views(item.name, "Notation representation", item.formLatex, null, "display-math",
+      [{key: "lean", label: "Lean", panel: leanPanel}]);
+    mathPanel.append(meaning);
+    card.append(heading("definition-heading", "Notation", "", item.title, toggle, sourceLink(item)));
+    const body = node("div", "definition-body");
+    body.append(mathPanel, leanPanel);
+    card.append(body);
+    return card;
+  }
+
+
   function definitionBox(item, blockIndex) {
     const card = node("section", "definition");
     card.setAttribute("aria-label", item.title);
@@ -402,6 +425,7 @@
     }
     for (const item of block.items) {
       output.append(item.type === "code" ? codeBlock(item)
+        : item.kind === "notation" ? notationBox(item, index)
         : item.statement ? statementBox(item, index) : definitionBox(item, index));
     }
     return output;

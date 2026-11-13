@@ -34,7 +34,7 @@ Python, and Lean.
 | `tests/python/test_document.py` | A throwaway paper through Lean: every box kind, and proofs that must be rejected. |
 | `tests/python/test_server.py` | Editing and checking through the local server. |
 | `tests/python/test_branding.py` | The embedded SVG assets. |
-| `tests/lean/Formula.lean`, `tests/js/test_latex.cjs` | Checked formulas, refusals, and KaTeX accepting the output. |
+| `tests/lean/Latex.lean`, `tests/js/test_latex.cjs` | Claims read back exactly through the dictionary, refusals, and KaTeX accepting the output. |
 
 When you change the proof check, confirm that a correct proof succeeds and
 that a proof of a different proposition, a `sorry`, and a broken file all fail.

@@ -38,13 +38,11 @@ error too. A proof may use only Lean's own axioms (`propext`,
 `Classical.choice`, `Quot.sound`). Imports
 come before all other Lean, and the editor refuses to move a box above them.
 
-Every box's LaTeX is a formula of PLAER's formula language, checked by Lean's
-kernel to mean exactly the declaration (see the
-[architecture guide](architecture.md#mathematical-notation)). The language has:
-`ℕ`, `ℤ` and `Prop`; the paper's own types and names; `∀` and `∃` over a type;
-`∧ ∨ ¬ ⟹ ⇔`; `= ≠ < ≤ > ≥`; `+ ·` and powers; subtraction in `ℤ`; and, in `ℕ`,
-subtraction `∸` and division `⌊a/b⌋`. Anything else shows "No LaTeX" with the
-Lean view.
+Every box's LaTeX is read back by Lean through the
+[dictionary](../examples/Dictionary/Paper.md), and must be exactly the
+declaration. A paper imports it with `import Dictionary.Statements`. A claim that
+uses something with no entry shows "No LaTeX" with the Lean view; add an entry
+with `latex_notation` to the dictionary paper.
 
 Write Lean the way it should read: state each claim about values, with every
 variable and its type quantified up front, and hypotheses joined with `∧` before
@@ -104,9 +102,13 @@ supported in proof files.
 ## LaTeX for your own definitions
 
 Names the paper defines print as themselves: a claim that uses
-`Basics.triangle n` reads $\operatorname{triangle}(n)$. A Mathlib name is part
-of the language only once it has a fixed notation and meaning in
-[Plaer/Formula/](../Plaer/Formula/).
+`Basics.triangle n` reads $\operatorname{triangle}(n)$. A Mathlib name needs a
+dictionary entry, for example:
+
+```lean
+/-- The number of ways to choose k things from n -/
+latex_notation Dictionary.choose (n k : ℕ) := Nat.choose n k as:max "\\binom{" n:0 "}{" k:0 "}"
+```
 
 ## Write useful notes
 

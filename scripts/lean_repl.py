@@ -21,7 +21,7 @@ from toolchain import lean_invocation
 
 REPL = ROOT / ".lake" / "packages" / "REPL" / ".lake" / "build" / "bin" / "repl"
 IMPORT = re.compile(r"\s*import\s+(\S+)\s*(--.*)?\Z")
-ENGINE = ["Plaer.Extract"]          # imports Plaer.Check and Plaer.Formula
+ENGINE = ["Plaer.Extract"]          # imports Plaer.Check and Plaer.Latex
 RESTART_AFTER = 400                 # the REPL keeps every environment; start afresh now and then
 
 

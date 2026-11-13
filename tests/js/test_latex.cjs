@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const katex = require('../../web/vendor/katex.min.js');
 const fixtures = JSON.parse(fs.readFileSync('build/latex-tests.json', 'utf8'));
-assert(fixtures.length >= 6, 'Run tests/lean/Formula.lean before checking KaTeX');
+assert(fixtures.length >= 6, 'Run tests/lean/Latex.lean before checking KaTeX');
 for (const {source, latex} of fixtures) {
   assert(!latex.includes('\\operatorname{Lean}'), `Debug fallback in ${source}`);
   const html = katex.renderToString(latex, {throwOnError: true, strict: 'error', displayMode: true});

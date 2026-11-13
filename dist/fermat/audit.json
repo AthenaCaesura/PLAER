@@ -4,7 +4,7 @@
   "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
   "source": "examples/Fermat/Statements.lean",
   "sourceModule": "Fermat.Statements",
-  "sourceSha256": "e114c39a06d2df7b24bce6ea42307e3564719dedba1b98611afcc0bc711e916e",
+  "sourceSha256": "334dfb7b3afe2558c13ca4961ea283f145fbdca5662b50f59760b6c07b394e53",
   "checks": [
     {
       "file": "proofs/Last.lean",
@@ -22,7 +22,7 @@
       "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
       "proofSha256": "905057e9ed6075ef53a061dfffd1b77ed6dd2f1ad1ee1230dfba564a39c5ab93",
       "statementHash": "2894794718",
-      "wallMs": 1244
+      "wallMs": 1492
     },
     {
       "file": "proofs/Little.lean",
@@ -46,7 +46,7 @@
       "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
       "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
       "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-      "wallMs": 1168
+      "wallMs": 1433
     }
   ]
 }

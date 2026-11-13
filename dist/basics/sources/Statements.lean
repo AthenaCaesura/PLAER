@@ -5,6 +5,7 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Data.Nat.Prime.Defs
 import Mathlib.Algebra.BigOperators.Intervals
+import Dictionary.Statements
 -- ```
 
 -- A paper holds the things Lean has: definitions, and claims. A claim is a conjecture until a proof of it is checked; then it is a theorem. PLAER shows each one in its own kind of box.
@@ -60,7 +61,7 @@ inductive Basics.even : ℕ → Prop
 -- ```lean
 /-- Goldbach's conjecture -/
 def Basics.goldbach : Prop :=
-  ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n
+  ∀ n : ℕ, n > 2 ∧ 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n
 -- ```
 
 -- A conjecture can be false. Euler noticed that $n^2 + n + 41$ is prime for $n = 0, 1, \dots, 39$, but at $n = 40$ it is $41^2$. The proof attached here is wrong, and the second proof file does not exist, so the claim stays a conjecture:

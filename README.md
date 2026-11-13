@@ -70,6 +70,7 @@ dist/fermat/index.html            the document, as one offline HTML file
 | Project | What it illustrates | Paper | Offline document |
 | --- | --- | --- | --- |
 | Basics | Every kind of box, with a short explanation of each, and every answer a play button can give. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
+| Dictionary | Every piece of LaTeX PLAER uses, and the Lean definition it means. | [Dictionary/Paper.md](examples/Dictionary/Paper.md) | [dist/dictionary](dist/dictionary/index.html) |
 | Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/Paper.md](examples/Fermat/Paper.md) | [dist/fermat](dist/fermat/index.html) |
 
 ## View a document
@@ -121,7 +122,7 @@ Run `python scripts/check.py` to build every example and run every test.
 
 | Location | Purpose |
 | --- | --- |
-| [Plaer/](Plaer/) | Lean: the formula language (meaning, LaTeX, round-trip proof), declaration reports, and the exact-statement proof check. |
+| [Plaer/](Plaer/) | Lean: LaTeX as a language Lean reads, declaration reports, and the exact-statement proof check. |
 | [examples/](examples/) | Independent projects: a paper, its generated Lean file, and separate proofs. |
 | [scripts/](scripts/) | The paper format, the build, proof checks, packaging, and the local server. |
 | [web/](web/) | The page: one script, one stylesheet, logos, and bundled KaTeX and Marked. |
@@ -132,17 +133,19 @@ Run `python scripts/check.py` to build every example and run every test.
 
 ## How the LaTeX is checked
 
-A box's LaTeX is never a print-out of Lean's expression. Each claim is written
-as a formula of a small language defined in Lean ([Plaer/Formula/](Plaer/Formula/)),
-which gives every formula its meaning (`denote`) and its LaTeX (`render`):
+Every formula PLAER shows is LaTeX that Lean itself reads. The
+[dictionary](examples/Dictionary/Paper.md) is a PLAER paper: each entry is a
+piece of LaTeX and the Lean definition it means, such as
+$a \mathbin{\dot{-}} b$ for `Nat.sub a b`. A box shows its LaTeX only after
+Lean has read it back, through the dictionary, and found exactly the
+declaration, confirmed by Lean's kernel. To trust a formula in any paper, read
+the dictionary's entries once; nothing else stands between the LaTeX and the
+Lean.
 
-- Lean's kernel checks, for every box, that the formula's meaning is exactly
-  the declaration's statement.
-- A theorem proves that the LaTeX determines the formula: reading it back gives
-  the same formula (`Plaer.Formula.parse_render`).
-
-A claim the language cannot express shows its Lean view, and says what is
-missing. Papers are written in the style the language expresses.
+A claim that uses something the dictionary has no entry for shows its Lean
+view, and says what is missing. Papers are written in the style the dictionary
+reads: every variable quantified up front with its type, and hypotheses joined
+with `∧` before one `→`.
 
 See the [architecture guide](docs/architecture.md) and the
 [third-party notices](THIRD_PARTY_NOTICES.md).

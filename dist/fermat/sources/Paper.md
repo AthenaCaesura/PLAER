@@ -2,6 +2,7 @@
 
 ```lean
 import Mathlib.FieldTheory.Finite.Basic
+import Dictionary.Statements
 ```
 
 ```lean

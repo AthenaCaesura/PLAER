@@ -1,0 +1,9 @@
+{
+  "project": "dictionary",
+  "paper": "examples/Dictionary/Paper.md",
+  "execution": "The paper's Lean compiles as one module. Each play button compiles only its attached proof file, with an appended exact-proposition audit.",
+  "source": "examples/Dictionary/Statements.lean",
+  "sourceModule": "Dictionary.Statements",
+  "sourceSha256": "6faa06611dcb9b60c8d2156c564566efb977fb45abb1c9388a9d531bc4b1277e",
+  "checks": []
+}

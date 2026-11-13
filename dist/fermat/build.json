@@ -1,18 +1,18 @@
 {
-  "built_at": "2026-11-13T20:30:11.574816+00:00",
+  "built_at": "2026-11-13T21:28:07.645752+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
-  "paper_sha256": "5a045a9388a58e7f50ec0493a6d7dfb63eb140c4c88ddbbfd3245e4f86fec3fe",
-  "source_sha256": "e114c39a06d2df7b24bce6ea42307e3564719dedba1b98611afcc0bc711e916e",
-  "document_sha256": "88e9915479f35608fe88434714b2ee4c6ee7d260e4e069d45f556fd78d312e49",
-  "engine_fingerprint": "8bda243885165827d524528d26577d2810edca0a42690eeaa20d07c58e1d119c",
+  "paper_sha256": "e181ed7b2d7ab2eadd77a9ad9517fef82c275675695d7da13a9a0c81c6ab6410",
+  "source_sha256": "334dfb7b3afe2558c13ca4961ea283f145fbdca5662b50f59760b6c07b394e53",
+  "document_sha256": "0c52f2ccc3594e0544cf600c0579c930bb1f3980fab59aaebfa7035135d5daed",
+  "engine_fingerprint": "931ab07675ae9f961daa84c1218f1e91ca9dbcaecf8cc2dbf9807b9652113066",
   "latex_generated_by": "Plaer/Formula (kernel-checked formulas; Plaer.Formula.parse_render)",
   "state": {
     "project": "fermat",
     "title": "Two theorems of Fermat",
-    "revision": "5a045a9388a58e7f50ec0493a6d7dfb63eb140c4c88ddbbfd3245e4f86fec3fe",
+    "revision": "e181ed7b2d7ab2eadd77a9ad9517fef82c275675695d7da13a9a0c81c6ab6410",
     "paperFile": "examples/Fermat/Paper.md",
     "paperUrl": "sources/Paper.md",
     "sourceFile": "examples/Fermat/Statements.lean",
@@ -27,31 +27,30 @@
       },
       {
         "kind": "lean",
-        "text": "import Mathlib.FieldTheory.Finite.Basic",
+        "text": "import Mathlib.FieldTheory.Finite.Basic\nimport Dictionary.Statements",
         "line": 4,
         "items": [
           {
             "type": "code",
-            "text": "import Mathlib.FieldTheory.Finite.Basic"
+            "text": "import Mathlib.FieldTheory.Finite.Basic\nimport Dictionary.Statements"
           }
         ]
       },
       {
         "kind": "lean",
         "text": "/-- Fermat's last theorem -/\ndef Fermat.last_statement : Prop :=\n  ∀ n a b c : ℕ, n > 2 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a ^ n + b ^ n ≠ c ^ n\n-- proof: proofs/Last.lean Fermat.Proofs.last",
-        "line": 8,
+        "line": 9,
         "items": [
           {
             "type": "declaration",
             "doc": "Fermat's last theorem",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 8,
+            "line": 9,
             "name": "Fermat.last_statement",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "2894794718",
-            "statementLatex": "\\forall n , a , b , c \\in \\mathbb{N} ,\\; n > 2 \\land a > 0 \\land b > 0 \\land c > 0 \\implies a ^{ n } + b ^{ n } \\neq c ^{ n }",
+            "statementLatex": "\\forall n, a, b, c \\in \\mathbb{N},\\; n > 2 \\land a > 0 \\land b > 0 \\land c > 0 \\implies a^{n} + b^{n} \\neq c^{n}",
             "statementLean": "def Fermat.last_statement : Prop := ∀ (n a b c : ℕ), n > 2 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a ^ n + b ^ n ≠ c ^ n",
             "block": 1,
             "offset": 0,
@@ -73,7 +72,7 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "905057e9ed6075ef53a061dfffd1b77ed6dd2f1ad1ee1230dfba564a39c5ab93",
                 "statementHash": "2894794718",
-                "wallMs": 1244
+                "wallMs": 1492
               }
             ],
             "statement": true,
@@ -86,24 +85,23 @@
       {
         "kind": "markdown",
         "text": "## Reading the last theorem\n\nFor an integer exponent $n>2$, no positive integers $a,b,c$ satisfy $a^n+b^n=c^n$. All four variables are natural numbers; the positivity assumptions exclude zero.\n\nFor an application involving integer solutions, first match the variables and check every assumption. This note is an explanation, not a proof of that application.\n\nThe attached demonstration proof is deliberately wrong: from $n>2$ it tries to conclude the required inequality using only `Nat.ne_of_lt hn`. **Not proved** describes that attempt; Fermat's last theorem itself is true.",
-        "line": 14
+        "line": 15
       },
       {
         "kind": "lean",
         "text": "/-- Fermat's little theorem -/\ndef Fermat.little_statement : Prop :=\n  ∀ (p : ℕ) (a : ℤ), p.Prime → Int.ModEq (p : ℤ) (a ^ p) a\n-- proof: proofs/Little.lean Fermat.Proofs.little",
-        "line": 23,
+        "line": 24,
         "items": [
           {
             "type": "declaration",
             "doc": "Fermat's little theorem",
             "kind": "candidate",
-            "latexError": "No notation for Nat.Prime",
             "leanVersion": "4.35.0",
-            "line": 23,
+            "line": 24,
             "name": "Fermat.little_statement",
             "sourceModule": "[anonymous]",
             "statementHash": "737928072",
-            "statementLatex": null,
+            "statementLatex": "\\forall p \\in \\mathbb{N},\\; \\forall a \\in \\mathbb{Z},\\; \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{(p : \\mathbb{Z})}",
             "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
             "block": 2,
             "offset": 0,
@@ -131,7 +129,7 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 1168
+                "wallMs": 1433
               }
             ],
             "statement": true,
@@ -144,12 +142,12 @@
       {
         "kind": "markdown",
         "text": "## Reading the little theorem\n\nIf $p$ is prime, every integer $a$ satisfies $a^p\\equiv a\\pmod p$. The prime $p$ specifies the modulus, and $a$ may be any integer. For example, $2^5=32\\equiv2\\pmod5$, which Lean confirms:",
-        "line": 29
+        "line": 30
       },
       {
         "kind": "lean",
         "text": "example : Int.ModEq 5 (2 ^ 5) 2 := by decide",
-        "line": 34,
+        "line": 35,
         "items": [
           {
             "type": "code",
@@ -160,7 +158,7 @@
       {
         "kind": "markdown",
         "text": "When applying the statement to modular arithmetic, identify the modulus and establish that it is prime. The attached proof applies Mathlib's `Int.ModEq.pow_prime_eq_self`; its play button checks that proof against this statement.",
-        "line": 37
+        "line": 38
       }
     ]
   }

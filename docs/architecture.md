@@ -76,22 +76,19 @@ again.
 
 ## Mathematical notation
 
-LaTeX comes from a formula language defined in Lean, in
-[Plaer/Formula/](../Plaer/Formula/):
+LaTeX is a language Lean reads, defined in [Plaer/Latex/](../Plaer/Latex/):
 
 | File | Role |
 | --- | --- |
-| `Syntax.lean` | Types and formulas. |
-| `Semantics.lean` | `denote`: each formula's meaning, one line per symbol. This is the table a reader trusts. |
-| `Latex.lean` | `render`: tokens by precedence, spelled out with single spaces. |
-| `Parse.lean`, `RoundTrip.lean` | `lex` and `parse`, and the theorem that the LaTeX determines the formula. |
-| `Reflect.lean` | Reads a declaration as a formula (not trusted), and has Lean's kernel check that the formula's meaning is exactly the declaration. |
+| `Grammar.lean` | The built-in forms: quantifiers, names, numerals, brackets, application, types, sums. `⟪ … ⟫` reads LaTeX as a Lean term. |
+| `Dictionary.lean` | The `latex_notation` command: one dictionary entry, a reducible Lean definition and the LaTeX form that means it. |
+| `Print.lean` | Writes a declaration as LaTeX through the dictionary (not trusted), and `checkLatex`: Lean reads the LaTeX back, and it must be exactly the declaration, confirmed by the kernel. |
 
-A declaration outside the language, or a formula that fails the kernel check,
-has no LaTeX: its box keeps its Lean view and reports the reason. What remains
-outside any proof is that KaTeX draws the LaTeX as written, and that a reader
-reads each symbol as `Semantics.lean` defines it.
-
+The entries themselves are [examples/Dictionary/Paper.md](../examples/Dictionary/Paper.md),
+which papers import as `Dictionary.Statements`. Only the paper's own names are
+written by name; anything imported needs an entry. What remains outside any
+check is that KaTeX draws the LaTeX as written, and that a reader reads each
+entry's LaTeX as its Lean definition says.
 ## The page and the server
 
 `web/paper.js` draws the document from a JSON state embedded in the HTML:
