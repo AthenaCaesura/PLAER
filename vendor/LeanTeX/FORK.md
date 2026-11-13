@@ -20,6 +20,10 @@ Local changes:
   remains the default for upstream examples. PLAER always enables strict mode.
 - Reject parameter-introspection failures rather than silently dropping
   function arguments.
+- Print consecutive `∀` binders over the same type as one quantifier,
+  `\forall a, b : \mathbb{N}`, and update `test/basic.lean` to match.
+- Add `Config.collectHypotheses`, off by default, to print `A → B → C` as
+  `A \land B \implies C`. PLAER turns it on.
 
 Project-specific Mathlib notation is in `Plaer/Latex.lean`, using this fork's
 `latex_pp_const_rule`, `latex_pp_app_rules`, and `def_latex_binop` extension points.

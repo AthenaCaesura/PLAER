@@ -73,19 +73,19 @@ variable (b : Nat) (c : Nat → Real → Real) (x : Real)
 #guard_msgs in #latex (n : Nat) → Nat → Fin n
 /-- info: \prod_{m : \mathbb{N}} \prod_{n : \mathbb{N}} \mathbb{N}_{< m + n} -/
 #guard_msgs in #latex (m n : Nat) → Fin (m + n)
-/-- info: \forall n : \mathbb{N},\ \forall m : \mathbb{N},\ n < m \implies n < m + 1 -/
+/-- info: \forall n, m : \mathbb{N},\ n < m \implies n < m + 1 -/
 #guard_msgs in #latex ∀ (n m : Nat), n < m → n < m + 1
 /-- info: \forall n : \mathbb{N},\ 1 = 1 -/
 #guard_msgs in #latex ∀ (n : Nat), 1 = 1
 /-- info: \prod_{\alpha : \mathbf{Type}} \prod_{\beta : \mathbf{Type}} \prod_{\gamma : \mathbf{Type}} (\text{HAdd}_{\alpha, \beta, \gamma} \to (\alpha \to (\beta \to \gamma))) -/
 #guard_msgs in #latex {α : Type} → {β : Type} → {γ : Type} → [self : HAdd α β γ] → α → β → γ
-/-- info: \forall \alpha : \mathbf{Type},\ \forall \beta : \mathbf{Type},\ \forall f : \alpha \to \beta,\ \forall x : \alpha,\ \forall y : \alpha,\ f(x) = f(y) \implies x = y -/
+/-- info: \forall \alpha, \beta : \mathbf{Type},\ \forall f : \alpha \to \beta,\ \forall x, y : \alpha,\ f(x) = f(y) \implies x = y -/
 #guard_msgs in #latex (α β : Type) → (f : α → β) → ∀ {x y : α}, f x = f y → x = y
-/-- info: \forall p : \mathbf{Prop},\ \forall q : \mathbf{Prop},\ \forall r : \mathbf{Prop},\ (p \implies q) \implies ((p \implies (q \implies r)) \implies (p \implies r)) -/
+/-- info: \forall p, q, r : \mathbf{Prop},\ (p \implies q) \implies ((p \implies (q \implies r)) \implies (p \implies r)) -/
 #guard_msgs in #latex (p q r : Prop) → (p → q) → (p → q → r) → p → r
-/-- info: \forall p_1 : \mathbf{Prop},\ \forall p_2 : \mathbf{Prop},\ p_1 \implies (p_2 \implies p_1) -/
+/-- info: \forall p_1, p_2 : \mathbf{Prop},\ p_1 \implies (p_2 \implies p_1) -/
 #guard_msgs in #latex (p₁ p₂ : Prop) → p₁ → (p₂ → p₁)
-/-- info: \forall p : \mathbf{Prop},\ \forall p' : \mathbf{Prop},\ p \implies (p' \implies p) -/
+/-- info: \forall p, p' : \mathbf{Prop},\ p \implies (p' \implies p) -/
 #guard_msgs in #latex (p p' : Prop) → p → (p' → p)
 /-- info: c(1, x) -/
 #guard_msgs in #latex c 1 x

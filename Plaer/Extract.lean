@@ -10,7 +10,8 @@ namespace Plaer
 
 /-- Read a declaration's source span through Lean's source search path. -/
 meta def declarationSource (name : Name) : MetaM String := do
-  let some moduleName ← findModuleOf? name | throwError "No source module recorded for {name}"
+  -- Declarations made in the REPL have no module; the page reads their text from the paper.
+  let some moduleName ← findModuleOf? name | return ""
   let sourcePath ← findLean (← getSrcSearchPath) moduleName
   let source ← IO.FS.readFile sourcePath
   let some ranges ← findDeclarationRanges? name | throwError "No source span recorded for {name}"
@@ -67,14 +68,12 @@ meta def declarationReport (name : Name) : MetaM Json := do
     ("name", toJson name.toString), ("kind", toJson "other"),
     ("source", toJson (← declarationSource name))]
 
-/-- Every declaration written in a module, in source order, with its line span
-and doc comment. Constants Lean generates inside another declaration are skipped. -/
-meta def moduleReport (moduleName : Name) : MetaM Json := do
+/-- Reports for the given declarations, in source order, with line spans and doc
+comments. Constants Lean generates inside another declaration are skipped. -/
+meta def reportOf (names : Array Name) : MetaM Json := do
   let env ← getEnv
-  let some index := env.getModuleIdx? moduleName
-    | throwError "Module is not imported: {moduleName}"
   let mut spans : Array (Nat × Nat × Name) := #[]
-  for name in env.header.moduleData[index.toNat]!.constNames do
+  for name in names do
     if name.isInternal then continue
     let some ranges ← findDeclarationRanges? name | continue
     spans := spans.push (ranges.range.pos.line, ranges.range.endPos.line, name)
@@ -91,5 +90,16 @@ meta def moduleReport (moduleName : Name) : MetaM Json := do
     reports := reports.push <| report.mergeObj <| Json.mkObj [
       ("line", toJson first), ("endLine", toJson last), ("doc", toJson doc.trimAscii.copy)]
   return toJson reports
+
+/-- Every declaration written in an imported module. -/
+meta def moduleReport (moduleName : Name) : MetaM Json := do
+  let env ← getEnv
+  let some index := env.getModuleIdx? moduleName
+    | throwError "Module is not imported: {moduleName}"
+  reportOf env.header.moduleData[index.toNat]!.constNames
+
+/-- Every declaration made after the imports, as when the REPL runs a paper. -/
+meta def localReport : MetaM Json := do
+  reportOf <| (← getEnv).constants.map₂.toList.map (·.1) |>.toArray
 
 end Plaer

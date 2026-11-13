@@ -15,7 +15,8 @@ import subprocess
 import paper
 from project import ROOT, Project, relative
 from toolchain import lean_environment
-from verify_proof import check_proof, run_lean
+from lean_repl import ImportFailed, session_for, split_imports
+from verify_proof import check_proof, compile_module
 
 REPORT_MARKER = "PLAER_REPORT="
 
@@ -49,22 +50,41 @@ def statements_built(project: Project) -> bool:
     return _built.get(project.source) == (project.source.read_text(encoding="utf-8"), engine_fingerprint())
 
 
-def build_statements(project: Project) -> None:
-    """Compile the paper's Lean file and PLAER's Lean engine. Quick when up to date."""
-    lake, env = lean_environment(project)
-    built = (project.source.read_text(encoding="utf-8"), engine_fingerprint())
-    build = subprocess.run([lake, "build", "Plaer", project.source_module], cwd=ROOT, env=env,
-                           capture_output=True, text=True, encoding="utf-8", timeout=1800)
-    project.build_dir.mkdir(parents=True, exist_ok=True)
-    (project.build_dir / "source-build.log").write_text(build.stdout + build.stderr, encoding="utf-8")
-    if build.returncode == 0:
-        _built[project.source] = built
+def build_engine(project: Project) -> None:
+    """Build PLAER's own Lean with Lake, only when its sources changed."""
+    fingerprint = engine_fingerprint()
+    stamp = ROOT / "build" / "engine.stamp"
+    if stamp.exists() and stamp.read_text(encoding="utf-8") == fingerprint:
         return
-    # Ask Lean directly, so each error carries its line. Lines match the paper's.
-    _, messages = run_lean(project, project.source)
-    errors = [f"{project.paper.name}:{m['pos']['line']}: {m['data']}"
-              for m in messages if m.get("severity") == "error" and m.get("pos")]
-    raise LeanRejected("\n\n".join(errors) or (build.stdout + build.stderr)[-3000:])
+    lake, env = lean_environment(project)
+    build = subprocess.run([lake, "build", "Plaer"], cwd=ROOT, env=env,
+                           capture_output=True, text=True, encoding="utf-8", timeout=1800)
+    if build.returncode:
+        raise RuntimeError("PLAER's Lean engine does not build:\n" + (build.stdout + build.stderr)[-3000:])
+    stamp.parent.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(fingerprint, encoding="utf-8")
+
+
+def build_statements(project: Project) -> None:
+    """Compile the paper's Lean file to the module proof files import (for the
+    offline checker files; the live document never needs it)."""
+    built = (project.source.read_text(encoding="utf-8"), engine_fingerprint())
+    build_engine(project)
+    errors = compile_module(project)
+    if errors:
+        raise LeanRejected("\n\n".join(errors))
+    _built[project.source] = built
+
+
+def warm(project: Project) -> None:
+    """Load the paper's imports into the REPL ahead of the first edit or proof check."""
+    try:
+        build_engine(project)
+        imports, body = split_imports(project.source.read_text(encoding="utf-8"))
+        if imports is not None:
+            session_for(project).paper(imports, body)
+    except Exception:
+        pass   # the next real compile reports the problem
 
 
 class StaleSource(RuntimeError):
@@ -92,20 +112,27 @@ def declarations(project: Project, blocks: list[paper.Block], compile: bool = Tr
         return (*reuse(saved, lean_blocks), False)
 
     expected = project.source.read_text(encoding="utf-8")
-    build_statements(project)
-    driver = project.build_dir / "Report.lean"
-    driver.write_text(
-        f"import {project.source_module}\nimport Plaer.Extract\n\nopen Lean\n\nrun_meta do\n"
-        f"  let report ← Plaer.moduleReport (String.toName {json.dumps(project.source_module)})\n"
-        f'  logInfo m!"{REPORT_MARKER}{{report.compress}}"\n', encoding="utf-8")
-    process, messages = run_lean(project, driver)
+    build_engine(project)
+    imports, body = split_imports(expected)
+    if imports is None:
+        raise LeanRejected(f"{project.paper.name}: put every import in the first lean block")
+    session = session_for(project)
+    try:
+        env, messages = session.paper(imports, body)
+    except ImportFailed as error:
+        raise LeanRejected(f"{project.paper.name}: the imports do not load:\n{error}")
+    errors = [f"{project.paper.name}:{m['pos']['line']}: {m['data']}"
+              for m in messages if m.get("severity") == "error"]
+    if errors:
+        raise LeanRejected("\n\n".join(errors))
+    messages = session.command(
+        f'run_meta do\n  let report ← Plaer.localReport\n  Lean.logInfo m!"{REPORT_MARKER}{{report.compress}}"', env)
     if project.source.read_text(encoding="utf-8") != expected:
         raise StaleSource("The paper changed during the compile")
     reports = [m["data"][len(REPORT_MARKER):] for m in messages if m["data"].startswith(REPORT_MARKER)]
-    if process.returncode or len(reports) != 1:
+    if len(reports) != 1:
         errors = [m["data"] for m in messages if m.get("severity") == "error"]
-        raise RuntimeError("Lean could not describe the paper's declarations:\n"
-                           + ("\n".join(errors) or process.stderr)[-3000:])
+        raise RuntimeError("Lean could not describe the paper's declarations:\n" + "\n".join(errors)[-3000:])
     found = json.loads(reports[0])
     for declaration in found:
         index = next(i for i, block in enumerate(lean_blocks)
@@ -235,8 +262,6 @@ def build_state(project: Project, run_proofs: bool, log=lambda _: None, compile:
     write_statements(project, markdown)
     found, pending, compiled = declarations(project, blocks, compile=compile or run_proofs)
     attach_proofs(blocks, found, pending)
-    if run_proofs:
-        build_statements(project)
 
     results = Results(project, paper.lean_fingerprint(blocks) + engine_fingerprint())
     (project.output / "checks").mkdir(parents=True, exist_ok=True)

@@ -8,7 +8,7 @@ import argparse
 import subprocess
 import sys
 
-from document import LeanRejected, build_state
+from document import LeanRejected, build_state, build_statements
 from package_document import package_document
 from project import ROOT, load_project
 from toolchain import lean_environment
@@ -39,6 +39,7 @@ def main() -> None:
         prepare_dependencies(project)
         print(f"Compile {project.paper.relative_to(ROOT)} with Lean", flush=True)
         state = build_state(project, run_proofs=True, log=lambda line: print(line, flush=True))
+        build_statements(project)   # the offline checker files import the compiled paper
     except LeanRejected as error:
         sys.exit(f"Lean rejected the paper:\n\n{error}")
     except ValueError as error:

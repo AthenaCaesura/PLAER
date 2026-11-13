@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T08:13:18.092948+00:00",
+  "built_at": "2026-11-13T12:27:35.195011+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
   "paper_sha256": "276e6739ba3ee9f1d890bb2f5f3e2de7b0984f9eed0d4cb506f2777f0be9b24d",
   "source_sha256": "a676d562f3f7cde6e57879c242e358097f1ddfbe31dc86209c8fae51ab6bc13b",
-  "document_sha256": "37c2358f41257415a698375051c81b801ebe22c3f8f07c598600f642003d29d9",
-  "engine_fingerprint": "9ee9ac1676d0c65f3a201d4cb84db5c5892f23457c9dd475c069f2ee3ae8d39f",
+  "document_sha256": "53180a22892143cc0d7c4e9aec26910eecf61e767f4ad16378ca1fe717e5751f",
+  "engine_fingerprint": "e954cadebd29e46c1e77207c19f5ff033e2a74fe2b4a145a281ace549c8f8678",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -57,7 +57,7 @@
             "line": 9,
             "name": "Basics.double",
             "source": "/-- Doubling a natural number -/\ndef Basics.double (n : ℕ) : ℕ := n + n",
-            "sourceModule": "Basics.Statements",
+            "sourceModule": "[anonymous]",
             "block": 1,
             "offset": 0,
             "lines": 2,
@@ -96,7 +96,7 @@
             "leanVersion": "4.35.0",
             "line": 32,
             "name": "Basics.add_zero_statement",
-            "sourceModule": "Basics.Statements",
+            "sourceModule": "[anonymous]",
             "statementHash": "720014397",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n + 0 = n",
             "statementLean": "def Basics.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
@@ -122,7 +122,7 @@
                 "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero.lean\"",
                 "proofSha256": "dceec24b9f7b2dd4827a820015e0549288115b59e87dd20019cd79a341b8c243",
-                "wallMs": 4332
+                "wallMs": 356
               },
               {
                 "file": "proofs/AddZeroBySimp.lean",
@@ -144,7 +144,7 @@
                 "auditUrl": "checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_add_zero_statement--Basics_Proofs_add_zero_by_simp.lean\"",
                 "proofSha256": "f431fb551c8d5dc7b76daec86c03a84a880d4e745c8c11c43543240b4127b7c5",
-                "wallMs": 5688
+                "wallMs": 345
               }
             ],
             "statement": true,
@@ -177,7 +177,7 @@
             "leanVersion": "4.35.0",
             "line": 47,
             "name": "Basics.double_statement",
-            "sourceModule": "Basics.Statements",
+            "sourceModule": "[anonymous]",
             "statementHash": "3076824760",
             "statementLatex": "\\forall n : \\mathbb{N},\\ \\operatorname{double}(n) = 2 \\cdot n",
             "statementLean": "def Basics.double_statement : Prop := ∀ (n : ℕ), Basics.double n = 2 * n",
@@ -206,7 +206,7 @@
                 "auditUrl": "checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_double_statement--Basics_Proofs_double_eq_two_mul.lean\"",
                 "proofSha256": "c28bd955bbfe5d729f0e1a07aa032694f074287d0f6f3a6fbb8ce83c3ce2001e",
-                "wallMs": 2657
+                "wallMs": 360
               }
             ],
             "statement": true,
@@ -230,7 +230,7 @@
             "line": 53,
             "name": "Namespace.name",
             "source": "/-- Title of the definition -/\ndef Namespace.name (n : ℕ) : ℕ := n",
-            "sourceModule": "Basics.Statements",
+            "sourceModule": "[anonymous]",
             "block": 6,
             "offset": 0,
             "lines": 2,
@@ -253,7 +253,7 @@
             "leanVersion": "4.35.0",
             "line": 58,
             "name": "Namespace.name_statement",
-            "sourceModule": "Basics.Statements",
+            "sourceModule": "[anonymous]",
             "statementHash": "975527729",
             "statementLatex": "\\forall n : \\mathbb{N},\\ n + 1 = n",
             "statementLean": "def Namespace.name_statement : Prop := ∀ (n : ℕ), n + 1 = n",
@@ -277,7 +277,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Namespace_name_statement--Namespace_Proofs_name.lean\"",
                 "proofSha256": "0b6db5dd686694c073db654f155b7c6e06eecfbfd86cc3b337cb7bef9fbe76d4",
                 "statementHash": "975527729",
-                "wallMs": 1784
+                "wallMs": 350
               }
             ],
             "statement": true,

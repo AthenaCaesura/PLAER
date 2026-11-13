@@ -88,6 +88,15 @@ and cannot run fresh Lean checks.
 After installing Python and Lean as described in the
 [setup guide](docs/getting-started.md):
 
+Start a new paper with one command. It creates `examples/MyTopic/` with a
+statement and its proof, registers it with Lean, and opens the editor:
+
+```sh
+python scripts/new.py MyTopic
+```
+
+To work on an existing paper:
+
 ```sh
 python scripts/build.py examples/Basics/Paper.md
 python scripts/serve.py examples/Basics/Paper.md

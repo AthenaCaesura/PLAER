@@ -17,8 +17,8 @@ import sys
 import threading
 
 import paper
-from document import (LeanRejected, Results, StaleSource, build_state, build_statements,
-                      engine_fingerprint, find_proof, proof_key, statements_built)
+from document import (LeanRejected, Results, StaleSource, build_state,
+                      engine_fingerprint, find_proof, proof_key, warm)
 from package_document import package_document
 from project import Project, load_project
 from verify_proof import check_proof
@@ -104,8 +104,6 @@ def verify(server, request: dict) -> dict:
             compile_now(server)
             if server.lean_error:
                 raise LeanRejected(server.lean_error)
-        if not statements_built(project):
-            build_statements(project)   # proofs import the paper's compiled Lean
         statement, proof = find_proof(server.state, request.get("theorem"), request.get("proof"))
         report = check_proof(project, statement, proof)
         with server.state_lock:
@@ -198,6 +196,7 @@ def make_server(project: Project, port: int = 0) -> ThreadingHTTPServer:
     with server.lean_lock:
         compile_now(server)
     threading.Thread(target=compiler, args=(server,), daemon=True).start()
+    threading.Thread(target=warm, args=(project,), daemon=True).start()
     return server
 
 

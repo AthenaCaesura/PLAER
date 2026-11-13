@@ -1,6 +1,7 @@
 """The paper format: blocks, the line-for-line Lean file, and browser edits. No Lean needed."""
 from _support import ROOT
 import paper
+import new
 
 MARKDOWN = """# Title
 
@@ -71,4 +72,14 @@ for folder in sorted((ROOT / "examples").iterdir()):
     if (folder / "Paper.md").exists():
         expected = paper.lean_source((folder / "Paper.md").read_text(encoding="utf-8"))
         assert (folder / "Statements.lean").read_text(encoding="utf-8") == expected, folder.name
+# A new paper is registered in the Examples library, once.
+lakefile = (ROOT / "lakefile.toml").read_text(encoding="utf-8")
+registered = new.register(lakefile, "Primes")
+assert 'roots = ["Basics", "Fermat", "Primes"]' in registered and '"Primes.+"]' in registered, registered
+assert new.register(registered, "Primes") == registered
+assert registered.count("Primes") == 2 and "TestFixtures" in registered
+template = new.PAPER.format(title="T", name="Primes")
+assert [b.kind for b in paper.parse(template)].count("lean") == 2
+assert next(paper.PROOF_LINE.match(l) for l in template.splitlines() if l.startswith("-- proof")).groups() == ("proofs/AddZero.lean", "Primes.Proofs.add_zero")
+
 print("PASS: paper blocks, line-for-line Lean file, edits, and generated Statements.lean files")

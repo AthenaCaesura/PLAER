@@ -96,6 +96,17 @@ latex_pp_rules (kind := lam) | e => do
   let pargs := LatexData.intercalate ", " <| args.map (λ (name, type) => LatexData.ofString name.toLatex ++ " : " ++ type)
   return pargs.parens ++ LatexData.nonAssocOp " \\mapsto " 0 ++ body
 
+/-- Enter `e`, a `∀`, and every following `∀` over the same domain whose variable is
+used (an unused one is an implication or a plain function arrow, printed as such). -/
+partial def forallGroup (domain : Expr) (e : Expr) (names : Array Name)
+    (k : Array Name → Expr → LatexPrinterM α) : LatexPrinterM α :=
+  withBindingBodyUnusedName e fun name body => do
+    let names := names.push name
+    if body.isForall && !body.isArrow && body.bindingDomain! == domain then
+      forallGroup domain body names k
+    else
+      k names body
+
 /-- Simple implementation. Doesn't collect anything at all, compared to `pp_lam`. -/
 latex_pp_rules (kind := forallE) | e => do
   let prop? ← try Meta.isProp e catch _ => pure false
@@ -105,17 +116,33 @@ latex_pp_rules (kind := forallE) | e => do
   if prop? then
     if arrow? ∧ domProp? then
       -- implication
+      if (← read).collectHypotheses then
+        -- `A → B → C` is `A ∧ B ⟹ C`: gather every hypothesis before the conclusion
+        let mut hyps := #[e.bindingDomain!]
+        let mut concl := e.bindingBody!
+        repeat
+          -- `←` would run before `&&`, so test for an arrow first
+          unless concl.isArrow do break
+          unless ← (try Meta.isProp concl.bindingDomain! catch _ => pure false) do break
+          hyps := hyps.push concl.bindingDomain!
+          concl := concl.bindingBody!
+        let mut phyps := (← latexPP hyps[0]!).protect 35
+        for h in hyps[1:] do
+          phyps := phyps ++ LatexData.rightAssocOp " \\land " 35 ++ (← latexPP h).protect 35
+        let pconcl ← latexPP concl
+        return phyps ++ LatexData.nonAssocOp " \\implies " 30 ++ pconcl.protectLeft 30
       let pdom ← latexPP e.bindingDomain!
       let pbody ← latexPP e.bindingBody!
       let assoc := if (← read).implicationAssoc then LatexData.rightAssocOp else LatexData.nonAssocOp
       return pdom.protectRight 30 ++ assoc " \\implies " 30 ++ pbody.protectLeft 30
     else
-      -- forall
+      -- forall; consecutive variables of the same type share one quantifier
       let pdom ← latexPP e.bindingDomain!
-      withBindingBodyUnusedName e fun name body => do
+      forallGroup e.bindingDomain! e #[] fun names body => do
         let pbody ← latexPP body
         let binder := if (← read).omitBinders then LatexData.atomString "" else " : " ++ pdom.resetBP .Infinity .Infinity
-        let pall := s!"\\forall {name.toLatex}" ++ binder ++ ",\\ " ++ pbody
+        let vars := ", ".intercalate (names.map (·.toLatex)).toList
+        let pall := s!"\\forall {vars}" ++ binder ++ ",\\ " ++ pbody
         return pall |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 0)
   else
     if arrow? then

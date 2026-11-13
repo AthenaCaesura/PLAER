@@ -21,14 +21,18 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("(0 : ℝ) ∈ IntervalFixture.I", "0 \\in I"),
     ("(2 : ℝ) ∉ IntervalFixture.I", "2 \\notin I"),
     ("∀ x : ℝ, x ≤ 1 → x + 1 ≤ 2", "\\forall x : \\mathbb{R},\\ x \\le 1 \\implies x + 1 \\le 2"),
-    ("∃ n : ℕ, 1 < n", "\\exists n : \\mathbb{N},\\ 1 < n"),
+    ("∃ n : ℕ, 1 < n", "\\exists n : \\mathbb{N},\\ n > 1"),
+    ("∀ x : ℝ, 0 ≤ x → x ≤ 1", "\\forall x : \\mathbb{R},\\ x \\ge 0 \\implies x \\le 1"),
+    ("(1 : ℕ) < 2", "1 < 2"),
     ("((1 + 2) / 3 : ℝ)", "\\frac{1 + 2}{3}"),
     ("((1 / 2) ^ 3 : ℝ)", "\\left(\\frac{1}{2}\\right)^{3}"),
     ("(1 + (2 + 3) : ℕ)", "1 + (2 + 3)"),
     ("{y : ℝ | -1 < y ∧ y ≤ 2}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; - 1 < y \\le 2\\right\\}"),
     ("{y : ℝ | y = 0 ∨ y = 1}", "\\left\\{y\\in\\mathbb{R}\\;\\middle|\\; y = 0 \\lor y = 1\\right\\}"),
     ("∀ x : ℝ, ∃ x : ℝ, x = x", "\\forall x : \\mathbb{R},\\ \\exists x : \\mathbb{R},\\ x = x"),
-    ("∀ s : Set ℝ, s = s", "\\forall s : \\mathcal{P}(\\mathbb{R}),\\ s = s")]
+    ("∀ s : Set ℝ, s = s", "\\forall s : \\mathcal{P}(\\mathbb{R}),\\ s = s"),
+    ("∀ a b : ℕ, ∀ x : ℝ, 0 < a → 0 < b → a + b = b + a", "\\forall a, b : \\mathbb{N},\\ \\forall x : \\mathbb{R},\\ a > 0 \\land b > 0 \\implies a + b = b + a"),
+    ("∀ p q : Prop, (p → q) → p → q", "\\forall p, q : \\mathbf{Prop},\\ (p \\implies q) \\land p \\implies q")]
   let mut fixtures : Array Json := #[]
   for (source, expected) in cases do
     let latex ← renderTerm source

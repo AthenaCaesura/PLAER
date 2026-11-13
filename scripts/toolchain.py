@@ -40,12 +40,19 @@ def lean_invocation(project=None) -> tuple[str, dict]:
     """The `lean` binary and an environment equivalent to `lake env lean`.
 
     `lake env` spends seconds loading every package's configuration, so its
-    paths are asked for once and reused until the Lake configuration changes.
+    paths are asked for once, saved in build/, and reused until the Lake
+    configuration changes.
     """
     lake, environment = lean_environment(project)
-    stamp = (tuple((ROOT / name).stat().st_mtime_ns for name in ("lakefile.toml", "lake-manifest.json", "lean-toolchain")),
+    stamp = ([(ROOT / name).stat().st_mtime_ns for name in ("lakefile.toml", "lake-manifest.json", "lean-toolchain")],
              environment["LEAN_SRC_PATH"])
-    if _lean_paths.get("stamp") != stamp:
+    saved = ROOT / "build" / "lean-paths.json"
+    if _lean_paths.get("stamp") != list(stamp) and saved.exists():
+        try:
+            _lean_paths.update(json.loads(saved.read_text(encoding="utf-8")))
+        except (OSError, ValueError):
+            pass
+    if _lean_paths.get("stamp") != list(stamp):
         probe = ("import json, os, shutil; print(json.dumps([shutil.which('lean'), "
                  "os.environ.get('LEAN_PATH', ''), os.environ.get('LEAN_SRC_PATH', '')]))")
         output = subprocess.run([lake, "env", sys.executable, "-I", "-c", probe], cwd=ROOT, env=environment,
@@ -53,7 +60,9 @@ def lean_invocation(project=None) -> tuple[str, dict]:
         lean, lean_path, source_path = json.loads(output.strip().splitlines()[-1])
         if not lean:
             raise RuntimeError("Lake did not find a lean binary. Run `lake env lean --version` to diagnose.")
-        _lean_paths.update(stamp=stamp, lean=lean, path=lean_path, source=source_path)
+        _lean_paths.update(stamp=list(stamp), lean=lean, path=lean_path, source=source_path)
+        saved.parent.mkdir(parents=True, exist_ok=True)
+        saved.write_text(json.dumps(_lean_paths), encoding="utf-8")   # for the next process
     environment["LEAN_PATH"] = _lean_paths["path"]
     environment["LEAN_SRC_PATH"] = _lean_paths["source"]
     return _lean_paths["lean"], environment

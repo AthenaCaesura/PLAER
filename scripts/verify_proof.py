@@ -13,15 +13,16 @@ import subprocess
 import time
 
 from project import IDENTIFIER, ROOT, Project, proof_path, relative
+from lean_repl import ImportFailed, session_for, split_imports
 from toolchain import lean_invocation
 
 MARKER = "PLAER_PROOF_RESULT="
 
 
-def run_lean(project: Project, file, timeout: int = 240) -> tuple[subprocess.CompletedProcess, list[dict]]:
+def run_lean(project: Project, file, timeout: int = 240, options=()) -> tuple[subprocess.CompletedProcess, list[dict]]:
     """Run Lean on one file inside the Lake workspace (as `lake env lean`); return its JSON messages."""
     lean, env = lean_invocation(project)
-    process = subprocess.run([lean, "--json", str(file)], cwd=ROOT, env=env,
+    process = subprocess.run([lean, "--json", *options, str(file)], cwd=ROOT, env=env,
                              capture_output=True, text=True, encoding="utf-8", timeout=timeout)
     messages = []
     for line in process.stdout.splitlines():
@@ -32,6 +33,49 @@ def run_lean(project: Project, file, timeout: int = 240) -> tuple[subprocess.Com
         if isinstance(message, dict) and isinstance(message.get("data"), str):
             messages.append(message)
     return process, messages
+
+
+def compile_module(project: Project) -> list[str]:
+    """Compile the paper's Lean file to the module that proof files import.
+
+    Lean runs directly, as Lake would run it: asking Lake costs seconds even when
+    nothing changed. Returns Lean's errors, each naming a line of the paper.
+    """
+    out = ROOT / ".lake" / "build" / "lib" / "lean" / project.folder.name
+    out.mkdir(parents=True, exist_ok=True)
+    _, messages = run_lean(project, project.source, timeout=1800, options=[
+        "-R", str(project.folder.parent), "-o", str(out / "Statements.olean"), "-i", str(out / "Statements.ilean")])
+    return [f"{project.paper.name}:{m['pos']['line']}: {m['data']}"
+            for m in messages if m.get("severity") == "error" and m.get("pos")]
+
+
+def proof_messages(project: Project, statement: str, proof: dict, metadata: dict) -> tuple[bool, list[dict], str]:
+    """Lean's messages for one proof check: (Lean failed, messages, other output).
+
+    Usually one command in the long-running REPL, on top of the paper. A proof
+    file importing modules the paper does not falls back to its own Lean process.
+    """
+    check = f"\n\n#plaer_check_proof {statement} {proof['declaration']}\n"
+    session = session_for(project)
+    paper_imports, paper_body = split_imports(project.source.read_text(encoding="utf-8"))
+    if proof.get("inline"):
+        proof_imports, proof_body = [], ""
+    else:
+        proof_imports, proof_body = split_imports(proof_path(project, proof["file"]).read_text(encoding="utf-8"))
+    if paper_imports is not None and proof_imports is not None:
+        try:
+            env, paper = session.paper(paper_imports, paper_body)
+        except ImportFailed as error:
+            return True, [], str(error)
+        if any(m.get("severity") == "error" for m in paper):
+            return True, [], "The paper's Lean has errors."
+        if set(proof_imports) <= set(session.imports) | {project.source_module}:
+            return False, session.command(proof_body + check, env), ""
+    errors = compile_module(project)
+    if errors:
+        return True, [], "\n".join(errors)
+    process, messages = run_lean(project, project.output / metadata["checkerUrl"])
+    return process.returncode != 0, messages, process.stderr.strip()
 
 
 def write_checker(project: Project, statement: str, proof: dict) -> dict:
@@ -82,13 +126,13 @@ def check_proof(project: Project, statement: dict, proof: dict) -> dict:
                 "statementHash": statement["statementHash"],
                 "result": {"ok": False, "diagnostics": str(error)}}
     started = time.perf_counter()
-    process, messages = run_lean(project, project.output / metadata["checkerUrl"])
+    failed, messages, output = proof_messages(project, name, proof, metadata)
     reports = [json.loads(m["data"][len(MARKER):]) for m in messages if m["data"].startswith(MARKER)]
     errors = [m["data"] for m in messages if m.get("severity") == "error"]
     report = reports[0] if len(reports) == 1 else {}
-    if process.returncode or errors or not report:
+    if failed or errors or not report:
         report = {"name": name, "proofDeclaration": proof["declaration"],
-                  "result": {"ok": False, "diagnostics": "\n".join(errors) or process.stderr.strip()
+                  "result": {"ok": False, "diagnostics": "\n".join(errors) or output
                              or "Lean did not verify the attached proof declaration."}}
     if report.get("name") != name or report.get("proofDeclaration") != proof["declaration"]:
         raise RuntimeError("Lean checked a different proof declaration.")

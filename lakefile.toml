@@ -6,6 +6,13 @@ defaultTargets = ["Plaer"]
 name = "LeanTeX"
 path = "vendor/LeanTeX"
 
+# The Lean REPL keeps one Lean process, with the paper's imports loaded, for
+# every compile and proof check. https://github.com/leanprover-community/repl
+[[require]]
+name = "REPL"
+git = "https://github.com/leanprover-community/repl"
+rev = "v4.35.0"
+
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
@@ -16,7 +23,7 @@ name = "Plaer"
 
 # One entry per folder under examples/. A folder's Paper.md generates its
 # Statements.lean, and its proof files import `<Folder>.Statements`.
-# To add a project, add its folder name to both lists.
+# `python scripts/new.py MyTopic` adds a project to both lists.
 [[lean_lib]]
 name = "Examples"
 srcDir = "examples"

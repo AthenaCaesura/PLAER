@@ -12,14 +12,16 @@ Paper.md
   │  scripts/paper.py: comment out every line outside a lean block
   ▼
 Statements.lean                    same line numbers as the paper
-  │  lake build                    the paper's Lean compiles as one module
+  │  Lean REPL (scripts/lean_repl.py): one long-running Lean with the
+  │                                imports loaded; the paper runs as one command
   ▼
-Plaer.moduleReport (Lean)          every declaration: kind, lines, doc comment,
+Plaer.localReport (Lean)           every declaration: kind, lines, doc comment,
   │                                pretty-printed Lean, LaTeX from LeanTeX
   ▼
 scripts/document.py                place boxes by line; attach `-- proof:` lines
   │
-  ├─ scripts/verify_proof.py       one checker file per attached proof
+  ├─ scripts/verify_proof.py       each proof: one REPL command on top of the
+  │                                paper, so proofs never see each other
   ▼
 scripts/package_document.py        dist/<project>/index.html + audit files
 ```
@@ -29,6 +31,14 @@ of where each declaration sits says directly where its box belongs in the
 paper, and Lean's errors name lines of the paper. Python never parses Lean:
 which declarations exist, what kind they are, and how they read all come from
 Lean's environment.
+
+Loading Mathlib takes seconds, so PLAER never starts Lean per job. It keeps
+one [Lean REPL](https://github.com/leanprover-community/repl) per paper, with
+the imports loaded once. Editing the paper reruns only the paper's Lean, and a
+proof check costs about a second. A proof file that imports modules the paper
+does not is checked in its own Lean process instead. `scripts/build.py` also
+compiles `Statements.lean` to a module, so the offline checker files run on
+their own with `lake env lean`.
 
 ## Statements and proofs
 

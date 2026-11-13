@@ -7,7 +7,7 @@ import Mathlib.FieldTheory.Finite.Basic
 -- ```lean
 /-- Fermat's last theorem -/
 def Fermat.last_statement : Prop :=
-  ∀ n a b c : ℕ, 2 < n → 0 < a → 0 < b → 0 < c → a ^ n + b ^ n ≠ c ^ n
+  ∀ n a b c : ℕ, n > 2 → a > 0 → b > 0 → c > 0 → a ^ n + b ^ n ≠ c ^ n
 -- proof: proofs/Last.lean Fermat.Proofs.last
 -- ```
 
@@ -17,7 +17,7 @@ def Fermat.last_statement : Prop :=
 
 -- For an application involving integer solutions, first match the variables and check every assumption. This note is an explanation, not a proof of that application.
 
--- The attached demonstration proof is deliberately wrong: from $2<n$ it tries to conclude the required inequality using only `Nat.ne_of_lt hn`. **Not proved** describes that attempt; Fermat's last theorem itself is true.
+-- The attached demonstration proof is deliberately wrong: from $n>2$ it tries to conclude the required inequality using only `Nat.ne_of_lt hn`. **Not proved** describes that attempt; Fermat's last theorem itself is true.
 
 -- ```lean
 /-- Fermat's little theorem -/

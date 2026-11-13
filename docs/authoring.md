@@ -9,9 +9,10 @@ examples/MyTopic/
   proofs/*.lean      proofs
 ```
 
-The folder name is the Lean module name, so it must be a Lean identifier such
-as `MyTopic`. Add it to both lists of the `Examples` library in
-`lakefile.toml` so Lean can find `MyTopic.Statements`.
+Create one with `python scripts/new.py MyTopic`. That writes a starter paper
+with one statement and its proof, registers the folder in the `Examples`
+library of `lakefile.toml`, and opens the editor. The folder name is the Lean
+module name, so it must be a capitalized Lean identifier such as `MyTopic`.
 
 ## The paper
 

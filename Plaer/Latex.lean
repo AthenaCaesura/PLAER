@@ -29,6 +29,22 @@ def_latex_binop GE.ge " \\ge " 50 .none
 def_latex_binop And " \\land " 35 .right
 def_latex_binop Or " \\lor " 30 .right
 
+/-- A plain number such as `2`. -/
+def isNumeral (e : Expr) : Bool := e.isAppOfArity ``OfNat.ofNat 3 || e.isRawNatLit
+
+/-- Put the variable first when comparing with a plain number: `2 < n` prints as `n > 2`
+and `0 ≤ x` as `x ≥ 0`. Lean stores `n > 2` as `2 < n`, so this is how either was written. -/
+meta def flippedComparison (op : String) (small big : Expr) : LatexPrinterM LatexData := do
+  unless isNumeral small && !isNumeral big do failure
+  let big ← latexPP big
+  let small ← latexPP small
+  return (big.protectRight 50 ++ op ++ small.protectLeft 50).resetBP (.NonAssoc 50) (.NonAssoc 50)
+
+latex_pp_app_rules (const := LT.lt)
+  | _, #[_, _, small, big] => flippedComparison " > " small big
+latex_pp_app_rules (const := LE.le)
+  | _, #[_, _, small, big] => flippedComparison " \\ge " small big
+
 /-- Compact a pair of comparisons sharing their middle term, without changing their order. -/
 latex_pp_app_rules (const := And)
   | _, #[left, right] => do
@@ -78,7 +94,7 @@ latex_pp_app_rules (kind := const.Int.ModEq)
 
 /-- The same strict printer is used for saved statements and live verification. -/
 meta def expressionLatex (expression : Expr) : MetaM String := do
-  let result ← run_latexPP expression { strict := true }
+  let result ← run_latexPP expression { strict := true, collectHypotheses := true }
   let normalized := " ".intercalate <| result.split Char.isWhitespace |>.toList |>.map (·.toString) |>.filter (!·.isEmpty)
   if normalized.length > 180 then
     let rows := normalized.split " \\implies " |>.toList |>.map (·.toString)
