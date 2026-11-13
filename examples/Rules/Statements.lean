@@ -11,15 +11,15 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Plaer.Latex
 -- ```
 
--- Lean's notation is built for a type checker, not for a reader. PLAER prints Lean as a mathematician would write it, using five rules. Each rule looks only at the *shape* of an expression and at its types, never at a particular name. To show this, every rule below is applied to Mathlib's own notions and to notions this paper defines itself, which no rule has ever heard of.
+-- Lean's notation is built for a type checker, not for a reader. PLAER prints Lean as a mathematician would write it, using five rules. Each rule looks only at the *shape* of an expression and at its types, never at a particular name, and none of them drops information: every variable keeps its type, and every conversion between types is shown. To show that the rules are general, each is applied to Mathlib's own notions and to notions this paper defines itself, which no rule has ever heard of.
 
 -- The claims here have no proofs attached; they are here for how they read. Switch any box to **Lean** to see what was written.
 
 -- <!-- cell -->
 
--- ## 1. Assumptions about a type are hypotheses
+-- ## 1. A structure on a type comes with the type
 
--- In Lean, `[Group G]` asks Lean to find a group structure on $G$. It is an assumption, so it reads as one, in the same list as the other hypotheses. Every class prints as its own name.
+-- In Lean, `[Group G]` is not a true-or-false condition: it is a group structure on $G$, a choice of multiplication, and the claim holds for every such choice. So it reads as mathematicians write it, "for every type $G$ *with* a group structure". Every class prints as its own name.
 
 -- ```lean
 /-- In a finite group, every element to the group's order is 1 -/
@@ -30,7 +30,7 @@ def Rules.pow_card : Prop :=
 def Rules.min_le : Prop := ∀ (α : Type) [LinearOrder α] (a b : α), min a b ≤ a
 -- ```
 
--- The same rule, for a class this paper defines:
+-- The same rule, for a class this paper defines. `Sized α` is not true or false either: it is a choice of size function on $\alpha$, and $\mathbb{N}$ has many (such as $n \mapsto n$ and $n \mapsto 0$).
 
 -- ```lean
 /-- Something with a size -/
@@ -40,6 +40,13 @@ class Rules.Sized (α : Type) where
 /-- Two equal things have the same size -/
 def Rules.size_eq : Prop :=
   ∀ (α : Type) [Rules.Sized α] (a b : α), a = b → Rules.Sized.size a = Rules.Sized.size b
+-- ```
+
+-- Some classes *are* true or false: Lean declares them as propositions, such as `Nonempty α`, "$\alpha$ has an element". Those are hypotheses, and read with $\implies$:
+
+-- ```lean
+/-- A type with an element has an element equal to itself -/
+def Rules.nonempty : Prop := ∀ (α : Type) [Nonempty α], ∃ x : α, x = x
 -- ```
 
 -- <!-- cell -->
@@ -55,14 +62,14 @@ def Rules.size_eq : Prop :=
 def Rules.commutative : Prop := ∀ f : ℝ → ℝ → ℝ, (∀ x y, f x y = f y x) → f 1 2 = f 2 1
 -- ```
 
--- **Functions given by a formula.** Lean writes `fun x => x ^ 2`; a mathematician writes $x \mapsto x^2$:
+-- **Functions given by a formula.** Lean writes `fun x : ℝ => x ^ 2`; a mathematician writes $x \mapsto x^2$, with $x$'s type stated, since over $\mathbb{N}$ it would be a different function:
 
 -- ```lean
 /-- Squaring is multiplying by itself -/
 def Rules.square : Prop := (fun x : ℝ => x ^ 2) = (fun x => x * x)
 -- ```
 
--- **Sets used as types.** `Fin n` and `{x // p x}` are sets of numbers that Lean treats as types:
+-- **Sets used as types.** `Fin n` and `{x // p x}` are sets of numbers that Lean treats as types. Their elements are not themselves numbers, so using one as a number is a conversion, and shows (see rule 4):
 
 -- ```lean
 /-- Every element of Fin 5 is below 5 -/
@@ -72,7 +79,7 @@ def Rules.fin_lt : Prop := ∀ i : Fin 5, (i : ℕ) < 5
 def Rules.positive : Prop := ∀ n : {n : ℕ // n > 0}, (n : ℕ) ≥ 1
 -- ```
 
--- **Values of a structure are tuples.** The same rule handles a structure this paper defines. A field that is a proof is never shown, so a `Digit`, a number with a proof that it is below 10, is just its number:
+-- **Values of a structure are tuples.** The same rule handles a structure this paper defines. A field that is a proof is never shown: any two proofs of the same claim are interchangeable, so a `Digit`, a number with a proof that it is below 10, is determined by its number, and the type line says it is a `Digit`. A field read from a value is written as a function of it, $\operatorname{value}(d)$:
 
 -- ```lean
 /-- A point in the plane, with integer coordinates -/
@@ -95,7 +102,7 @@ def Rules.seven : Rules.Digit := ⟨7, by decide⟩
 def Rules.digit_lt : Prop := ∀ d : Rules.Digit, d.value < 10
 -- ```
 
--- **Limits.** Mathlib states limits with filters: `Tendsto f atTop (𝓝 a)`. That is $\lim_{x \to \infty} f(x) = a$:
+-- **Limits.** Mathlib states limits with filters: `Tendsto f atTop (𝓝 a)`. That is $\lim_{x \to \infty} f(x) = a$, with the variable's type kept, since a sequence ($n \in \mathbb{N}$) and a function on $\mathbb{R}$ have different limits:
 
 -- ```lean
 /-- 1/n tends to 0 -/
@@ -127,9 +134,9 @@ def Rules.div_self : Prop := ∀ x : ℝ, x ≠ 0 → x / x = 1
 
 -- <!-- cell -->
 
--- ## 4. A conversion shows only when it can change a value
+-- ## 4. Conversions are always shown
 
--- $\mathbb{N} \subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R}$: a number moved into a larger number system is the same number, so the conversion prints as nothing. The test is general: a conversion is hidden exactly when it can never make two different numbers equal. For the conversions from $\mathbb{N}$, $\mathbb{Z}$ and $\mathbb{Q}$ that is when the target has characteristic zero. A conversion into $\mathbb{Z}/n\mathbb{Z}$ can make $1$ and $4$ equal, so it shows. In the first claim below, $n$ is moved into $\mathbb{R}$ twice; the conversions are invisible, and the two divisions still look different, because one is in $\mathbb{N}$ and one in $\mathbb{R}$.
+-- In Lean, $3 \in \mathbb{N}$ and $3 \in \mathbb{R}$ are different things, and moving a value from one type to another is a function, a conversion. It prints as Lean writes one, $(x : T)$, "$x$ as an element of $T$", so the type of every operation is visible. The rule covers every function Lean itself marks as a conversion. In the first claim below, $n \in \mathbb{N}$ is halved in $\mathbb{N}$ on the left and in $\mathbb{R}$ on the right. A conversion into $\mathbb{Z}/n\mathbb{Z}$ can make different numbers equal, and the box says so.
 
 -- ```lean
 /-- Half of n, in ℕ and in ℝ -/

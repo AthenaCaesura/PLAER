@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T17:24:06.328789+00:00",
+  "built_at": "2026-11-13T17:54:49.290840+00:00",
   "project": "fermat",
   "lean_version": "4.35.0",
   "paper": "examples/Fermat/Paper.md",
   "source": "examples/Fermat/Statements.lean",
   "paper_sha256": "8a51e7766b38e6533cfc0f9e85e6e46f003a16dc2ec0c246ab24c7076948dd5b",
   "source_sha256": "5ff785f27e28bf974f20a8a8c65e397610b6b29949920617c35fd14e7e85330e",
-  "document_sha256": "9c03decb5cee256f31132c73e4b9f9e800b04389de9a354c3f7eb1e6176e1d5c",
-  "engine_fingerprint": "4a6a7b6c47ebf6494bfee9c64aab96680a15cee848666e3916aa0e922012c130",
+  "document_sha256": "142c7a84574fdd3980534269b67677be8b4e892b9b41ea29562a9c3572f1b4c0",
+  "engine_fingerprint": "b36e8569b74e2a01a50350f199e8cca8555ff7143c33c72a94f6583d516b8732",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -80,7 +80,7 @@
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_last_statement--Fermat_Proofs_last.lean\"",
                 "proofSha256": "5de7218ce2725d08ae5d3428ae0e861bdc15a0b87dfd81069c19e41740b2f495",
                 "statementHash": "1861763117",
-                "wallMs": 1113
+                "wallMs": 1249
               }
             ],
             "statement": true,
@@ -110,7 +110,7 @@
             "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "737928072",
-            "statementLatex": "\\forall p \\in \\mathbb{N},\\ \\forall a \\in \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{p}",
+            "statementLatex": "\\forall p \\in \\mathbb{N},\\ \\forall a \\in \\mathbb{Z},\\ \\operatorname{Prime}(p) \\implies a^{p} \\equiv a \\pmod{(p : \\mathbb{Z})}",
             "statementLean": "def Fermat.little_statement : Prop := ∀ (p : ℕ) (a : ℤ), Nat.Prime p → a ^ p ≡ a [ZMOD ↑p]",
             "block": 2,
             "offset": 0,
@@ -138,7 +138,7 @@
                 "auditUrl": "checks/Fermat_little_statement--Fermat_Proofs_little.json",
                 "command": "lake env lean --json \"dist/fermat/checks/Fermat_little_statement--Fermat_Proofs_little.lean\"",
                 "proofSha256": "824b62109b844117a195bfdade9f84c61998dbc8a414b34f65e9d2fa5ddc1775",
-                "wallMs": 1277
+                "wallMs": 1316
               }
             ],
             "statement": true,

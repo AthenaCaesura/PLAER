@@ -23,11 +23,14 @@ Local changes:
 - Print consecutive `∀` binders over the same type as one quantifier,
   `\forall a, b : \mathbb{N}`, and update `test/basic.lean` to match.
 - Add `Config.collectHypotheses`, off by default, to print `A → B → C` as
-  `A \land B \implies C`. Instance arguments, `[Group G]`, are assumptions and
-  join the hypotheses. PLAER turns it on.
+  `A \land B \implies C`. An instance argument whose class is a proposition,
+  `[Nonempty α]`, is a hypothesis too. One that carries data, `[Group G]`, is a
+  structure chosen on `G`, quantified over, so it joins the quantifier:
+  `\forall G : \mathbf{Type} \text{ with } \operatorname{Group}(G)`. PLAER turns it on.
 - Add `Config.mathFunctions`, off by default: a function type `α → β → γ` prints
   as `(α, β) → γ`, its inputs together, as its calls print `f(a, b)`, and
-  `fun a b => e` as `(a, b) \mapsto e`, without binder types. PLAER turns it on.
+  `fun (a b : ℕ) => e` as `(a, b \in \mathbb{N}) \mapsto e`, its inputs written
+  as quantifiers write them. PLAER turns it on.
 - Add `Config.elementBinders`, off by default: a variable over the elements of a
   type prints `x \in T`, and over `Set α`, `s \subseteq α`. Variables over sorts
   and function types keep `x : T`. PLAER turns it on.

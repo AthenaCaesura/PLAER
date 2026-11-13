@@ -101,11 +101,6 @@ private partial def collectLambdaArgs : Expr → Array (Name × LatexData) → L
 /-- `LatexPrinter` for `λ`-abstractions. For instance `λ x : ℝ => x^2` is rendered as `(x : ℝ) ↦ x^2`. -/
 latex_pp_rules (kind := lam) | e => do
   let (args, body) ← collectLambdaArgs e #[]
-  if (← read).mathFunctions then
-    -- `fun a b => e` is the two-input function `(a, b) ↦ e`
-    let names := args.map fun (name, _) => LatexData.atomString name.toLatex
-    let pnames := if names.size == 1 then names[0]! else (LatexData.intercalate ", " names).parens
-    return pnames ++ LatexData.nonAssocOp " \\mapsto " 0 ++ body
   let pargs := LatexData.intercalate ", " <| args.map (λ (name, type) => LatexData.ofString name.toLatex ++ " : " ++ type)
   return pargs.parens ++ LatexData.nonAssocOp " \\mapsto " 0 ++ body
 
@@ -128,17 +123,59 @@ def binderLatex (names : String) (domain : Expr) : LatexPrinterM LatexData := do
   return names ++ " : " ++ (← latexPP domain).resetBP .Infinity .Infinity
 
 /-- Gather the hypotheses at the front of `e`: implications `A → …`, and instance
-arguments `[C x] → …`, which assume a structure. Calls `k` with them and the rest. -/
+arguments whose class is a proposition, `[Nonempty α] → …`. Calls `k` with them and the rest. -/
 partial def gatherHypotheses (e : Expr) (hyps : Array LatexData)
     (k : Array LatexData → Expr → LatexPrinterM α) : LatexPrinterM α := do
   unless e.isForall do return ← k hyps e
-  if e.binderInfo.isInstImplicit then
+  if e.binderInfo.isInstImplicit && (← try Meta.isProp e.bindingDomain! catch _ => pure false) then
     let h ← latexPP e.bindingDomain!
     withBindingBodyUnusedName e fun _ body => gatherHypotheses body (hyps.push h) k
   else if e.isArrow && (← try Meta.isProp e.bindingDomain! catch _ => pure false) then
     gatherHypotheses e.bindingBody! (hyps.push (← latexPP e.bindingDomain!)) k
   else
     k hyps e
+
+/-- Enter the inputs of `fun x₁ … xₙ => body`, grouping consecutive inputs of the same
+type, and call `k` with each group's names and type, and the body. -/
+partial def lambdaGroups (e : Expr) (groups : Array (Array Name × Expr))
+    (k : Array (Array Name × Expr) → Expr → LatexPrinterM α) : LatexPrinterM α := do
+  unless e.isLambda do return ← k groups e
+  let domain := e.bindingDomain!
+  withBindingBodyUnusedName e fun name body => do
+    match groups.back? with
+    | some (names, last) =>
+      if last == domain then
+        lambdaGroups body (groups.pop.push (names.push name, domain)) k
+      else lambdaGroups body (groups.push (#[name], domain)) k
+    | none => lambdaGroups body (groups.push (#[name], domain)) k
+
+/-- With `mathFunctions`, `fun (x : ℝ) => x ^ 2` is `(x ∈ ℝ) ↦ x^2` and `fun a b : ℕ => …`
+is `(a, b ∈ ℕ) ↦ …`: the inputs as quantifiers write them, types included. -/
+latex_pp_rules (kind := lam) | e => do
+  unless (← read).mathFunctions do failure
+  lambdaGroups e #[] fun groups body => do
+    let mut binders := #[]
+    for (names, domain) in groups do
+      binders := binders.push (← binderLatex (", ".intercalate (names.map (·.toLatex)).toList) domain)
+    let pbody ← latexPP body
+    return (LatexData.intercalate ",\\ " binders).parens ++ LatexData.nonAssocOp " \\mapsto " 0 ++ pbody
+
+/-- Enter the instance arguments at the front of `e` that carry data, `[Group G]`: each is
+a structure chosen on a type, quantified over like a variable, not a condition. Only those
+for which `about` holds are taken: the structures on the variables just bound. Calls `k`
+with them and the rest. A class that is a proposition, `[Nonempty α]`, is a hypothesis
+instead (see `gatherHypotheses`). -/
+partial def gatherStructures (about : Expr → Bool) (e : Expr) (found : Array LatexData)
+    (k : Array LatexData → Expr → LatexPrinterM α) : LatexPrinterM α := do
+  unless e.isForall && e.binderInfo.isInstImplicit && about e.bindingDomain! do return ← k found e
+  if ← (try Meta.isProp e.bindingDomain! catch _ => pure true) then return ← k found e
+  let s ← latexPP e.bindingDomain!
+  withBindingBodyUnusedName e fun _ body => gatherStructures about body (found.push s) k
+
+/-- `binder` followed by the structures it carries: `G : Type with Group(G), Fintype(G)`. -/
+def withStructures (binder : LatexData) (structures : Array LatexData) : LatexData :=
+  if structures.isEmpty then binder
+  else binder ++ " \\text{ with } " ++ LatexData.intercalate ", " structures
 
 /-- Enter `e`, a `∀`, and every following `∀` over the same domain whose variable is
 used (an unused one is an implication or a plain function arrow, printed as such). -/
@@ -158,7 +195,7 @@ latex_pp_rules (kind := forallE) | e => do
   let domProp? ← try Meta.isProp e.bindingDomain! catch _ => pure false
 
   if prop? then
-    if (← read).collectHypotheses && ((arrow? ∧ domProp?) || e.binderInfo.isInstImplicit) then
+    if (← read).collectHypotheses && arrow? && domProp? then
       -- `A → B → C` is `A ∧ B ⟹ C`: gather every hypothesis before the conclusion
       return ← gatherHypotheses e #[] fun hyps concl => do
         let mut phyps := hyps[0]!.protect 35
@@ -173,11 +210,23 @@ latex_pp_rules (kind := forallE) | e => do
       let assoc := if (← read).implicationAssoc then LatexData.rightAssocOp else LatexData.nonAssocOp
       return pdom.protectRight 30 ++ assoc " \\implies " 30 ++ pbody.protectLeft 30
     else
+      if e.binderInfo.isInstImplicit && (← read).collectHypotheses then
+        -- a structure on a type bound further out: `with Group(G), …`
+        return ← gatherStructures (fun _ => true) e #[] fun structures body => do
+          let pbody ← latexPP body
+          let pall := "\\text{with } " ++ LatexData.intercalate ", " structures ++ ",\\ " ++ pbody
+          return pall |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 0)
       -- forall; consecutive variables of the same type share one quantifier
       forallGroup e.bindingDomain! e #[] fun names body => do
-        let pbody ← latexPP body
         let vars := ", ".intercalate (names.map (·.toLatex)).toList
         let binder ← binderLatex vars e.bindingDomain!
+        -- the variables this quantifier binds are the last ones in the local context
+        let bound := (← getLCtx).getFVarIds.toList.reverse.take names.size
+        let about (domain : Expr) := bound.any domain.containsFVar
+        let (binder, body) ← if (← read).collectHypotheses then
+            gatherStructures about body #[] fun structures body => return (withStructures binder structures, body)
+          else pure (binder, body)
+        let pbody ← latexPP body
         let pall := "\\forall " ++ binder ++ ",\\ " ++ pbody
         return pall |>.resetBP (lbp := .Infinity) |>.mergeBP (rbp := .NonAssoc 0)
   else

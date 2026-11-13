@@ -18,11 +18,13 @@ structure Config where
   smallness : Nat := 0
   /-- Whether implication is right associative -/
   implicationAssoc : Bool := false
-  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication. Instance
-  arguments, `[Group G]`, are assumptions too, and join the hypotheses. -/
+  /-- Whether to print `A → B → C` as `A ∧ B ⟹ C`, with one implication. An instance
+  argument whose class is a proposition, `[Nonempty α]`, is a hypothesis too; one that
+  carries data, `[Group G]`, is a structure chosen on `G`, and joins its quantifier:
+  `∀ G : Type with Group(G), …`. -/
   collectHypotheses : Bool := false
   /-- Whether functions read as in mathematics: a type `α → β → γ` as `(α, β) → γ`, with
-  its inputs together, and `fun a b => e` as `(a, b) ↦ e`, without binder types. -/
+  its inputs together, and `fun (a b : ℕ) => e` as `(a, b ∈ ℕ) ↦ e`. -/
   mathFunctions : Bool := false
   /-- Whether a variable ranging over a type of elements reads `x ∈ T`, and over `Set α`,
   `s ⊆ α`, rather than `x : T`. Variables over sorts and function types keep `x : T`. -/

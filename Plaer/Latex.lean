@@ -263,17 +263,19 @@ meta def limitPoint (filter : Expr) : LatexPrinterM String := do
   | _, _ => failure
 
 latex_pp_app_rules (kind := const.Filter.Tendsto)
-  | _, #[_, _, f, source, target] => do
+  | _, #[domain, _, f, source, target] => do
     let source ← limitPoint source
     let target ← limitPoint target
     withBindingBodyUnusedName' f `x fun name body => do
+      -- the variable's type stays: a sequence (`n ∈ ℕ`) and a function on `ℝ` differ
+      let range := (← binderLatex name.toLatex domain).latex.1
       let body ← latexPP body
-      return (LatexData.atomString s!"\\lim_\{{name.toLatex} \\to {source}} " ++ body.protect 65 ++
-        " = " ++ target).resetBP (.NonAssoc 50) (.NonAssoc 50)
+      return (LatexData.atomString s!"\\lim_\{\\substack\{{name.toLatex} \\to {source} \\\\ {range}}} " ++
+        body.protect 65 ++ " = " ++ target).resetBP (.NonAssoc 50) (.NonAssoc 50)
 
 /-- `∀ᶠ x in l, p x`: `p(x)` holds from some point on (`atTop`), or near a point (`𝓝 a`). -/
 latex_pp_app_rules (kind := const.Filter.Eventually)
-  | _, #[_, p, filter] => do
+  | _, #[domain, p, filter] => do
     let range ← match filter.getAppFn.constName?, filter.getAppNumArgs with
       | some `Filter.atTop, 2 => pure fun x => s!"\\text\{for all sufficiently large } {x}"
       | some `Filter.atBot, 2 => pure fun x => s!"\\text\{for all sufficiently small } {x}"
@@ -282,8 +284,9 @@ latex_pp_app_rules (kind := const.Filter.Eventually)
         pure fun x => s!"\\text\{for all } {x} \\text\{ sufficiently close to } {a}"
       | _, _ => failure
     withBindingBodyUnusedName' p `x fun name body => do
+      let bound := (← binderLatex name.toLatex domain).latex.1
       let body ← latexPP body
-      return (body.protect 35 ++ ",\\ " ++ range name.toLatex).resetBP (.NonAssoc 30) (.NonAssoc 30)
+      return (body.protect 35 ++ ",\\ " ++ range bound).resetBP (.NonAssoc 30) (.NonAssoc 30)
 
 /-- The number of elements of a finite type, `|α|`. -/
 latex_pp_app_rules (kind := const.Fintype.card)
@@ -357,12 +360,20 @@ meta def notationNotes (e : Expr) : Array String := Id.run do
     notes := notes.push "As in Lean, $x / 0 = 0$ and $0^{-1} = 0$."
   return notes
 
-/-! ## A conversion shows only when it can change a value
+/-! ## A conversion is always shown
 
-`ℕ ⊆ ℤ ⊆ ℚ ⊆ ℝ`: a number placed in a larger number system is the same number, and
-prints as itself. A conversion is invisible exactly when it is injective, which for the
-casts from `ℕ`, `ℤ` and `ℚ` is when the target has characteristic zero (`CharZero`).
-Any other conversion, such as `ℤ → ℤ/nℤ`, prints as `[a]_T`, `a` as an element of `T`. -/
+A conversion, `↑x`, moves a value into another type: `ℕ` into `ℝ`, an element of
+`{n // n > 0}` into `ℕ`. It prints as Lean writes one, `(x : T)`, "x as an element of
+`T`", so the reader always knows which type each operation happens in. This holds for
+every function Lean itself marks as a coercion (`@[coe]`). -/
+
+latex_pp_rules (kind := app) | e => do
+  let .const fn _ := e.getAppFn | failure
+  let some info ← getCoeFnInfo? fn | failure
+  unless info.type == .coe && e.getAppNumArgs == info.numArgs do failure
+  let value ← latexPP e.getAppArgs[info.coercee]!
+  let target ← latexPP (← inferType e)
+  return LatexData.atomString ("(" ++ value.latex.1 ++ " : " ++ target.latex.1 ++ ")")
 
 /-- Whether the casts into `target` are injective: whether `CharZero target` holds. -/
 meta def castIsInjective (target : Expr) : MetaM Bool := do
@@ -371,38 +382,6 @@ meta def castIsInjective (target : Expr) : MetaM Bool := do
     let charZero ← mkAppOptM `CharZero #[target, none]
     return (← synthInstance? charZero).isSome
   catch _ => return false
-
-meta def castLatex (target value : Expr) : LatexPrinterM LatexData := do
-  let value ← latexPP value
-  if ← castIsInjective target then return value
-  let target ← withExtraSmallness 2 <| latexPP target
-  return LatexData.atomString ("\\left[" ++ value.latex.1 ++ "\\right]_{" ++ target.latex.1 ++ "}")
-
-latex_pp_app_rules (const := Nat.cast)
-  | _, #[target, _, n] => castLatex target n
-latex_pp_app_rules (const := Int.cast)
-  | _, #[target, _, n] => castLatex target n
-latex_pp_app_rules (kind := const.Rat.cast)
-  | _, #[target, _, n] => castLatex target n
-
-/-- A structure whose other fields are all proofs, such as `{x // p x}` or `Fin n`, is its
-one data field with a guarantee about it. Taking that field out, `↑x`, can never make two
-different values equal, so it prints as nothing: `↑x` is `x`. -/
-latex_pp_rules (kind := app) | e => do
-  let .const projection _ := e.getAppFn | failure
-  let some info ← getProjectionFnInfo? projection | failure
-  if info.fromClass then failure
-  unless e.getAppNumArgs == info.numParams + 1 do failure
-  let ctor ← getConstInfoCtor info.ctorName
-  let onlyData ← forallTelescope ctor.type fun binders _ => do
-    let fields := binders[info.numParams:].toArray
-    let mut others := true
-    for field in fields, index in [0:fields.size] do
-      if index != info.i then
-        others := others && (← Meta.isProp (← Meta.inferType field))
-    return others
-  unless onlyData do failure
-  latexPP e.appArg!
 
 /-- Rounding to an integer: `⌊x⌋` and `⌈x⌉`, into `ℤ` or `ℕ`. -/
 latex_pp_app_rules (kind := const.Int.floor)
@@ -423,7 +402,7 @@ meta def boxNotes (e : Expr) : MetaM (Array String) := do
     if let some cast := e.find? (fun sub => sub.isAppOfArity head 3) then
       unless ← castIsInjective cast.getAppArgs[0]! do lossy := true
   if lossy then
-    notes := notes.push "$[a]_T$ is $a$ as an element of $T$, where different numbers can become equal."
+    notes := notes.push "Moving a number into $\\mathbb{Z}/n\\mathbb{Z}$, or another type where it is not injective, can make different numbers equal."
   return notes
 
 /-- The same strict printer is used for saved statements and live verification. -/

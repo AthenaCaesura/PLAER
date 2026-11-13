@@ -1,13 +1,13 @@
 {
-  "built_at": "2026-11-13T17:23:47.552761+00:00",
+  "built_at": "2026-11-13T17:54:32.717088+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
   "paper_sha256": "4b4da9d098a2b92ada29d21325dfb694d617aa6e00314c1e1d6e4a9c51c7a522",
   "source_sha256": "7c5e773977b7d778effdc2e3be130e5b348ebefe6e6a4404a7fbe3aac9599aa9",
-  "document_sha256": "e44dae0755893973a1df312538fa4c5f9f4aa9a96d39af43bd4352da71017604",
-  "engine_fingerprint": "4a6a7b6c47ebf6494bfee9c64aab96680a15cee848666e3916aa0e922012c130",
+  "document_sha256": "3628bdb09c24eddf237fc917feaa46f9e56a4dc8eff984ef85c89da14f5e35ec",
+  "engine_fingerprint": "b36e8569b74e2a01a50350f199e8cca8555ff7143c33c72a94f6583d516b8732",
   "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
   "latex_engine": {
     "repository": "https://github.com/kmill/LeanTeX",
@@ -240,7 +240,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
                 "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
                 "statementHash": "538884409",
-                "wallMs": 1140
+                "wallMs": 1235
               },
               {
                 "file": "proofs/Missing.lean",
@@ -309,7 +309,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1062
+                "wallMs": 1269
               },
               {
                 "file": "proofs/Gauss.lean",
@@ -333,7 +333,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1136
+                "wallMs": 1302
               }
             ],
             "statement": true,
@@ -389,7 +389,7 @@
                 "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
                 "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
-                "wallMs": 1008
+                "wallMs": 1313
               }
             ],
             "statement": true,
@@ -459,7 +459,7 @@
                 "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1216
+                "wallMs": 1298
               }
             ],
             "statement": true,
@@ -505,7 +505,7 @@
                 "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1008
+                "wallMs": 1301
               }
             ],
             "statement": true,

@@ -54,17 +54,21 @@ elab "#test_latex" : command => Command.liftTermElabM do
     ("∀ x : ℕ, x ∈ Finset.range 3 → x < 3", "\\forall x \\in \\mathbb{N},\\ x \\in \\{0, \\ldots, 2\\} \\implies x < 3"),
     ("∀ f : ℕ → ℝ, f 0 = f 0", "\\forall f : \\mathbb{N} \\to \\mathbb{R},\\ f(0) = f(0)"),
     ("∀ f : ℕ → ℕ → ℕ, f 0 0 = 0", "\\forall f : (\\mathbb{N}, \\mathbb{N}) \\to \\mathbb{N},\\ f(0, 0) = 0"),
-    -- Rule 1: an instance argument is an assumption, and joins the hypotheses.
-    ("∀ (α : Type) [LinearOrder α] (a b : α), min a b ≤ a", "\\forall \\alpha : \\mathbf{Type},\\ \\operatorname{LinearOrder}(\\alpha) \\implies \\forall a, b \\in \\alpha,\\ \\min(a, b) \\le a"),
+    -- Rule 1: a structure on a type comes with its variable; a class that is a
+    -- proposition is a hypothesis; a structure on an outer variable stands alone.
+    ("∀ (α : Type) [LinearOrder α] (a b : α), min a b ≤ a", "\\forall \\alpha : \\mathbf{Type} \\text{ with } \\operatorname{LinearOrder}(\\alpha),\\ \\forall a, b \\in \\alpha,\\ \\min(a, b) \\le a"),
+    ("∀ (α : Type) [Nonempty α], ∃ x : α, x = x", "\\forall \\alpha : \\mathbf{Type},\\ \\operatorname{Nonempty}(\\alpha) \\implies \\exists x \\in \\alpha,\\ x = x"),
+    ("∀ (α : Type) (n : ℕ) [LinearOrder α] (a : α), min a a = a", "\\forall \\alpha : \\mathbf{Type},\\ \\forall n \\in \\mathbb{N},\\ \\text{with } \\operatorname{LinearOrder}(\\alpha),\\ \\forall a \\in \\alpha,\\ \\min(a, a) = a"),
     -- Rule 2: encodings read as what they encode.
-    ("(fun (a b : ℕ) => a + b) 1 2 = 3", "((a, b) \\mapsto a + b)(1, 2) = 3"),
-    ("∀ i : Fin 5, (i : ℕ) < 5", "\\forall i \\in \\{0, \\ldots, 4\\},\\ i < 5"),
-    ("∀ x : {n : ℕ // n > 0}, (x : ℕ) ≥ 1", "\\forall x \\in \\left\\{n\\in\\mathbb{N}\\;\\middle|\\; n > 0\\right\\},\\ x \\ge 1"),
+    ("(fun (a b : ℕ) => a + b) 1 2 = 3", "((a, b \\in \\mathbb{N}) \\mapsto a + b)(1, 2) = 3"),
+    ("(fun (x : ℝ) (n : ℕ) => x ^ n) 2 3 = 8", "((x \\in \\mathbb{R},\\ n \\in \\mathbb{N}) \\mapsto x^{n})(2, 3) = 8"),
+    ("∀ i : Fin 5, (i : ℕ) < 5", "\\forall i \\in \\{0, \\ldots, 4\\},\\ (i : \\mathbb{N}) < 5"),
+    ("∀ x : {n : ℕ // n > 0}, (x : ℕ) ≥ 1", "\\forall x \\in \\left\\{n\\in\\mathbb{N}\\;\\middle|\\; n > 0\\right\\},\\ (x : \\mathbb{N}) \\ge 1"),
     -- Rule 3: an unusual operation looks unusual.
     ("∀ n m : ℕ, n - m + m ≥ n", "\\forall n, m \\in \\mathbb{N},\\ n \\mathbin{\\dot{-}} m + m \\ge n"),
     ("∀ a b : ℤ, a / b * b + a % b = a", "\\forall a, b \\in \\mathbb{Z},\\ a \\mathbin{\\mathrm{div}} b \\cdot b + a \\bmod b = a"),
-    -- Rule 4: a conversion shows only when it can change a value.
-    ("∀ n : ℕ, ((n : ℤ) : ℝ) = (n : ℝ)", "\\forall n \\in \\mathbb{N},\\ n = n"),
+    -- Rule 4: a conversion is always shown.
+    ("∀ n : ℕ, ((n : ℤ) : ℝ) = (n : ℝ)", "\\forall n \\in \\mathbb{N},\\ ((n : \\mathbb{Z}) : \\mathbb{R}) = (n : \\mathbb{R})"),
     -- A name defined in this file, not imported, prints by its own name.
     ("LatexTests.unmapped 3 = 10", "\\operatorname{unmapped}(3) = 10")]
   let mut fixtures : Array Json := #[]

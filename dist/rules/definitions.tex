@@ -1,25 +1,26 @@
-\forall G : \mathbf{Type},\ \operatorname{Group}(G) \land \operatorname{Fintype}(G) \implies \forall g \in G,\ g^{\left|G\right|} = 1
-\forall \alpha : \mathbf{Type},\ \operatorname{LinearOrder}(\alpha) \implies \forall a, b \in \alpha,\ \min(a, b) \le a
+\forall G : \mathbf{Type} \text{ with } \operatorname{Group}(G), \operatorname{Fintype}(G),\ \forall g \in G,\ g^{\left|G\right|} = 1
+\forall \alpha : \mathbf{Type} \text{ with } \operatorname{LinearOrder}(\alpha),\ \forall a, b \in \alpha,\ \min(a, b) \le a
 \begin{aligned}\operatorname{size} &: \alpha \to \mathbb{N}\end{aligned}
-\forall \alpha : \mathbf{Type},\ \operatorname{Sized}(\alpha) \implies \forall a, b \in \alpha,\ a = b \implies \operatorname{size}(a) = \operatorname{size}(b)
+\forall \alpha : \mathbf{Type} \text{ with } \operatorname{Sized}(\alpha),\ \forall a, b \in \alpha,\ a = b \implies \operatorname{size}(a) = \operatorname{size}(b)
+\forall \alpha : \mathbf{Type},\ \operatorname{Nonempty}(\alpha) \implies \exists x \in \alpha,\ x = x
 \forall f : (\mathbb{R}, \mathbb{R}) \to \mathbb{R},\ (\forall x, y \in \mathbb{R},\ f(x, y) = f(y, x)) \implies f(1, 2) = f(2, 1)
-(x \mapsto x^{2}) = (x \mapsto x \cdot x)
-\forall i \in \{0, \ldots, 4\},\ i < 5
-\forall n \in \left\{n\in\mathbb{N}\;\middle|\; n > 0\right\},\ n \ge 1
+((x \in \mathbb{R}) \mapsto x^{2}) = ((x \in \mathbb{R}) \mapsto x \cdot x)
+\forall i \in \{0, \ldots, 4\},\ (i : \mathbb{N}) < 5
+\forall n \in \left\{n\in\mathbb{N}\;\middle|\; n > 0\right\},\ (n : \mathbb{N}) \ge 1
 \begin{aligned}x &: \mathbb{Z} \\ y &: \mathbb{Z}\end{aligned}
 \operatorname{origin} \coloneqq (0, 0)
 \begin{aligned}\operatorname{value} &: \mathbb{N} \\ \operatorname{small} &: \operatorname{value} < 10\end{aligned}
 \operatorname{seven} \coloneqq 7
-\forall d \in \operatorname{Digit},\ d < 10
-\lim_{n \to \infty} \frac{1}{n} = 0
-n^{2} > 100,\ \text{for all sufficiently large } n
+\forall d \in \operatorname{Digit},\ \operatorname{value}(d) < 10
+\lim_{\substack{n \to \infty \\ n \in \mathbb{N}}} \frac{1}{(n : \mathbb{R})} = 0
+n^{2} > 100,\ \text{for all sufficiently large } n \in \mathbb{N}
 \forall n, m \in \mathbb{N},\ n \mathbin{\dot{-}} m + m \ge n
 \forall n \in \mathbb{N},\ \sum_{i = 0}^{n} i = \left\lfloor \frac{n \cdot (n + 1)}{2} \right\rfloor
 \forall a, b \in \mathbb{Z},\ b \cdot (a \mathbin{\mathrm{div}} b) + a \bmod b = a
 \forall x \in \mathbb{R},\ x \neq 0 \implies \frac{x}{x} = 1
-\forall n \in \mathbb{N},\ \left\lfloor \frac{n}{2} \right\rfloor \le \frac{n}{2}
-\left[1\right]_{\mathbb{Z}/3\mathbb{Z}} = \left[4\right]_{\mathbb{Z}/3\mathbb{Z}}
-\forall x \in \mathbb{R},\ \lfloor x \rfloor \le x
+\forall n \in \mathbb{N},\ (\left\lfloor \frac{n}{2} \right\rfloor : \mathbb{R}) \le \frac{(n : \mathbb{R})}{2}
+(1 : \mathbb{Z}/3\mathbb{Z}) = (4 : \mathbb{Z}/3\mathbb{Z})
+\forall x \in \mathbb{R},\ (\lfloor x \rfloor : \mathbb{R}) \le x
 \forall x \in \mathbb{R},\ x^{2} \ge 0
 \forall s \subseteq \mathbb{N},\ s \subseteq s
 \forall f : \mathbb{N} \to \mathbb{N},\ \exists n \in \mathbb{N},\ f(0) = n
