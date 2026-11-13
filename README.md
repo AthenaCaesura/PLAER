@@ -70,7 +70,6 @@ dist/fermat/index.html            the document, as one offline HTML file
 | Project | What it illustrates | Paper | Offline document |
 | --- | --- | --- | --- |
 | Basics | Every kind of box, with a short explanation of each, and every answer a play button can give. | [Basics/Paper.md](examples/Basics/Paper.md) | [dist/basics](dist/basics/index.html) |
-| Rules | The five rules that print Lean as mathematics, each shown on Mathlib's notions and the paper's own. | [Rules/Paper.md](examples/Rules/Paper.md) | [dist/rules](dist/rules/index.html) |
 | Fermat | Two statements, with an intentionally wrong last-theorem attempt and a valid little-theorem proof. | [Fermat/Paper.md](examples/Fermat/Paper.md) | [dist/fermat](dist/fermat/index.html) |
 
 ## View a document
@@ -122,23 +121,28 @@ Run `python scripts/check.py` to build every example and run every test.
 
 | Location | Purpose |
 | --- | --- |
-| [Plaer/](Plaer/) | Lean: LaTeX notation rules, declaration reports, and the exact-statement proof check. |
+| [Plaer/](Plaer/) | Lean: the formula language (meaning, LaTeX, round-trip proof), declaration reports, and the exact-statement proof check. |
 | [examples/](examples/) | Independent projects: a paper, its generated Lean file, and separate proofs. |
 | [scripts/](scripts/) | The paper format, the build, proof checks, packaging, and the local server. |
 | [web/](web/) | The page: one script, one stylesheet, logos, and bundled KaTeX and Marked. |
 | [tests/](tests/) | Lean, Python, and JavaScript tests and fixtures. |
 | [docs/](docs/) | Setup, authoring, architecture, and development guides. |
 | [design/logo/](design/logo/) | Wordmark source and glyph provenance. |
-| [vendor/LeanTeX/](vendor/LeanTeX/) | Maintained LeanTeX source fork and its license. |
 | [dist/](dist/) | Per-project documents, source snapshots, checkers, and audit records. |
 
-## Renderer and attribution
+## How the LaTeX is checked
 
-PLAER uses a local fork of [Kyle Miller's LeanTeX](https://github.com/kmill/LeanTeX),
-ported to Lean 4.35.0. Mathematical notation comes from elaborated Lean
-expressions. Notation without a registered LaTeX form is never guessed: that
-box keeps its Lean view and says what is missing.
+A box's LaTeX is never a print-out of Lean's expression. Each claim is written
+as a formula of a small language defined in Lean ([Plaer/Formula/](Plaer/Formula/)),
+which gives every formula its meaning (`denote`) and its LaTeX (`render`):
 
-See the [architecture guide](docs/architecture.md),
-[fork notes](vendor/LeanTeX/FORK.md), and
-[third-party notices](THIRD_PARTY_NOTICES.md) for implementation and licensing.
+- Lean's kernel checks, for every box, that the formula's meaning is exactly
+  the declaration's statement.
+- A theorem proves that the LaTeX determines the formula: reading it back gives
+  the same formula (`Plaer.Formula.parse_render`).
+
+A claim the language cannot express shows its Lean view, and says what is
+missing. Papers are written in the style the language expresses.
+
+See the [architecture guide](docs/architecture.md) and the
+[third-party notices](THIRD_PARTY_NOTICES.md).

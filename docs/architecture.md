@@ -16,7 +16,7 @@ Statements.lean                    same line numbers as the paper
   │                                imports loaded; the paper runs as one command
   ▼
 Plaer.localReport (Lean)           every declaration: kind, lines, doc comment,
-  │                                pretty-printed Lean, LaTeX from LeanTeX
+  │                                pretty-printed Lean, checked LaTeX
   ▼
 scripts/document.py                place boxes by line; attach `-- proof:` lines
   │
@@ -76,13 +76,21 @@ again.
 
 ## Mathematical notation
 
-LaTeX is printed from elaborated Lean expressions by the maintained
-[LeanTeX fork](../vendor/LeanTeX/FORK.md) with PLAER's rules in
-[Plaer/Latex.lean](../Plaer/Latex.lean). Rendering is strict: an expression
-without a registered form is an error rather than guessed mathematics. In a
-document that error is confined to its box, which keeps its Lean view and
-reports the reason. This pretty printer is not itself a formal proof that the
-LaTeX is equivalent to the Lean.
+LaTeX comes from a formula language defined in Lean, in
+[Plaer/Formula/](../Plaer/Formula/):
+
+| File | Role |
+| --- | --- |
+| `Syntax.lean` | Types and formulas. |
+| `Semantics.lean` | `denote`: each formula's meaning, one line per symbol. This is the table a reader trusts. |
+| `Latex.lean` | `render`: tokens by precedence, spelled out with single spaces. |
+| `Parse.lean`, `RoundTrip.lean` | `lex` and `parse`, and the theorem that the LaTeX determines the formula. |
+| `Reflect.lean` | Reads a declaration as a formula (not trusted), and has Lean's kernel check that the formula's meaning is exactly the declaration. |
+
+A declaration outside the language, or a formula that fails the kernel check,
+has no LaTeX: its box keeps its Lean view and reports the reason. What remains
+outside any proof is that KaTeX draws the LaTeX as written, and that a reader
+reads each symbol as `Semantics.lean` defines it.
 
 ## The page and the server
 
@@ -109,7 +117,6 @@ a time.
 | `scripts/` | Paper format, build, proof checks, packaging, server, and check runner. |
 | `web/` | The page script and stylesheet, SVG assets, bundled KaTeX and Marked. |
 | `tests/` | Engine and pipeline tests, and fixtures. |
-| `vendor/LeanTeX/` | Maintained upstream source fork, provenance, and license. |
 | `dist/<id>/` | The document, source snapshots, checkers, and audit records. |
 | `build/<id>/` | Ignored intermediates, caches, and logs. |
 | `design/logo/` | Wordmark construction and glyph provenance. |

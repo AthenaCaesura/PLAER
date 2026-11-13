@@ -23,7 +23,6 @@ PAPER = """# {title}
 
 ```lean
 import Mathlib.Data.Nat.Basic
-import Plaer.Latex
 ```
 
 Write notes in Markdown, with $...$ for mathematics. Every Lean declaration

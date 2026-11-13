@@ -28,7 +28,7 @@ class LeanRejected(ValueError):
 def engine_fingerprint() -> str:
     """Changes when the Lean side of PLAER or its dependencies change."""
     paths = [ROOT / "lakefile.toml", ROOT / "lake-manifest.json", ROOT / "lean-toolchain"]
-    paths += sorted((ROOT / "Plaer").rglob("*.lean")) + sorted((ROOT / "vendor/LeanTeX").rglob("*.lean"))
+    paths += sorted((ROOT / "Plaer").rglob("*.lean"))
     digest = hashlib.sha256()
     for path in paths:
         digest.update(relative(path).encode() + b"\0" + path.read_bytes() + b"\0")

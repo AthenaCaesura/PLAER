@@ -1,25 +1,18 @@
 {
-  "built_at": "2026-11-13T17:54:32.717088+00:00",
+  "built_at": "2026-11-13T20:29:54.123120+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
-  "paper_sha256": "4b4da9d098a2b92ada29d21325dfb694d617aa6e00314c1e1d6e4a9c51c7a522",
-  "source_sha256": "7c5e773977b7d778effdc2e3be130e5b348ebefe6e6a4404a7fbe3aac9599aa9",
-  "document_sha256": "3628bdb09c24eddf237fc917feaa46f9e56a4dc8eff984ef85c89da14f5e35ec",
-  "engine_fingerprint": "b36e8569b74e2a01a50350f199e8cca8555ff7143c33c72a94f6583d516b8732",
-  "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
-  "latex_engine": {
-    "repository": "https://github.com/kmill/LeanTeX",
-    "commit": "d66db4582b6cb4d9fa0b6309168103a248a5fd46",
-    "license": "Apache-2.0",
-    "fork": "PLAER local source fork",
-    "lean_version": "4.35.0"
-  },
+  "paper_sha256": "158cfa2a505207c38193851f7d87b001a4adc246b68d84b6b24ac43bc4e0b41e",
+  "source_sha256": "529cd20c585397aa38792ebdde2667a12246514015cf16f06daa50891478e7ca",
+  "document_sha256": "40348392a92868ab93056035a4de4cfe57b0da436b3808bc55b5df41a5950e18",
+  "engine_fingerprint": "8bda243885165827d524528d26577d2810edca0a42690eeaa20d07c58e1d119c",
+  "latex_generated_by": "Plaer/Formula (kernel-checked formulas; Plaer.Formula.parse_render)",
   "state": {
     "project": "basics",
     "title": "Theorems, conjectures, and definitions",
-    "revision": "4b4da9d098a2b92ada29d21325dfb694d617aa6e00314c1e1d6e4a9c51c7a522",
+    "revision": "158cfa2a505207c38193851f7d87b001a4adc246b68d84b6b24ac43bc4e0b41e",
     "paperFile": "examples/Basics/Paper.md",
     "paperUrl": "sources/Paper.md",
     "sourceFile": "examples/Basics/Statements.lean",
@@ -34,34 +27,34 @@
       },
       {
         "kind": "lean",
-        "text": "import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Intervals\nimport Plaer.Latex",
+        "text": "import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Intervals",
         "line": 4,
         "items": [
           {
             "type": "code",
-            "text": "import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Intervals\nimport Plaer.Latex"
+            "text": "import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic\nimport Mathlib.Data.Nat.Choose.Basic\nimport Mathlib.Data.Nat.Prime.Defs\nimport Mathlib.Algebra.BigOperators.Intervals"
           }
         ]
       },
       {
         "kind": "markdown",
         "text": "A paper holds the things Lean has: definitions, and claims. A claim is a conjecture until a proof of it is checked; then it is a theorem. PLAER shows each one in its own kind of box.\n\n## Definition\n\nThese Lean declarations make a **Definition** box:\n\n- `def` (and `abbrev`, `noncomputable def`) that is not a claim: a function, a number, a set, …\n- `structure` and `class`: a new type whose values are made of named fields.\n- `inductive`: a new type, or a property, given by the rules that build its values.\n\nEach box starts with the name's type, as Lean records it. For a function that is its domain and range: `triangle : ℕ → ℕ` takes a natural number and gives one back. Below it is the definition itself. The $n$-th triangular number is $0 + 1 + \\dots + n$:",
-        "line": 11
+        "line": 10
       },
       {
         "kind": "lean",
         "text": "/-- Triangular numbers -/\ndef Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i",
-        "line": 24,
+        "line": 23,
         "items": [
           {
             "type": "declaration",
             "doc": "Triangular numbers",
             "kind": "definition",
-            "latex": "\\operatorname{triangle}(n) \\coloneqq \\sum_{i = 0}^{n} i",
+            "latex": null,
+            "latexError": "No notation for Finset.sum",
             "leanVersion": "4.35.0",
-            "line": 24,
+            "line": 23,
             "name": "Basics.triangle",
-            "notes": [],
             "signatureLatex": "\\operatorname{triangle} : \\mathbb{N} \\to \\mathbb{N}",
             "source": "/-- Triangular numbers -/\ndef Basics.triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i",
             "sourceModule": "[anonymous]",
@@ -78,12 +71,12 @@
       {
         "kind": "markdown",
         "text": "A `structure` or `class` box lists its fields and their types. Its type line, $\\operatorname{Point} : \\mathbf{Type}$, says that `Point` is itself a type, like $\\mathbb{N}$.",
-        "line": 28
+        "line": 27
       },
       {
         "kind": "lean",
         "text": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
-        "line": 31,
+        "line": 30,
         "items": [
           {
             "type": "declaration",
@@ -91,7 +84,7 @@
             "kind": "definition",
             "latex": "\\begin{aligned}x &: \\mathbb{N} \\\\ y &: \\mathbb{N}\\end{aligned}",
             "leanVersion": "4.35.0",
-            "line": 31,
+            "line": 30,
             "name": "Basics.Point",
             "signatureLatex": "\\operatorname{Point} : \\mathbf{Type}",
             "source": "/-- A point with natural-number coordinates -/\nstructure Basics.Point where\n  x : ℕ\n  y : ℕ",
@@ -108,22 +101,22 @@
       {
         "kind": "markdown",
         "text": "A `class` is a structure whose values Lean finds by itself. Its fields can include laws: here a monoid is a type with an operation and a unit, where the operation is associative and the unit does nothing. The class has a parameter, the type $\\alpha$, named once in its type line.",
-        "line": 37
+        "line": 36
       },
       {
         "kind": "lean",
         "text": "/-- A monoid -/\nclass Basics.Monoid (α : Type) where\n  op : α → α → α\n  unit : α\n  op_assoc : ∀ a b c : α, op (op a b) c = op a (op b c)\n  op_unit : ∀ a : α, op a unit = a",
-        "line": 40,
+        "line": 39,
         "items": [
           {
             "type": "declaration",
             "doc": "A monoid",
             "kind": "definition",
-            "latex": "\\begin{aligned}\\operatorname{op} &: (\\alpha, \\alpha) \\to \\alpha \\\\ \\operatorname{unit} &: \\alpha \\\\ \\operatorname{op\\_assoc} &: \\forall a, b, c \\in \\alpha,\\ \\operatorname{op}(\\operatorname{op}(a, b), c) = \\operatorname{op}(a, \\operatorname{op}(b, c)) \\\\ \\operatorname{op\\_unit} &: \\forall a \\in \\alpha,\\ \\operatorname{op}(a, \\operatorname{unit}) = a\\end{aligned}",
+            "latex": "\\begin{aligned}\\operatorname{op} &: ( \\alpha , \\alpha ) \\to \\alpha \\\\ \\operatorname{unit} &: \\alpha \\\\ \\operatorname{op\\_assoc} &: \\forall a , b , c \\in \\alpha ,\\; \\operatorname{op} ( \\operatorname{op} ( a , b ) , c ) = \\operatorname{op} ( a , \\operatorname{op} ( b , c ) ) \\\\ \\operatorname{op\\_unit} &: \\forall a \\in \\alpha ,\\; \\operatorname{op} ( a , \\operatorname{unit} ) = a\\end{aligned}",
             "leanVersion": "4.35.0",
-            "line": 40,
+            "line": 39,
             "name": "Basics.Monoid",
-            "signatureLatex": "\\operatorname{Monoid}(\\alpha) : \\mathbf{Type} \\quad \\text{for } \\alpha : \\mathbf{Type}",
+            "signatureLatex": "\\operatorname{Monoid} ( \\alpha ) : \\mathbf{Type} \\quad \\text{for } \\alpha : \\mathbf{Type}",
             "source": "/-- A monoid -/\nclass Basics.Monoid (α : Type) where\n  op : α → α → α\n  unit : α\n  op_assoc : ∀ a b c : α, op (op a b) c = op a (op b c)\n  op_unit : ∀ a : α, op a unit = a",
             "block": 3,
             "offset": 0,
@@ -138,20 +131,20 @@
       {
         "kind": "markdown",
         "text": "An `inductive` box lists the ways to build its values. Here the even numbers are defined by two rules: $0$ is even, and if $n$ is even, so is $n + 2$. Its type, $\\operatorname{even} : \\mathbb{N} \\to \\mathbf{Prop}$, says that `even` takes a natural number and gives a proposition: it is a property of numbers.",
-        "line": 48
+        "line": 47
       },
       {
         "kind": "lean",
         "text": "/-- Even numbers, by two rules -/\ninductive Basics.even : ℕ → Prop\n  | zero : Basics.even 0\n  | step (n : ℕ) : Basics.even n → Basics.even (n + 2)",
-        "line": 51,
+        "line": 50,
         "items": [
           {
             "type": "declaration",
             "doc": "Even numbers, by two rules",
             "kind": "definition",
-            "latex": "\\begin{aligned}\\operatorname{zero} &: \\operatorname{even}(0) \\\\ \\operatorname{step} &: \\forall n \\in \\mathbb{N},\\ \\operatorname{even}(n) \\implies \\operatorname{even}(n + 2)\\end{aligned}",
+            "latex": "\\begin{aligned}\\operatorname{zero} &: \\operatorname{even} ( 0 ) \\\\ \\operatorname{step} &: \\forall n \\in \\mathbb{N} ,\\; \\operatorname{even} ( n ) \\implies \\operatorname{even} ( n + 2 )\\end{aligned}",
             "leanVersion": "4.35.0",
-            "line": 51,
+            "line": 50,
             "name": "Basics.even",
             "signatureLatex": "\\operatorname{even} : \\mathbb{N} \\to \\mathbf{Prop}",
             "source": "/-- Even numbers, by two rules -/\ninductive Basics.even : ℕ → Prop\n  | zero : Basics.even 0\n  | step (n : ℕ) : Basics.even n → Basics.even (n + 2)",
@@ -168,24 +161,24 @@
       {
         "kind": "markdown",
         "text": "## Conjecture\n\nA `def … : Prop` is a claim: Lean calls it a proposition. Writing it down does not assert it. Until a proof of it is checked, it is a **Conjecture**. Goldbach's conjecture has been checked for every even number up to $4 \\times 10^{18}$, but nobody has proved it:",
-        "line": 57
+        "line": 56
       },
       {
         "kind": "lean",
         "text": "/-- Goldbach's conjecture -/\ndef Basics.goldbach : Prop :=\n  ∀ n : ℕ, n > 2 → 2 ∣ n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = n",
-        "line": 62,
+        "line": 61,
         "items": [
           {
             "type": "declaration",
             "doc": "Goldbach's conjecture",
             "kind": "candidate",
+            "latexError": "No notation for Dvd.dvd",
             "leanVersion": "4.35.0",
-            "line": 62,
+            "line": 61,
             "name": "Basics.goldbach",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "95177223",
-            "statementLatex": "\\forall n \\in \\mathbb{N},\\ n > 2 \\land 2 \\mid n \\implies \\exists p \\in \\mathbb{N},\\ \\exists q \\in \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = n",
+            "statementLatex": null,
             "statementLean": "def Basics.goldbach : Prop := ∀ n > 2, 2 ∣ n → ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n",
             "block": 5,
             "offset": 0,
@@ -201,24 +194,24 @@
       {
         "kind": "markdown",
         "text": "A conjecture can be false. Euler noticed that $n^2 + n + 41$ is prime for $n = 0, 1, \\dots, 39$, but at $n = 40$ it is $41^2$. The proof attached here is wrong, and the second proof file does not exist, so the claim stays a conjecture:",
-        "line": 67
+        "line": 66
       },
       {
         "kind": "lean",
         "text": "/-- Euler's prime-generating polynomial -/\ndef Basics.euler_statement : Prop := ∀ n : ℕ, (n ^ 2 + n + 41).Prime\n-- proof: proofs/File.lean Basics.Proofs.euler\n-- proof: proofs/Missing.lean Basics.Proofs.euler_missing",
-        "line": 70,
+        "line": 69,
         "items": [
           {
             "type": "declaration",
             "doc": "Euler's prime-generating polynomial",
             "kind": "candidate",
+            "latexError": "No notation for Nat.Prime",
             "leanVersion": "4.35.0",
-            "line": 70,
+            "line": 69,
             "name": "Basics.euler_statement",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "538884409",
-            "statementLatex": "\\forall n \\in \\mathbb{N},\\ \\operatorname{Prime}(n^{2} + n + 41)",
+            "statementLatex": null,
             "statementLean": "def Basics.euler_statement : Prop := ∀ (n : ℕ), Nat.Prime (n ^ 2 + n + 41)",
             "block": 6,
             "offset": 0,
@@ -240,7 +233,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
                 "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
                 "statementHash": "538884409",
-                "wallMs": 1235
+                "wallMs": 1186
               },
               {
                 "file": "proofs/Missing.lean",
@@ -264,24 +257,24 @@
       {
         "kind": "markdown",
         "text": "## Theorem\n\nA `-- proof:` line attaches a proof file to a claim. When a play button checks a proof, Lean has proved the claim and the box says **Theorem**. If the check happened earlier, for example when this page was built, the box says so; press play to check it again.\n\nEvery proof rests on the axioms of Lean's logic, and the box lists the ones its proof uses. A claim can have several proofs. Gauss's formula for the triangular numbers defined above has two, both from that definition:",
-        "line": 76
+        "line": 75
       },
       {
         "kind": "lean",
         "text": "/-- Gauss's formula -/\ndef Basics.gauss_statement : Prop := ∀ n : ℕ, 2 * Basics.triangle n = n * (n + 1)\n-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_induction\n-- proof: proofs/Gauss.lean Basics.Proofs.gauss_by_steps",
-        "line": 83,
+        "line": 82,
         "items": [
           {
             "type": "declaration",
             "doc": "Gauss's formula",
             "kind": "candidate",
             "leanVersion": "4.35.0",
-            "line": 83,
+            "line": 82,
             "name": "Basics.gauss_statement",
             "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "985449252",
-            "statementLatex": "\\forall n \\in \\mathbb{N},\\ 2 \\cdot \\operatorname{triangle}(n) = n \\cdot (n + 1)",
+            "statementLatex": "\\forall n \\in \\mathbb{N} ,\\; 2 \\cdot \\operatorname{triangle} ( n ) = n \\cdot ( n + 1 )",
             "statementLean": "def Basics.gauss_statement : Prop := ∀ (n : ℕ), 2 * Basics.triangle n = n * (n + 1)",
             "block": 7,
             "offset": 0,
@@ -309,7 +302,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1269
+                "wallMs": 1295
               },
               {
                 "file": "proofs/Gauss.lean",
@@ -333,7 +326,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_steps.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1302
+                "wallMs": 1331
               }
             ],
             "statement": true,
@@ -346,24 +339,24 @@
       {
         "kind": "markdown",
         "text": "## A theorem that assumes a conjecture\n\nA proof can never assume a conjecture. To build on one, put it in the claim: \"if Goldbach's conjecture holds, then …\". The theorem below is then honest about what it rests on, because the assumption is part of what it says:",
-        "line": 89
+        "line": 88
       },
       {
         "kind": "lean",
         "text": "/-- If Goldbach is right, 100 is a sum of two primes -/\ndef Basics.hundred_statement : Prop :=\n  Basics.goldbach → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p + q = 100\n-- proof: proofs/Primes.lean Basics.Proofs.hundred",
-        "line": 94,
+        "line": 93,
         "items": [
           {
             "type": "declaration",
             "doc": "If Goldbach is right, 100 is a sum of two primes",
             "kind": "candidate",
+            "latexError": "No notation for Nat.Prime",
             "leanVersion": "4.35.0",
-            "line": 94,
+            "line": 93,
             "name": "Basics.hundred_statement",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "1879992750",
-            "statementLatex": "\\operatorname{goldbach} \\implies \\exists p \\in \\mathbb{N},\\ \\exists q \\in \\mathbb{N},\\ \\operatorname{Prime}(p) \\land \\operatorname{Prime}(q) \\land p + q = 100",
+            "statementLatex": null,
             "statementLean": "def Basics.hundred_statement : Prop := Basics.goldbach → ∃ p q, Nat.Prime p ∧ Nat.Prime q ∧ p + q = 100",
             "block": 8,
             "offset": 0,
@@ -389,7 +382,7 @@
                 "auditUrl": "checks/Basics_hundred_statement--Basics_Proofs_hundred.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_hundred_statement--Basics_Proofs_hundred.lean\"",
                 "proofSha256": "c3b257267cb760a1b13d43b092b9ffbb6a2a5fda5d55c98bc8fc36162a3d5b0f",
-                "wallMs": 1313
+                "wallMs": 1184
               }
             ],
             "statement": true,
@@ -402,12 +395,12 @@
       {
         "kind": "markdown",
         "text": "## Lean\n\nAll other Lean is folded into one **Lean** line, because it matters to Lean, not to the reader. That includes imports (the folded line at the top), `instance` declarations, and quick checks such as `example`. This one gives points a default value, makes $\\mathbb{N}$ under $+$ a monoid, and checks that $\\operatorname{triangle}(4) = 10$:",
-        "line": 100
+        "line": 99
       },
       {
         "kind": "lean",
         "text": "instance : Inhabited Basics.Point := ⟨⟨0, 0⟩⟩\n\ninstance : Basics.Monoid ℕ := ⟨(· + ·), 0, Nat.add_assoc, Nat.add_zero⟩\n\nexample : Basics.triangle 4 = 10 := by simp [Basics.triangle, Finset.sum_range_succ]",
-        "line": 105,
+        "line": 104,
         "items": [
           {
             "type": "code",
@@ -418,24 +411,24 @@
       {
         "kind": "markdown",
         "text": "## Not allowed in a paper\n\nA paper states claims; proofs live in proof files. Lean refuses to build a paper that contains:\n\n- a `theorem`, because a `theorem` carries its proof. Write it as a conjecture with a `-- proof:` line; it shows as a theorem once that proof is checked.\n- an `axiom`, because every proof could then quietly assume it. Write it as a conjecture, and put it in the claims that depend on it, as above.\n- `sorry`, which would pretend a claim is proved.\n\nThis sample is not compiled:\n\n```lean ignore\ntheorem Basics.zero_add (n : ℕ) : 0 + n = n := by simp      -- refused: the proof belongs in a proof file\naxiom Basics.goldbach_holds : Basics.goldbach                -- refused: an unproved assumption\ndef Basics.half : ℕ → ℕ := sorry                            -- refused: sorry\n```\n\n## Notation\n\nThe LaTeX view knows common notation, such as sums, binomial coefficients, and trigonometric functions. Two examples, proved in `proofs/Notation.lean`:",
-        "line": 112
+        "line": 111
       },
       {
         "kind": "lean",
         "text": "/-- Pascal's rule -/\ndef Basics.pascal_statement : Prop :=\n  ∀ n k : ℕ, Nat.choose (n + 1) (k + 1) = Nat.choose n k + Nat.choose n (k + 1)\n-- proof: proofs/Notation.lean Basics.Proofs.pascal\n\n/-- The Pythagorean identity -/\ndef Basics.sin_cos_statement : Prop := ∀ x : ℝ, Real.sin x ^ 2 + Real.cos x ^ 2 = 1\n-- proof: proofs/Notation.lean Basics.Proofs.sin_cos",
-        "line": 133,
+        "line": 132,
         "items": [
           {
             "type": "declaration",
             "doc": "Pascal's rule",
             "kind": "candidate",
+            "latexError": "No notation for Nat.choose",
             "leanVersion": "4.35.0",
-            "line": 133,
+            "line": 132,
             "name": "Basics.pascal_statement",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "2248319565",
-            "statementLatex": "\\forall n, k \\in \\mathbb{N},\\ \\binom{n + 1}{k + 1} = \\binom{n}{k} + \\binom{n}{k + 1}",
+            "statementLatex": null,
             "statementLean": "def Basics.pascal_statement : Prop := ∀ (n k : ℕ), (n + 1).choose (k + 1) = n.choose k + n.choose (k + 1)",
             "block": 10,
             "offset": 0,
@@ -459,7 +452,7 @@
                 "auditUrl": "checks/Basics_pascal_statement--Basics_Proofs_pascal.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_pascal_statement--Basics_Proofs_pascal.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1298
+                "wallMs": 1368
               }
             ],
             "statement": true,
@@ -471,13 +464,13 @@
             "type": "declaration",
             "doc": "The Pythagorean identity",
             "kind": "candidate",
+            "latexError": "No notation for the type Real",
             "leanVersion": "4.35.0",
-            "line": 138,
+            "line": 137,
             "name": "Basics.sin_cos_statement",
-            "notes": [],
             "sourceModule": "[anonymous]",
             "statementHash": "1396079601",
-            "statementLatex": "\\forall x \\in \\mathbb{R},\\ \\sin(x)^{2} + \\cos(x)^{2} = 1",
+            "statementLatex": null,
             "statementLean": "def Basics.sin_cos_statement : Prop := ∀ (x : ℝ), Real.sin x ^ 2 + Real.cos x ^ 2 = 1",
             "block": 10,
             "offset": 5,
@@ -505,7 +498,7 @@
                 "auditUrl": "checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_sin_cos_statement--Basics_Proofs_sin_cos.lean\"",
                 "proofSha256": "ea7b7e0bcc1983121cd858704015a06af628e0a6eb90fee483a3d9fc81fe338d",
-                "wallMs": 1301
+                "wallMs": 1150
               }
             ],
             "statement": true,

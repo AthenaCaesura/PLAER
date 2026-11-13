@@ -34,7 +34,7 @@ Python, and Lean.
 | `tests/python/test_document.py` | A throwaway paper through Lean: every box kind, and proofs that must be rejected. |
 | `tests/python/test_server.py` | Editing and checking through the local server. |
 | `tests/python/test_branding.py` | The embedded SVG assets. |
-| `tests/lean/Latex.lean`, `tests/js/test_latex.cjs` | Notation rules, strict rejection, and KaTeX accepting the output. |
+| `tests/lean/Formula.lean`, `tests/js/test_latex.cjs` | Checked formulas, refusals, and KaTeX accepting the output. |
 
 When you change the proof check, confirm that a correct proof succeeds and
 that a proof of a different proposition, a `sorry`, and a broken file all fail.
@@ -54,8 +54,6 @@ optional portable tools belong in `.lake/` and `.tools/`. Keep `dist/` and each
 
 - `lean-toolchain` selects Lean 4.35.0. `lake-manifest.json` pins dependency
   revisions; normal builds preserve the manifest.
-- `vendor/LeanTeX` is an ordinary source directory used as a Lake path
-  dependency. No Git submodule initialization is needed.
 - Scripts look for elan in `~/.elan/bin` and the optional portable Windows
   toolchain in `.tools/lean-4.35.0-windows/bin`.
 - Set `PLAER_LEAN_BIN` to a custom Lean `bin` directory if necessary.

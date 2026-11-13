@@ -62,8 +62,7 @@ def package_document(project: Project, state: dict) -> Path:
         "source_sha256": audit["sourceSha256"],
         "document_sha256": hashlib.sha256(page.read_bytes()).hexdigest(),
         "engine_fingerprint": engine_fingerprint(),
-        "latex_generated_by": "Plaer/Latex.lean + vendor/LeanTeX",
-        "latex_engine": json.loads((ROOT / "vendor/LeanTeX/UPSTREAM.json").read_text(encoding="utf-8")),
+        "latex_generated_by": "Plaer/Formula (kernel-checked formulas; Plaer.Formula.parse_render)",
         "state": state,
     })
     latex = [d.get("latex") or d.get("statementLatex") for d in found]

@@ -38,31 +38,17 @@ error too. A proof may use only Lean's own axioms (`propext`,
 `Classical.choice`, `Quot.sound`). Imports
 come before all other Lean, and the editor refuses to move a box above them.
 
-The LaTeX view knows Lean's logic and arithmetic, sets, and this Mathlib
-notation: `∣`, `gcd`, `min`, `max`, `|x|`, `√x`, `n!`, `choose`, `∑` and `∏`
-over a `Finset` (with limits over `Finset.range`), `exp`, `log`, `sin`,
-`cos`, `π`, primes, and `≡ [ZMOD n]`. Names defined in the paper print by
-their own name. Any other name shows "No LaTeX" with the Lean view, until a
-rule is added (see below).
+Every box's LaTeX is a formula of PLAER's formula language, checked by Lean's
+kernel to mean exactly the declaration (see the
+[architecture guide](architecture.md#mathematical-notation)). The language has:
+`ℕ`, `ℤ` and `Prop`; the paper's own types and names; `∀` and `∃` over a type;
+`∧ ∨ ¬ ⟹ ⇔`; `= ≠ < ≤ > ≥`; `+ ·` and powers; subtraction in `ℤ`; and, in `ℕ`,
+subtraction `∸` and division `⌊a/b⌋`. Anything else shows "No LaTeX" with the
+Lean view.
 
-Lean's notation is printed as a mathematician would write it, by five general
-rules; [examples/Rules/Paper.md](../examples/Rules/Paper.md) shows each one:
-
-1. A structure on a type, `[Group G]`, comes with the type:
-   $\forall G : \mathbf{Type} \text{ with } \operatorname{Group}(G)$. A class that is
-   a proposition, `[Nonempty α]`, is a hypothesis: $\operatorname{Nonempty}(\alpha) \implies \dots$.
-   Every class prints as its own name.
-2. Lean's encodings read as what they encode: `α → β → γ` is $(\alpha, \beta) \to \gamma$,
-   `fun x : ℝ => e` is $(x \in \mathbb{R}) \mapsto e$, `Fin n` and `{x // p x}` are sets,
-   a structure's value is a tuple of its fields (proofs left out), and `Tendsto` and
-   `∀ᶠ` are limits, with the variable's type kept.
-3. An operation that differs from the textbook one looks different: subtraction
-   in ℕ is $\dot{-}$, division in ℕ is $\lfloor a/b \rfloor$, in ℤ $\operatorname{div}$.
-   The box notes what each such symbol means, and that $x / 0 = 0$.
-4. A conversion between types is always shown, as $(x : T)$.
-5. A variable over the elements of a type reads $x \in T$, over subsets $S \subseteq T$.
-
-No rule drops information: every variable keeps its type.
+Write Lean the way it should read: state each claim about values, with every
+variable and its type quantified up front, and hypotheses joined with `∧` before
+one `→`: `∀ n a : ℕ, n > 2 ∧ a > 0 → …`.
 
 A box's title is the first line of the declaration's doc comment; further
 lines become a caption. Without a doc comment the title is the name.
@@ -118,11 +104,9 @@ supported in proof files.
 ## LaTeX for your own definitions
 
 Names the paper defines print as themselves: a claim that uses
-`Basics.triangle n` reads $\operatorname{triangle}(n)$. Mathlib names need a
-notation rule, and the common ones are listed above. A claim that uses a
-Mathlib name with no rule keeps its Lean view and says what is missing. Rules
-for Mathlib notation belong in [Plaer/Latex.lean](../Plaer/Latex.lean); add a
-case to [tests/lean/Latex.lean](../tests/lean/Latex.lean) for each one.
+`Basics.triangle n` reads $\operatorname{triangle}(n)$. A Mathlib name is part
+of the language only once it has a fixed notation and meaning in
+[Plaer/Formula/](../Plaer/Formula/).
 
 ## Write useful notes
 

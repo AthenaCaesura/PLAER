@@ -2,10 +2,6 @@ name = "plaer"
 version = "0.1.0"
 defaultTargets = ["Plaer"]
 
-[[require]]
-name = "LeanTeX"
-path = "vendor/LeanTeX"
-
 # The Lean REPL keeps one Lean process, with the paper's imports loaded, for
 # every compile and proof check. https://github.com/leanprover-community/repl
 [[require]]
@@ -27,12 +23,12 @@ name = "Plaer"
 [[lean_lib]]
 name = "Examples"
 srcDir = "examples"
-roots = ["Basics", "Fermat", "Rules"]
-globs = ["Basics.+", "Fermat.+", "Rules.+"]
+roots = ["Basics", "Fermat"]
+globs = ["Basics.+", "Fermat.+"]
 
 # `SelfTest` is a throwaway paper that tests/python/test_document.py creates.
 [[lean_lib]]
 name = "TestFixtures"
 srcDir = "tests"
-roots = ["fixtures.Interval", "SelfTest"]
-globs = ["fixtures.Interval", "SelfTest.+"]
+roots = ["SelfTest"]
+globs = ["SelfTest.+"]

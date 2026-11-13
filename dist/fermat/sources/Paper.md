@@ -7,7 +7,7 @@ import Mathlib.FieldTheory.Finite.Basic
 ```lean
 /-- Fermat's last theorem -/
 def Fermat.last_statement : Prop :=
-  ∀ n a b c : ℕ, n > 2 → a > 0 → b > 0 → c > 0 → a ^ n + b ^ n ≠ c ^ n
+  ∀ n a b c : ℕ, n > 2 ∧ a > 0 ∧ b > 0 ∧ c > 0 → a ^ n + b ^ n ≠ c ^ n
 -- proof: proofs/Last.lean Fermat.Proofs.last
 ```
 

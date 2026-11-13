@@ -48,7 +48,7 @@ def main():
     projects = [load_project(paper) for paper in papers]
     # Build the shared Lean libraries once, so parallel steps never build them twice at once.
     started = time.perf_counter()
-    run(lake, "build", "Plaer", "fixtures.Interval")
+    run(lake, "build", "Plaer")
     print(f"  {time.perf_counter() - started:5.1f}s  Lean libraries", flush=True)
 
     steps = []
@@ -59,12 +59,9 @@ def main():
         if index == len(projects) - 1:   # the server code is the same for every paper: test it once
             commands.append(((python, "tests/python/test_server.py"), env))
         steps.append(step(f"build {project.folder.name}", *commands))
-    # The LaTeX engine: PLAER's notation rules, strict rejection, and the LeanTeX fork.
-    for path in ["tests/lean/Latex.lean", "vendor/LeanTeX/test/basic.lean", "vendor/LeanTeX/test/subscript.lean"]:
-        latex = [((lean, path), lean_direct)]
-        if path == "tests/lean/Latex.lean":
-            latex.append(((node, "tests/js/test_latex.cjs"), None))
-        steps.append(step(Path(path).name, *latex))
+    # The formula language: checked formulas, refusals, and KaTeX accepting the output.
+    steps.append(step("Formula.lean", ((lean, "tests/lean/Formula.lean"), lean_direct),
+                      ((node, "tests/js/test_latex.cjs"), None)))
     steps.append(step("paper format", ((python, "tests/python/test_paper.py"), None)))
     steps.append(step("proof checks", ((python, "tests/python/test_document.py"), None)))
 

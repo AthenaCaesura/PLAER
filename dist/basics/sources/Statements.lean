@@ -5,7 +5,6 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Data.Nat.Prime.Defs
 import Mathlib.Algebra.BigOperators.Intervals
-import Plaer.Latex
 -- ```
 
 -- A paper holds the things Lean has: definitions, and claims. A claim is a conjecture until a proof of it is checked; then it is a theorem. PLAER shows each one in its own kind of box.
