@@ -1,14 +1,14 @@
 {
-  "built_at": "2026-11-13T21:27:44.130246+00:00",
+  "built_at": "2026-11-17T14:42:37.199687+00:00",
   "project": "basics",
   "lean_version": "4.35.0",
   "paper": "examples/Basics/Paper.md",
   "source": "examples/Basics/Statements.lean",
   "paper_sha256": "7c611f22fa8a033239bb2eb8481da7c2f2447d83eb3a108e0653ed23d8dd3194",
   "source_sha256": "8e5950fce3839af852584da3b4fbeca8c16e923b96332966ab06d00e79bd3f07",
-  "document_sha256": "f87383b3589d23ec1b4785fcbe1ae7d99fd53fc1e6970b5a5eacc0411b42121e",
+  "document_sha256": "3b06a579ba3ca80a509cd7e41078a63ad55eeabc1b77d8dd495429ab1d658d74",
   "engine_fingerprint": "931ab07675ae9f961daa84c1218f1e91ca9dbcaecf8cc2dbf9807b9652113066",
-  "latex_generated_by": "Plaer/Formula (kernel-checked formulas; Plaer.Formula.parse_render)",
+  "latex_generated_by": "Plaer/Latex and examples/Dictionary (each formula read back by Lean)",
   "state": {
     "project": "basics",
     "title": "Theorems, conjectures, and definitions",
@@ -230,7 +230,7 @@
                 "command": "lake env lean --json \"dist/basics/checks/Basics_euler_statement--Basics_Proofs_euler.lean\"",
                 "proofSha256": "4a845a55570bfe2d5f9e9722a15ab7427b089c16d2cc533e2d808944aa44c61e",
                 "statementHash": "538884409",
-                "wallMs": 1332
+                "wallMs": 852
               },
               {
                 "file": "proofs/Missing.lean",
@@ -298,7 +298,7 @@
                 "auditUrl": "checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.json",
                 "command": "lake env lean --json \"dist/basics/checks/Basics_gauss_statement--Basics_Proofs_gauss_by_induction.lean\"",
                 "proofSha256": "96515dbe612a0109894bdec72640e0c6ad68a80ee4bf0ed529237a3c83900c47",
-                "wallMs": 1322
+                "wallMs": 852
               },
               {
                 "file": "proofs/Gauss.lean",

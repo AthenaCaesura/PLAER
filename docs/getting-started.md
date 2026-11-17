@@ -71,3 +71,5 @@ You can also edit `Paper.md` in any editor; reload the page to see the result.
 - [Write a document](authoring.md): the paper format and attaching proofs.
 - [Development](development.md): run checks and troubleshoot the toolchain.
 - [Architecture](architecture.md): how a paper becomes a checked document.
+
+Next, follow [Your first paper](tutorial.md), an end-to-end example.

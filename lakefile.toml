@@ -23,8 +23,8 @@ name = "Plaer"
 [[lean_lib]]
 name = "Examples"
 srcDir = "examples"
-roots = ["Basics", "Fermat", "Dictionary"]
-globs = ["Basics.+", "Fermat.+", "Dictionary.+"]
+roots = ["Basics", "Fermat", "Dictionary", "Tutorial"]
+globs = ["Basics.+", "Fermat.+", "Dictionary.+", "Tutorial.+"]
 
 # `SelfTest` is a throwaway paper that tests/python/test_document.py creates.
 [[lean_lib]]

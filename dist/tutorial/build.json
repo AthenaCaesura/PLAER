@@ -1,0 +1,212 @@
+{
+  "built_at": "2026-11-17T14:51:59.808882+00:00",
+  "project": "tutorial",
+  "lean_version": "4.35.0",
+  "paper": "examples/Tutorial/Paper.md",
+  "source": "examples/Tutorial/Statements.lean",
+  "paper_sha256": "b5f2e1912d8457322b183ee59ef68b99a7a24a2543f18208e4412d7cd72c68c6",
+  "source_sha256": "d12d0219ce85608e83cde1c2a9efa51c84ff27e46acc4a06c13ed9a935dd32ab",
+  "document_sha256": "a155d9aa751e2faf3ca575723c78a392be7dc34513c91fad2791e39d0410a56e",
+  "engine_fingerprint": "02943823b3bbe1aae5b6429304e9ee516e464d1f7272d66ef9ccc70f85ccbd28",
+  "latex_generated_by": "Plaer/Latex and examples/Dictionary (each formula read back by Lean)",
+  "state": {
+    "project": "tutorial",
+    "title": "Doubling",
+    "revision": "b5f2e1912d8457322b183ee59ef68b99a7a24a2543f18208e4412d7cd72c68c6",
+    "paperFile": "examples/Tutorial/Paper.md",
+    "paperUrl": "sources/Paper.md",
+    "sourceFile": "examples/Tutorial/Statements.lean",
+    "sourceUrl": "sources/Statements.lean",
+    "sourceModule": "Tutorial.Statements",
+    "compiled": true,
+    "blocks": [
+      {
+        "kind": "markdown",
+        "text": "# Doubling",
+        "line": 1
+      },
+      {
+        "kind": "lean",
+        "text": "import Mathlib.Data.Nat.Basic\nimport Dictionary.Statements",
+        "line": 4,
+        "items": [
+          {
+            "type": "code",
+            "text": "import Mathlib.Data.Nat.Basic\nimport Dictionary.Statements"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "Write notes in Markdown, with $...$ for mathematics. Every Lean declaration\nbecomes a box. Add more with the **+ Markdown**, **+ Definition**, **+ Conjecture**\nand **+ Lean** buttons between boxes.",
+        "line": 8
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Adding zero -/\ndef Tutorial.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n\n-- proof: proofs/AddZero.lean Tutorial.Proofs.add_zero",
+        "line": 13,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Adding zero",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 13,
+            "name": "Tutorial.add_zero_statement",
+            "sourceModule": "[anonymous]",
+            "statementHash": "720014397",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\; n + 0 = n",
+            "statementLean": "def Tutorial.add_zero_statement : Prop := ∀ (n : ℕ), n + 0 = n",
+            "block": 1,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/AddZero.lean",
+                "declaration": "Tutorial.Proofs.add_zero",
+                "leanVersion": "4.35.0",
+                "name": "Tutorial.add_zero_statement",
+                "proofDeclaration": "Tutorial.Proofs.add_zero",
+                "result": {
+                  "axioms": [],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "720014397",
+                "proofFile": "examples/Tutorial/proofs/AddZero.lean",
+                "proofUrl": "sources/proofs/AddZero.lean",
+                "checkerUrl": "checks/Tutorial_add_zero_statement--Tutorial_Proofs_add_zero.lean",
+                "auditUrl": "checks/Tutorial_add_zero_statement--Tutorial_Proofs_add_zero.json",
+                "command": "lake env lean --json \"dist/tutorial/checks/Tutorial_add_zero_statement--Tutorial_Proofs_add_zero.lean\"",
+                "proofSha256": "85a77c8d1f31cd83f46797ee30a1ec37c10ce75a4824f9bfde240b52b8fd31be",
+                "wallMs": 1258
+              }
+            ],
+            "statement": true,
+            "title": "Adding zero",
+            "caption": "",
+            "source": "/-- Adding zero -/\ndef Tutorial.add_zero_statement : Prop := ∀ n : ℕ, n + 0 = n"
+          }
+        ]
+      },
+      {
+        "kind": "markdown",
+        "text": "For every natural number $n$, $n + 0 = n$. Press the play button to check the proof.",
+        "line": 18
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Doubling a number -/\ndef Tutorial.double (n : ℕ) : ℕ := 2 * n\n\n/-- A double is even -/\ndef Tutorial.double_even : Prop := ∀ n : ℕ, 2 ∣ Tutorial.double n\n-- proof: proofs/Double.lean Tutorial.Proofs.double_even",
+        "line": 21,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Doubling a number",
+            "kind": "definition",
+            "latex": "\\operatorname{double}(n) \\coloneqq 2 \\cdot n",
+            "leanVersion": "4.35.0",
+            "line": 21,
+            "name": "Tutorial.double",
+            "signatureLatex": "\\operatorname{double} : \\mathbb{N} \\to \\mathbb{N}",
+            "source": "/-- Doubling a number -/\ndef Tutorial.double (n : ℕ) : ℕ := 2 * n",
+            "sourceModule": "[anonymous]",
+            "block": 2,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [],
+            "statement": false,
+            "title": "Doubling a number",
+            "caption": ""
+          },
+          {
+            "type": "declaration",
+            "doc": "A double is even",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 24,
+            "name": "Tutorial.double_even",
+            "sourceModule": "[anonymous]",
+            "statementHash": "3406941423",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\; 2 \\mid \\operatorname{double}(n)",
+            "statementLean": "def Tutorial.double_even : Prop := ∀ (n : ℕ), 2 ∣ Tutorial.double n",
+            "block": 2,
+            "offset": 3,
+            "lines": 2,
+            "proofs": [
+              {
+                "file": "proofs/Double.lean",
+                "declaration": "Tutorial.Proofs.double_even",
+                "leanVersion": "4.35.0",
+                "name": "Tutorial.double_even",
+                "proofDeclaration": "Tutorial.Proofs.double_even",
+                "result": {
+                  "axioms": [],
+                  "diagnostics": "Lean's kernel accepted the displayed proposition; axiom dependencies audited.",
+                  "ok": true
+                },
+                "statementHash": "3406941423",
+                "proofFile": "examples/Tutorial/proofs/Double.lean",
+                "proofUrl": "sources/proofs/Double.lean",
+                "checkerUrl": "checks/Tutorial_double_even--Tutorial_Proofs_double_even.lean",
+                "auditUrl": "checks/Tutorial_double_even--Tutorial_Proofs_double_even.json",
+                "command": "lake env lean --json \"dist/tutorial/checks/Tutorial_double_even--Tutorial_Proofs_double_even.lean\"",
+                "proofSha256": "f2267ee2c817921db67fb5c486fc3b3431b03efa6e908df88ee6d11389426406",
+                "wallMs": 1212
+              }
+            ],
+            "statement": true,
+            "title": "A double is even",
+            "caption": "",
+            "source": "/-- A double is even -/\ndef Tutorial.double_even : Prop := ∀ n : ℕ, 2 ∣ Tutorial.double n"
+          }
+        ]
+      },
+      {
+        "kind": "lean",
+        "text": "/-- Greatest common divisor -/\nlatex_notation Tutorial.gcd (a b : ℕ) := Nat.gcd a b as:max \"\\\\gcd(\" a:0 \",\" b:0 \")\"\n\n/-- The gcd of a number and its double -/\ndef Tutorial.gcd_double : Prop := ∀ n : ℕ, Nat.gcd n (Tutorial.double n) = n",
+        "line": 30,
+        "items": [
+          {
+            "type": "declaration",
+            "doc": "Greatest common divisor",
+            "formLatex": "\\gcd(a,b)",
+            "kind": "notation",
+            "leanFunction": "Nat.gcd",
+            "line": 30,
+            "meaningLean": "a.gcd b",
+            "name": "Tutorial.gcd",
+            "source": "/-- Greatest common divisor -/\nlatex_notation Tutorial.gcd (a b : ℕ) := Nat.gcd a b as:max \"\\\\gcd(\" a:0 \",\" b:0 \")\"",
+            "typeLean": "ℕ → ℕ → ℕ",
+            "block": 3,
+            "offset": 0,
+            "lines": 2,
+            "proofs": [],
+            "statement": false,
+            "title": "Greatest common divisor",
+            "caption": ""
+          },
+          {
+            "type": "declaration",
+            "doc": "The gcd of a number and its double",
+            "kind": "candidate",
+            "leanVersion": "4.35.0",
+            "line": 33,
+            "name": "Tutorial.gcd_double",
+            "sourceModule": "[anonymous]",
+            "statementHash": "1174584974",
+            "statementLatex": "\\forall n \\in \\mathbb{N},\\; \\gcd(n,\\operatorname{double}(n)) = n",
+            "statementLean": "def Tutorial.gcd_double : Prop := ∀ (n : ℕ), n.gcd (Tutorial.double n) = n",
+            "block": 3,
+            "offset": 3,
+            "lines": 2,
+            "proofs": [],
+            "statement": true,
+            "title": "The gcd of a number and its double",
+            "caption": "",
+            "source": "/-- The gcd of a number and its double -/\ndef Tutorial.gcd_double : Prop := ∀ n : ℕ, Nat.gcd n (Tutorial.double n) = n"
+          }
+        ]
+      }
+    ]
+  }
+}

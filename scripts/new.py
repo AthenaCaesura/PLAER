@@ -23,10 +23,12 @@ PAPER = """# {title}
 
 ```lean
 import Mathlib.Data.Nat.Basic
+import Dictionary.Statements
 ```
 
 Write notes in Markdown, with $...$ for mathematics. Every Lean declaration
-becomes a box. Add more with **+ Theorem**, **+ Definition** and **+ Markdown**.
+becomes a box. Add more with the **+ Markdown**, **+ Definition**, **+ Conjecture**
+and **+ Lean** buttons between boxes.
 
 ```lean
 /-- Adding zero -/

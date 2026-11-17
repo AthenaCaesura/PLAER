@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="docs/getting-started.md">Get started</a> ·
+  <a href="docs/tutorial.md">Your first paper</a> ·
   <a href="docs/authoring.md">Write a document</a> ·
   <a href="docs/architecture.md">How it works</a> ·
   <a href="docs/development.md">Development</a>
